@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Plant Manager Dashboard</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="main.js"></script>
+
+</head>
+<body>
+
+<div>
+    <img src="../static/logoPlantManager.png" alt="logoPlantManager" style="width:8%;height:8%;" class="left">
+</div>
+
+<div class="wrap-collapsible">
+    <input id="collapsible1" class="toggle" type="checkbox" checked>
+    <label for="collapsible1" class="lbl-toggle">To be watered in next 7 days: </label>
+    <div class="collapsible-content">
+        <div class="content-inner">
+            <p>
+                Uff! Nothing to be watered.
+            </p>
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+<div class="wrap-collapsible">
+    <input id="collapsible2" class="toggle" type="checkbox" checked>
+    <label for="collapsible2" class="lbl-toggle">Your plants:</label>
+
+    <div class="collapsible-content">
+        <div class="content-inner">
+
+            <!--
+
+             <div class="card-deck">
+
+                 <div class="card">
+                     <div class="image">
+                         <img class="img img-responsive full-width" src="../static/monstera.jpg">
+                     </div>
+                     <p class="plantName">Monstera monkey mask</p>
+                     <p><button>Edit</button></p>
+                 </div>
+
+                 <div class="card">
+                     <div class="image">
+                         <img class="img img-responsive full-width" src="../static/dieffenbachia.jpg">
+                     </div>
+                     <p class="plantName">Diffenbachia</p>
+                     <p><button>Edit</button></p>
+                 </div>
+
+                 <div class="card">
+                     <div class="image">
+                         <img class="img img-responsive full-width" src="../static/draecena.jpg">
+                     </div>
+                     <p class="plantName">Draecena</p>
+                     <p><button>Edit</button></p>
+                 </div>
+
+                 <div class="card">
+                     <div class="image">
+                         <img class="img img-responsive full-width" src="../static/addIcon.png">
+                     </div>
+                     <p class="plantName">Your new plant</p>
+                     <p><button>Add</button></p>
+                 </div>
+
+                 <div class="card">
+                     <div class="image">
+                         <img class="img img-responsive full-width" src="../static/addIcon.png">
+                     </div>
+                     <p class="plantName">Your new plant</p>
+                     <p><button>Add</button></p>
+                 </div>
+
+                 <div class="card">
+                     <div class="image">
+                         <img class="img img-responsive full-width" src="../static/addIcon.png">
+                     </div>
+                     <p class="plantName">Your new plant</p>
+                     <p><button>Add</button></p>
+                 </div>
+
+             </div>
+
+             //-->
+
+            <main class="cards">
+                <article class="card">
+                    <div class="image">
+                        <img class="img img-responsive full-width" src="../static/monstera.jpg">
+                    </div>
+                    <div class="text">
+                        <p>Monstera monkey mask</p>
+                        <button>Edit</button>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="image">
+                        <img class="img img-responsive full-width" src="../static/dieffenbachia.jpg">
+                    </div>
+                    <div class="text">
+                        <p>Diffenbachia</p>
+                        <button>Edit</button>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="image">
+                        <img class="img img-responsive full-width" src="../static/draecena.jpg">
+                    </div>
+                    <div class="text">
+                        <p>Dracena</p>
+                        <button>Edit</button>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="image">
+                        <img class="img img-responsive full-width" src="../static/addIcon.png">
+                    </div>
+                    <div class="text">
+                        <p>Your new plant</p>
+                        <button>Add</button>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="image">
+                        <img class="img img-responsive full-width" src="../static/addIcon.png" alt="Sample photo">
+                    </div>
+                    <div class="text">
+                        <p>Your new plant</p>
+                        <button>Add</button>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="image">
+                        <img class="img img-responsive full-width" src="../static/addIcon.png" alt="Sample photo">
+                    </div>
+                    <div class="text">
+                        <p>Your new plant</p>
+                        <button>Add</button>
+                    </div>
+                </article>
+            </main>
+
+
+
+    </div>
+</div>
+
+
+
+</body>
+</html>
+
