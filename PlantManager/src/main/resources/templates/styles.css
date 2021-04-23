@@ -10,14 +10,6 @@
   margin-bottom: 40px;
 }
 
-.left {
-  display: block;
-  margin-left: 20px;
-  margin-right: auto;
-  margin-top: 20px;
-  margin-bottom: 40px;
-}
-
 html,
 body * {
     font-family: 'Athiti', sans-serif;
@@ -27,6 +19,14 @@ body * {
 body {
     background: url(../static/background.jpeg) repeat center center fixed;
     background-size: cover;
+}
+
+a:link{
+    color: white;
+}
+
+a:visited, a:hover, a:active{
+    color: #aaa;
 }
 
 /*Login page and Forgot password page*/
@@ -230,6 +230,7 @@ a{
 	text-align:center;
 }
 
+
 /*Dashboard page*/
 
 /*Dashboard page > Collapsible sections */
@@ -295,74 +296,27 @@ input[type='checkbox'] {
   padding: .5rem 1rem;
 }
 
-
-
 /*Dashboard page > Collapsible sections > Cards*/
-
-/*
-.card {
-  max-width: 250px;
-  margin: auto;
-  text-align: center;
-}
-
-.image{
-    position:relative;
-    overflow:hidden;
-    padding-bottom:100%;
-}
-
-.image img{
-      position: absolute;
-      max-width: 100%;
-      max-height: 100%;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-}
-
-.plantName {
-  color: grey;
-  font-size: 22px;
-  padding: 12px;
-  margin: auto;
-}
-
-.card button {
-  border: none;
-  outline: 0;
-  padding: 12px;
-  color: white;
-  background-color: #000;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-  font-size: 18px;
-}
-
-.card button:hover {
-  opacity: 0.7;
-}
-
-*/
-
 .cards {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
   }
+
   .card {
     flex: 0 0 200px;
     margin: 10px;
     border: 1px solid #ccc;
     box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
     background-color: #1E5C45;
+
   }
 
 .image{
     position:relative;
     overflow:hidden;
     padding-bottom:100%;
+
 }
 
   .image img {
@@ -377,12 +331,13 @@ input[type='checkbox'] {
   .text{
       padding: 20px 20px 20px;
       text-align: center;
+
   }
 
   .text > p {
         font-size: 1.3rem;
         text-align: center;
-        justify-content: space-around;
+        min-height: 70px;
     }
 
   .card .text > button {
@@ -394,3 +349,67 @@ input[type='checkbox'] {
     cursor: pointer;
     align-self: flex-end;
     }
+
+/*Logo on the left side and log out on the right side*/
+.logoAndLogOut{
+    display: inline-block;
+}
+
+.logo{
+    float: left;
+}
+
+.logoLeft{
+    width: 25%;
+    height: 25%;
+    margin-left: 20px;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    }
+
+
+.logOut{
+    position: absolute;
+    right: 0;
+    margin-top: 20px;
+    width: 6em;
+    text-transform: uppercase;
+}
+
+/* Modal window for editing plants*/
+.modal-content{
+    background-color: #1E5C45;
+}
+
+.modal-title{
+    text-transform: uppercase;
+}
+
+#plantNameInModal,
+#roomInModal,
+#wateringScheduleInModal,
+#lastWateredDateInModal {
+    color: black;
+}
+
+.buttonSave{
+   background: #154030;
+   border: 0;
+   padding: 10px;
+   width: 100%;
+   text-transform: uppercase;
+   cursor: pointer;
+   border-radius: 5px;
+}
+
+.buttonCancel{
+   background: #aaa;
+   border: 0;
+   padding: 10px;
+   width: 100%;
+   text-transform: uppercase;
+   cursor: pointer;
+   border-radius: 5px;
+   text-align: center;
+}
