@@ -58,9 +58,10 @@
                         <!-- Button trigger modal -->
                         <button type="button" data-toggle="modal" data-target="#modalEditPlant">Edit</button>
                     </div>
+
                     <!-- modalEditPlant -->
-                    <div class="modal fade" id="modalEditPlant" tabindex="-1" role="dialog"
-                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal hide fade" id="modalEditPlant" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-focus-on="input:first">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -113,7 +114,43 @@
                                             <tr>
                                                 <td>Picture:</td>
                                             </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <form action="/action_page.php">
+
+                                                        <button id="choosePlantImageButton" type="button">
+                                                            <label for="file" id="labelForUploadPlantImage">Upload image</label>
+                                                            <input type="file" name="image" id="file" onchange="loadFile(event)">
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>OR</td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <button id="chooseIconButton" type="button" data-toggle="modal" href="#modalChooseIcon">Choose icon</button>
+                                                </td>
+                                            </tr>
+
                                         </table>
+
+                                        <br>
+
+                                        <!-- Place for displaying chosen image -->
+                                        <p><img id="output" width="200" /></p>
+
+                                        <script>
+                                            var loadFile = function(event) {
+                                                var image = document.getElementById('output');
+                                                image.src = URL.createObjectURL(event.target.files[0]);
+                                            };
+                                        </script>
+
 
                                         <div class="modal-footer">
                                             <input type="submit" class="buttonSave" value="Save changes">
@@ -121,11 +158,50 @@
                                         </div>
 
                                     </form>
+
+
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </article>
+
+                <div id="modalChooseIcon" class="modal hide fade" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-focus-on="input:first">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Choose icon for your plant</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="container"></div>
+                            <div class="modal-body">
+                                <div id="plantIconsGallery">
+
+                                    <input type="image" id="plantIcon1" src="../static/plantIcons/plantIcon1.jpg">
+                                    <input type="image" id="plantIcon2" src="../static/plantIcons/plantIcon2.jpg">
+                                    <input type="image" id="plantIcon3" src="../static/plantIcons/plantIcon3.jpg">
+                                    <input type="image" id="plantIcon4" src="../static/plantIcons/plantIcon4.jpg">
+                                    <input type="image" id="plantIcon5" src="../static/plantIcons/plantIcon5.jpg">
+                                    <input type="image" id="plantIcon6" src="../static/plantIcons/plantIcon6.jpg">
+                                    <input type="image" id="plantIcon7" src="../static/plantIcons/plantIcon7.jpg">
+                                    <input type="image" id="plantIcon8" src="../static/plantIcons/plantIcon8.jpg">
+                                    <input type="image" id="plantIcon9" src="../static/plantIcons/plantIcon9.jpg">
+                                    <input type="image" id="plantIcon10" src="../static/plantIcons/plantIcon10.jpg">
+                                    <input type="image" id="plantIcon11" src="../static/plantIcons/plantIcon11.jpg">
+                                    <input type="image" id="plantIcon12" src="../static/plantIcons/plantIcon12.jpg">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <article class="card">
                     <div class="image">
                         <img class="img img-responsive full-width" src="../static/dieffenbachia.jpg">

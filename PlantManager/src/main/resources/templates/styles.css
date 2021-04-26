@@ -389,7 +389,8 @@ input[type='checkbox'] {
 #plantNameInModal,
 #roomInModal,
 #wateringScheduleInModal,
-#lastWateredDateInModal {
+#lastWateredDateInModal,
+#chooseIconButton {
     color: black;
 }
 
@@ -413,3 +414,34 @@ input[type='checkbox'] {
    border-radius: 5px;
    text-align: center;
 }
+
+
+/* Modal window for editing plants > upload image*/
+#choosePlantImageButton{
+    color: black;
+    height: 30px;
+    cursor: pointer;
+}
+
+#file{
+    display: none;
+    color: black;
+}
+
+#labelForUploadPlantImage{
+    cursor: pointer;
+    color: black;
+}
+
+/* Modal window for editing plants > choose predefined icon*/
+#chooseIconButton{
+    cursor: pointer;
+}
+
+input[id^='plantIcon'] {
+    height: 150px;
+    width: 150px;
+    padding-right: 3px;
+    padding-bottom: 3px;
+}
+
