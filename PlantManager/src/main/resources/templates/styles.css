@@ -438,10 +438,90 @@ input[type='checkbox'] {
     cursor: pointer;
 }
 
-input[id^='plantIcon'] {
-    height: 150px;
-    width: 150px;
-    padding-right: 3px;
-    padding-bottom: 3px;
+.plantIconsGallery input{
+    margin:-2px;
+    padding:0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
 }
 
+.icon1{
+    background-image:url("../static/plantIcons/plantIcon1.jpg");
+}
+
+.icon2{
+    background-image:url("../static/plantIcons/plantIcon2.jpg");
+}
+
+.icon3{
+    background-image:url("../static/plantIcons/plantIcon3.jpg");
+}
+
+.icon4{
+    background-image:url("../static/plantIcons/plantIcon4.jpg");
+}
+
+.icon5{
+    background-image:url("../static/plantIcons/plantIcon5.jpg");
+}
+
+.icon6{
+    background-image:url("../static/plantIcons/plantIcon6.jpg");
+}
+
+.icon7{
+    background-image:url("../static/plantIcons/plantIcon7.jpg");
+}
+
+.icon8{
+    background-image:url("../static/plantIcons/plantIcon8.jpg");
+}
+
+.icon9{
+    background-image:url("../static/plantIcons/plantIcon9.jpg");
+}
+
+.icon10{
+    background-image:url("../static/plantIcons/plantIcon10.jpg");
+}
+
+.icon11{
+    background-image:url("../static/plantIcons/plantIcon11.jpg");
+}
+
+.icon12{
+    background-image:url("../static/plantIcons/plantIcon12.jpg");
+}
+
+.plantIconsGallery input:active +.plantIconLabel{
+    opacity: .9;
+}
+
+.plantIconsGallery input:checked +.plantIconLabel{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+
+.plantIconLabel{
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    height:150px;
+    width:150px;
+
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+}
+
+.plantIconLabel:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}

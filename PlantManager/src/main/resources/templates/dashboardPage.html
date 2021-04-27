@@ -120,8 +120,10 @@
                                                     <form action="/action_page.php">
 
                                                         <button id="choosePlantImageButton" type="button">
-                                                            <label for="file" id="labelForUploadPlantImage">Upload image</label>
-                                                            <input type="file" name="image" id="file" onchange="loadFile(event)">
+                                                            <label for="file" id="labelForUploadPlantImage">Upload
+                                                                image</label>
+                                                            <input type="file" name="image" id="file"
+                                                                   onchange="loadFile(event)">
                                                         </button>
                                                     </form>
                                                 </td>
@@ -133,7 +135,9 @@
 
                                             <tr>
                                                 <td>
-                                                    <button id="chooseIconButton" type="button" data-toggle="modal" href="#modalChooseIcon">Choose icon</button>
+                                                    <button id="chooseIconButton" type="button" data-toggle="modal"
+                                                            href="#modalChooseIcon">Choose icon
+                                                    </button>
                                                 </td>
                                             </tr>
 
@@ -142,23 +146,24 @@
                                         <br>
 
                                         <!-- Place for displaying chosen image -->
-                                        <p><img id="output" width="200" /></p>
+                                        <p><img id="output" width="200"/></p>
 
                                         <script>
                                             var loadFile = function(event) {
                                                 var image = document.getElementById('output');
                                                 image.src = URL.createObjectURL(event.target.files[0]);
                                             };
+
                                         </script>
 
 
                                         <div class="modal-footer">
                                             <input type="submit" class="buttonSave" value="Save changes">
-                                            <input type="cancel" class="buttonCancel" data-dismiss="modal" value="Cancel">
+                                            <input type="cancel" class="buttonCancel" data-dismiss="modal"
+                                                   value="Cancel">
                                         </div>
 
                                     </form>
-
 
 
                                 </div>
@@ -179,21 +184,53 @@
                             </div>
                             <div class="container"></div>
                             <div class="modal-body">
-                                <div id="plantIconsGallery">
 
-                                    <input type="image" id="plantIcon1" src="../static/plantIcons/plantIcon1.jpg">
-                                    <input type="image" id="plantIcon2" src="../static/plantIcons/plantIcon2.jpg">
-                                    <input type="image" id="plantIcon3" src="../static/plantIcons/plantIcon3.jpg">
-                                    <input type="image" id="plantIcon4" src="../static/plantIcons/plantIcon4.jpg">
-                                    <input type="image" id="plantIcon5" src="../static/plantIcons/plantIcon5.jpg">
-                                    <input type="image" id="plantIcon6" src="../static/plantIcons/plantIcon6.jpg">
-                                    <input type="image" id="plantIcon7" src="../static/plantIcons/plantIcon7.jpg">
-                                    <input type="image" id="plantIcon8" src="../static/plantIcons/plantIcon8.jpg">
-                                    <input type="image" id="plantIcon9" src="../static/plantIcons/plantIcon9.jpg">
-                                    <input type="image" id="plantIcon10" src="../static/plantIcons/plantIcon10.jpg">
-                                    <input type="image" id="plantIcon11" src="../static/plantIcons/plantIcon11.jpg">
-                                    <input type="image" id="plantIcon12" src="../static/plantIcons/plantIcon12.jpg">
 
+                                    <div class="plantIconsGallery">
+                                        <input checked="checked" id="icon1" type="radio" name="plantIcon" value="icon1" />
+                                        <label class="plantIconLabel icon1" for="icon1"></label>
+
+                                        <input id="icon2" type="radio" name="plantIcon" value="icon2" />
+                                        <label class="plantIconLabel icon2"for="icon2"></label>
+
+                                        <input id="icon3" type="radio" name="plantIcon" value="icon3" />
+                                        <label class="plantIconLabel icon3"for="icon3"></label>
+
+                                        <input id="icon4" type="radio" name="plantIcon" value="icon4" />
+                                        <label class="plantIconLabel icon4"for="icon4"></label>
+
+                                        <input id="icon5" type="radio" name="plantIcon" value="icon5" />
+                                        <label class="plantIconLabel icon5"for="icon5"></label>
+
+                                        <input id="icon6" type="radio" name="plantIcon" value="icon6" />
+                                        <label class="plantIconLabel icon6"for="icon6"></label>
+
+                                        <input id="icon7" type="radio" name="plantIcon" value="icon7" />
+                                        <label class="plantIconLabel icon7"for="icon7"></label>
+
+                                        <input id="icon8" type="radio" name="plantIcon" value="icon8" />
+                                        <label class="plantIconLabel icon8"for="icon8"></label>
+
+                                        <input id="icon9" type="radio" name="plantIcon" value="icon9" />
+                                        <label class="plantIconLabel icon9"for="icon9"></label>
+
+                                        <input id="icon10" type="radio" name="plantIcon" value="icon10" />
+                                        <label class="plantIconLabel icon10"for="icon10"></label>
+
+                                        <input id="icon11" type="radio" name="plantIcon" value="icon11" />
+                                        <label class="plantIconLabel icon11"for="icon11"></label>
+
+                                        <input id="icon12" type="radio" name="plantIcon" value="icon12" />
+                                        <label class="plantIconLabel icon12"for="icon12"></label>
+
+                                    </div>
+
+
+
+                                <div class="modal-footer">
+                                    <input type="submit" class="buttonSave" value="Choose icon">
+                                    <input type="cancel" class="buttonCancel" data-dismiss="modal"
+                                           value="Cancel">
                                 </div>
 
                             </div>
