@@ -1,5 +1,6 @@
-/*General*/
-
+/*********/
+/*GENERAL*/
+/*********/
 @import url('https://fonts.googleapis.com/css?family=Athiti:wght@300&display=swap');
 
 .center {
@@ -21,72 +22,56 @@ body {
     background-size: cover;
 }
 
-a:link{
+a:link {
     color: white;
 }
 
-a:visited, a:hover, a:active{
+a:visited, a:hover, a:active {
     color: #aaa;
 }
 
-/*Login page and Forgot password page*/
-*,:after,:before{
-    box-sizing:border-box
-}
-
-.clearfix:after,.clearfix:before{
-    content:'';
-    display:table
-}
-
-.clearfix:after{
-    clear:both;
-    display:block
-}
-
-a{
-    color:inherit;
-    text-decoration:none
-}
+/*************************************/
+/*LOGIN PAGE AND FORGOT PASSWORD PAGE*/
+/*************************************/
 
 .login-wrap,
-.forgotPass-wrap{
-	width:100%;
-	margin:auto;
-	max-width:525px;
-	min-height:720px;
-	position:relative;
+.forgotPass-wrap {
+	width: 100%;
+	margin: auto;
+	max-width: 525px;
+	min-height: 720px;
+	position: relative;
 }
 
 .login-html,
-.forgotPass-html{
-	width:100%;
-	height:100%;
-	position:absolute;
-	padding:70px 70px 50px 70px;
-	background:#1E5C45;
-	border-radius:15px;
+.forgotPass-html {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	padding: 70px 70px 50px 70px;
+	background: #1E5C45;
+	border-radius: 15px;
 }
 
 .login-html .sign-in-htm,
 .login-html .sign-up-htm,
-.forgotPass-html forgotPass-htm{
-	top:0;
-	left:0;
-	right:0;
-	bottom:0;
-	position:absolute;
-	transform:rotateY(180deg);
-	backface-visibility:hidden;
-	transition:all .4s linear;
+.forgotPass-html forgotPass-htm {
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	position: absolute;
+	transform: rotateY(180deg);
+	backface-visibility: hidden;
+	transition: all .4s linear;
 }
 
 .login-html .sign-in,
 .login-html .sign-up,
 .login-form .group .check,
 .forgotPass-html .forgotPass,
-.forgotPass-form .group .check{
-	display:none;
+.forgotPass-form .group .check {
+	display: none;
 }
 
 .login-html .tab,
@@ -94,38 +79,38 @@ a{
 .login-form .group .button,
 .forgotPass-html .tab,
 .forgotPass-form .group .label,
-.forgotPass-form .group .label{
-	text-transform:uppercase;
+.forgotPass-form .group .label {
+	text-transform: uppercase;
 }
 
 .login-html .tab,
-.forgotPass-html .tab{
-	font-size:22px;
-	margin-right:15px;
-	padding-bottom:5px;
-	margin:0 15px 10px 0;
-	display:inline-block;
-	border-bottom:2px solid transparent;
+.forgotPass-html .tab {
+	font-size: 22px;
+	margin-right: 15px;
+	padding-bottom: 5px;
+	margin: 0 15px 10px 0;
+	display: inline-block;
+	border-bottom: 2px solid transparent;
 }
 
 .login-html .sign-in:checked + .tab,
 .login-html .sign-up:checked + .tab,
-.forgotPass-html .forgotPass:checked + .tab{
-	color:#fff;
-	border-color:#154030;
+.forgotPass-html .forgotPass:checked + .tab {
+	color: #fff;
+	border-color: #154030;
 }
 
 .login-form,
-.forgotPass-form{
-	min-height:345px;
-	position:relative;
-	perspective:1000px;
-	transform-style:preserve-3d;
+.forgotPass-form {
+	min-height: 345px;
+	position: relative;
+	perspective: 1000px;
+	transform-style: preserve-3d;
 }
 
 .login-form .group,
-.forgotPass-form .group{
-	margin-bottom:15px;
+.forgotPass-form .group {
+	margin-bottom: 15px;
 }
 
 .login-form .group .label,
@@ -133,107 +118,135 @@ a{
 .login-form .group .button,
 .forgotPass-form .group .label,
 .forgotPass-form .group .input,
-.forgotPass-form .group .button{
-	width:100%;
-	color:#fff;
-	display:block;
+.forgotPass-form .group .button {
+	width: 100%;
+	color: #fff;
+	display: block;
 }
 
 .login-form .group .input,
 .login-form .group .button,
 .forgotPass-form .group .input,
-.forgotPass-form .group .button{
-	border:none;
-	padding:15px 20px;
-	border-radius:15px;
-	background:rgba(255,255,255,.1);
+.forgotPass-form .group .button {
+	border: none;
+	padding: 15px 20px;
+	border-radius: 15px;
+	background: rgba(255,255,255,.1);
 }
 
-.login-form .group input[data-type="password"]{
-	text-security:circle;
-	-webkit-text-security:circle;
+.login-form .group input[data-type="password"] {
+	text-security: circle;
+	-webkit-text-security: circle;
 }
 
 .login-form .group .label,
-.forgotPass-form .group .label{
-	color:#aaa;
-	font-size:12px;
+.forgotPass-form .group .label {
+	color: #aaa;
+	font-size: 12px;
 }
 
 .login-form .group .button,
-.forgotPass-form .group .button{
-	background:#154030;
+.forgotPass-form .group .button {
+	background: #154030;
 }
 
-.login-form .group label .icon{
-	width:15px;
-	height:15px;
-	border-radius:2px;
-	position:relative;
-	display:inline-block;
-	background:rgba(255,255,255,.1);
+.login-form .group label .icon {
+	width: 15px;
+	height: 15px;
+	border-radius: 2px;
+	position: relative;
+	display: inline-block;
+	background: rgba(255,255,255,.1);
 }
 
 .login-form .group label .icon:before,
-.login-form .group label .icon:after{
-	content:'';
-	width:10px;
-	height:2px;
-	background:#fff;
-	position:absolute;
-	transition:all .2s ease-in-out 0s;
+.login-form .group label .icon:after {
+	content: '';
+	width: 10px;
+	height: 2px;
+	background: #fff;
+	position: absolute;
+	transition: all .2s ease-in-out 0s;
 }
 
-.login-form .group label .icon:before{
-	left:3px;
-	width:5px;
-	bottom:6px;
-	transform:scale(0) rotate(0);
+.login-form .group label .icon:before {
+	left: 3px;
+	width: 5px;
+	bottom: 6px;
+	transform: scale(0) rotate(0);
 }
 
-.login-form .group label .icon:after{
-	top:6px;
-	right:0;
-	transform:scale(0) rotate(0);
+.login-form .group label .icon:after {
+	top: 6px;
+	right: 0;
+	transform: scale(0) rotate(0);
 }
 
-.login-form .group .check:checked + label{
-	color:#fff;
+.login-form .group .check:checked + label {
+	color: #fff;
 }
 
-.login-form .group .check:checked + label .icon{
-	background:#154030;
+.login-form .group .check:checked + label .icon {
+	background: #154030;
 }
 
-.login-form .group .check:checked + label .icon:before{
-	transform:scale(1) rotate(45deg);
+.login-form .group .check:checked + label .icon:before {
+	transform: scale(1) rotate(45deg);
 }
 
-.login-form .group .check:checked + label .icon:after{
-	transform:scale(1) rotate(-45deg);
+.login-form .group .check:checked + label .icon:after {
+	transform: scale(1) rotate(-45deg);
 }
 
-.login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm{
-	transform:rotate(0);
+.login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm {
+	transform: rotate(0);
 }
 
-.login-html .sign-up:checked + .tab + .login-form .sign-up-htm{
-	transform:rotate(0);
+.login-html .sign-up:checked + .tab + .login-form .sign-up-htm {
+	transform: rotate(0);
 }
 
-.hr{
-	height:2px;
-	margin:50px 0 50px 0;
-	background:rgba(255,255,255,.2);
+.hr {
+	height: 2px;
+	margin: 50px 0 50px 0;
+	background: rgba(255,255,255,.2);
 }
-.foot-lnk{
+
+.foot-lnk {
 	text-align:center;
 }
 
+/****************/
+/*DASHBOARD PAGE*/
+/****************/
 
-/*Dashboard page*/
+/* Logo on the left side and log out on the right side */
+.logoAndLogOut {
+    display: inline-block;
+}
 
-/*Dashboard page > Collapsible sections */
+.logo {
+    float: left;
+}
+
+.logoLeft {
+    width: 25%;
+    height: 25%;
+    margin-left: 20px;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    }
+
+.logOut {
+    position: absolute;
+    right: 0;
+    margin-top: 20px;
+    width: 6em;
+    text-transform: uppercase;
+}
+
+/* Dashboard page > Collapsible sections */
 .wrap-collapsible {
   margin-bottom: 1.2rem 0;
 }
@@ -296,7 +309,7 @@ input[type='checkbox'] {
   padding: .5rem 1rem;
 }
 
-/*Dashboard page > Collapsible sections > Cards*/
+/* Dashboard page > Collapsible sections > Cards */
 .cards {
     display: flex;
     flex-wrap: wrap;
@@ -309,38 +322,34 @@ input[type='checkbox'] {
     border: 1px solid #ccc;
     box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
     background-color: #1E5C45;
-
   }
 
-.image{
-    position:relative;
-    overflow:hidden;
-    padding-bottom:100%;
-
+.image {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 100%;
 }
 
-  .image img {
+.image img {
           position: absolute;
           max-width: 100%;
           max-height: 100%;
           top: 50%;
           left: 50%;
           transform: translateX(-50%) translateY(-50%);
-  }
+}
 
-  .text{
+.text {
       padding: 20px 20px 20px;
       text-align: center;
+}
 
-  }
-
-  .text > p {
+.text > p {
         font-size: 1.3rem;
-        text-align: center;
         min-height: 70px;
-    }
+}
 
-  .card .text > button {
+.card .text > button {
     background: #154030;
     border: 0;
     padding: 10px;
@@ -348,41 +357,14 @@ input[type='checkbox'] {
     text-transform: uppercase;
     cursor: pointer;
     align-self: flex-end;
-    }
-
-/*Logo on the left side and log out on the right side*/
-.logoAndLogOut{
-    display: inline-block;
 }
 
-.logo{
-    float: left;
-}
-
-.logoLeft{
-    width: 25%;
-    height: 25%;
-    margin-left: 20px;
-    margin-right: auto;
-    margin-top: 20px;
-    margin-bottom: 40px;
-    }
-
-
-.logOut{
-    position: absolute;
-    right: 0;
-    margin-top: 20px;
-    width: 6em;
-    text-transform: uppercase;
-}
-
-/* Modal window for editing plants*/
-.modal-content{
+/* Modal window for editing/adding plants */
+.modal-content {
     background-color: #1E5C45;
 }
 
-.modal-title{
+.modal-title {
     text-transform: uppercase;
 }
 
@@ -394,7 +376,7 @@ input[type='checkbox'] {
     color: black;
 }
 
-.buttonSave{
+.buttonSave {
    background: #154030;
    border: 0;
    padding: 10px;
@@ -404,7 +386,7 @@ input[type='checkbox'] {
    border-radius: 5px;
 }
 
-.buttonCancel{
+.buttonCancel {
    background: #aaa;
    border: 0;
    padding: 10px;
@@ -415,113 +397,121 @@ input[type='checkbox'] {
    text-align: center;
 }
 
-
-/* Modal window for editing plants > upload image*/
-#choosePlantImageButton{
+/* Modal window for editing/adding plants > upload image */
+#choosePlantImageButton {
     color: black;
     height: 30px;
     cursor: pointer;
 }
 
-#file{
+#file {
     display: none;
     color: black;
 }
 
-#labelForUploadPlantImage{
+#labelForUploadPlantImage {
     cursor: pointer;
     color: black;
 }
 
-/* Modal window for editing plants > choose predefined icon*/
-#chooseIconButton{
+/* Modal window for editing and adding plants > choose predefined icon */
+#chooseIconButton {
     cursor: pointer;
 }
 
-.plantIconsGallery input{
-    margin:-2px;
-    padding:0;
-    -webkit-appearance:none;
-       -moz-appearance:none;
-            appearance:none;
+.plantIconsGallery input {
+    margin: -2px;
+    padding: 0;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
 }
 
-.icon1{
-    background-image:url("../static/plantIcons/plantIcon1.jpg");
+.icon1 {
+    background-image: url(../static/plantIcons/plantIcon1.jpg);
 }
 
-.icon2{
-    background-image:url("../static/plantIcons/plantIcon2.jpg");
+.icon2 {
+    background-image: url(../static/plantIcons/plantIcon2.jpg);
 }
 
-.icon3{
-    background-image:url("../static/plantIcons/plantIcon3.jpg");
+.icon3 {
+    background-image: url(../static/plantIcons/plantIcon3.jpg);
 }
 
-.icon4{
-    background-image:url("../static/plantIcons/plantIcon4.jpg");
+.icon4 {
+    background-image: url(../static/plantIcons/plantIcon4.jpg);
 }
 
-.icon5{
-    background-image:url("../static/plantIcons/plantIcon5.jpg");
+.icon5 {
+    background-image: url(../static/plantIcons/plantIcon5.jpg);
 }
 
-.icon6{
-    background-image:url("../static/plantIcons/plantIcon6.jpg");
+.icon6 {
+    background-image: url(../static/plantIcons/plantIcon6.jpg);
 }
 
-.icon7{
-    background-image:url("../static/plantIcons/plantIcon7.jpg");
+.icon7 {
+    background-image: url(../static/plantIcons/plantIcon7.jpg);
 }
 
-.icon8{
-    background-image:url("../static/plantIcons/plantIcon8.jpg");
+.icon8 {
+    background-image: url(../static/plantIcons/plantIcon8.jpg);
 }
 
-.icon9{
-    background-image:url("../static/plantIcons/plantIcon9.jpg");
+.icon9 {
+    background-image: url(../static/plantIcons/plantIcon9.jpg);
 }
 
-.icon10{
-    background-image:url("../static/plantIcons/plantIcon10.jpg");
+.icon10 {
+    background-image: url(../static/plantIcons/plantIcon10.jpg);
 }
 
-.icon11{
-    background-image:url("../static/plantIcons/plantIcon11.jpg");
+.icon11 {
+    background-image: url(../static/plantIcons/plantIcon11.jpg);
 }
 
-.icon12{
-    background-image:url("../static/plantIcons/plantIcon12.jpg");
+.icon12 {
+    background-image: url(../static/plantIcons/plantIcon12.jpg);
 }
 
-.plantIconsGallery input:active +.plantIconLabel{
+.plantIconsGallery input:active + .plantIconLabel {
     opacity: .9;
 }
 
-.plantIconsGallery input:checked +.plantIconLabel{
+.plantIconsGallery input:checked + .plantIconLabel {
     -webkit-filter: none;
        -moz-filter: none;
             filter: none;
 }
 
-.plantIconLabel{
-    cursor:pointer;
-    background-size:contain;
-    background-repeat:no-repeat;
-    height:150px;
-    width:150px;
+.plantIconLabel {
+    cursor: pointer;
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 150px;
+    width: 150px;
 
     -webkit-transition: all 100ms ease-in;
        -moz-transition: all 100ms ease-in;
             transition: all 100ms ease-in;
 
-    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
-       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
-            filter: brightness(1.8) grayscale(1) opacity(.7);
+    -webkit-filter: brightness(1.8) grayscale(.8) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(.8) opacity(.7);
+            filter: brightness(1.8) grayscale(.8) opacity(.7);
 }
 
-.plantIconLabel:hover{
+.plantIconLabel:hover {
     -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
        -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
             filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+/* Place for displaying chosen image/icon */
+#output {
+    height: 200px;
+    width: 200px;
+    display: none;
+    background-size: contain;
+    margin-bottom: 10px;
 }
