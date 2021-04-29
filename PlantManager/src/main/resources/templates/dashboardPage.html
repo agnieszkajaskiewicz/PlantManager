@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,7 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
           crossorigin="anonymous">
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" th:href="@{/styles.css}" />
 
 </head>
 <body>
@@ -19,7 +19,7 @@
 <!-- Logo and log out -->
 <div class="logoAndLogOut">
     <div class="logo">
-        <img src="../static/logoPlantManager.png" alt="logoPlantManager" class="logoLeft">
+        <img src="/logoPlantManager.png" alt="logoPlantManager" class="logoLeft">
     </div>
     <div class="logOut">
         <a href="homePage.html">Log out</a>
@@ -52,7 +52,7 @@
 
                     <article class="card">
                         <div class="image">
-                            <img class="img img-responsive full-width" src="../static/monstera.jpg">
+                            <img class="img img-responsive full-width" src="/monstera.jpg">
                         </div>
                         <div class="text">
                             <p>Monstera monkey mask</p>
@@ -63,7 +63,7 @@
 
                     <article class="card">
                         <div class="image">
-                            <img class="img img-responsive full-width" src="../static/dieffenbachia.jpg">
+                            <img class="img img-responsive full-width" src="/dieffenbachia.jpg">
                         </div>
                         <div class="text">
                             <p>Diffenbachia</p>
@@ -73,7 +73,7 @@
 
                     <article class="card">
                         <div class="image">
-                            <img class="img img-responsive full-width" src="../static/draecena.jpg">
+                            <img class="img img-responsive full-width" src="/draecena.jpg">
                         </div>
                         <div class="text">
                             <p>Dracena</p>
@@ -83,7 +83,7 @@
 
                     <article class="card">
                         <div class="image">
-                            <img class="img img-responsive full-width" src="../static/addIcon.png">
+                            <img class="img img-responsive full-width" src="/addIcon.png">
                         </div>
                         <div class="text">
                             <p>Your new plant</p>
@@ -95,7 +95,6 @@
             </div>
         </div>
 </div>
-
 
 <!-- Modal window for editing/adding plant -->
 <div class="modal hide fade" id="modalEditPlant" tabindex="-1" role="dialog"
