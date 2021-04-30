@@ -22,84 +22,40 @@
 
 <!-- Logo -->
 <div>
-        <img th:src="@{/logoPlantManager.png}" alt="logoPlantManager" class="center">
+    <img th:src="@{/logoPlantManager.png}" alt="logoPlantManager" class="center">
 </div>
 
 <div class="login-wrap">
     <div class="login-html">
-         <div class="content" align="center">
-                <p>
-                    Have you recently killed the plant because you actually forgot about it? <br>
-                    This won't happen again with your Plant Manager! <br>
-                    Your plants will be grateful for logging in.
-                </p>
+        <div class="content" align="center">
+            <p>
+                Have you recently killed the plant <br>
+                because you actually forgot about it? <br>
+                It won't happen again with your Plant Manager! <br>
+                Your plants will be grateful for logging in <br>
+                (and we will send you notifications). <br>
+            </p>
                 <br>
-         </div>
-
-         <!-- Sign in/Sign up -->
-        <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
-        <label for="tab-1" class="tab">Sign In</label>
-
-        <input id="tab-2" type="radio" name="tab" class="sign-up">
-        <label for="tab-2" class="tab">Sign Up</label>
-
-            <div class="login-form">
-
-                <!-- Sign in form -->
-                <form role="form" th:action="@{/}" th:method="post">
-                    <div class="sign-in-htm">
-                        <div class="group">
-                            <label for="user" class="label">Username</label>
-                            <input id="user" type="text" class="input">
-                        </div>
-                        <div class="group">
-                            <label for="pass" class="label">Password</label>
-                            <input id="pass" type="password" class="input" data-type="password">
-                        </div>
-                        <div class="group">
-                            <input id="check" type="checkbox" class="check" checked>
-                            <label for="check"><span class="icon"></span> Keep me signed in</label>
-                        </div>
-                        <div class="group">
-                            <input type="submit" class="button" value="Sign In">
-                        </div>
-
-                        <div class="hr"></div>
-                        <div class="foot-lnk">
-                            <a href="/forgotPass">Forgot Password?</a>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- Sign up form -->
-
-                <form role="form" th:action="@{/}" th:method="post">
-                    <div class="sign-up-htm">
-                        <div class="group">
-                            <label for="user" class="label">Username</label>
-                            <input id="user" type="text" class="input">
-                        </div>
-                        <div class="group">
-                            <label for="pass" class="label">Password</label>
-                            <input id="pass" type="password" class="input" data-type="password">
-                        </div>
-                        <div class="group">
-                            <label for="pass" class="label">Repeat Password</label>
-                            <input id="pass" type="password" class="input" data-type="password">
-                        </div>
-                        <div class="group">
-                            <label for="pass" class="label">Email Address</label>
-                            <input id="pass" type="text" class="input">
-                        </div>
-                        <div class="group">
-                            <input type="submit" class="button" value="Sign Up">
-                        </div>
-                    </div>
-                </form>
-
-            </div>
+            <p>What would you like to do now?</p>
         </div>
+
+        <!-- Buttons Sign in/Sign up -->
+        <div>
+            <a href="/sign-in">
+                <button type="button" class="buttonSave">Sign me in</button>
+            </a>
+        </div>
+
+        <br>
+
+        <div>
+            <a href="/sign-up">
+                <button class="buttonSave">I'm new here, sign me up</button>
+            </a>
+        </div>
+
     </div>
+</div>
 
 </body>
 </html>
