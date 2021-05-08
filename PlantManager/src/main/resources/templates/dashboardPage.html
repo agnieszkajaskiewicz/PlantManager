@@ -58,36 +58,17 @@
             <div class="content-inner">
                 <main class="cards">
 
-                    <article class="card">
+                    <article class="card" th:each="entry : ${plant}">
                         <div class="image">
                             <img class="img img-responsive full-width" src="/monstera.jpg">
                         </div>
                         <div class="text">
-                            <p>Monstera monkey mask</p>
+                            <p th:text="${entry.plantName}"></p>
                             <!-- Button that triggers modal window for editing/adding plant -->
                             <button type="button" data-toggle="modal" data-target="#modalEditPlant">Edit</button>
                         </div>
                     </article>
 
-                    <article class="card">
-                        <div class="image">
-                            <img class="img img-responsive full-width" src="/dieffenbachia.jpg">
-                        </div>
-                        <div class="text">
-                            <p>Diffenbachia</p>
-                            <button type="button" data-toggle="modal" data-target="#modalEditPlant">Edit</button>
-                        </div>
-                    </article>
-
-                    <article class="card">
-                        <div class="image">
-                            <img class="img img-responsive full-width" src="/draecena.jpg">
-                        </div>
-                        <div class="text">
-                            <p>Dracena</p>
-                            <button type="button" data-toggle="modal" data-target="#modalEditPlant">Edit</button>
-                        </div>
-                    </article>
 
                     <article class="card">
                         <div class="image">
@@ -95,7 +76,7 @@
                         </div>
                         <div class="text">
                             <p>Your new plant</p>
-                            <button type="button" data-toggle="modal" data-target="#modalEditPlant">Edit</button>
+                            <button type="button" data-toggle="modal" data-target="#modalEditPlant" onclick="window.location.hash = 'addPlant';">Add</button>
                         </div>
                     </article>
 
@@ -117,17 +98,17 @@
             </div>
 
             <div class="modal-body">
-                <form>
+                <form th:action="@{/dashboard/addPlant}" method="post">
 
                     <table>
                         <tr>
                             <td>Plant name:</td>
-                            <td><input type="text" id="plantNameInModal" value="Monstera monkey mask"></td>
+                            <td><input type="text" id="plantNameInModal" name="plantName"></td>
                         </tr>
 
                         <tr>
                             <td>Room:</td>
-                            <td><input type="text" id="roomInModal" value="Living room"></td>
+                            <td><input type="text" id="roomInModal" name="roomName"></td>
                         </tr>
 
                     </table>
@@ -141,13 +122,13 @@
 
                         <tr>
                             <td>Water every</td>
-                            <td><input type="number" id="wateringScheduleInModal" step=1 pattern="\d{3}" maxlength="3"> days
+                            <td><input type="number" id="wateringScheduleInModal" name="wateringInterval" step=1 pattern="\d{3}" maxlength="3"> days
                             </td>
                         </tr>
 
                         <tr>
                             <td>Last watered</td>
-                            <td><input type="date" id="lastWateredDateInModal"></td>
+                            <td><input type="date" id="lastWateredDateInModal" name="lastWateredDate"></td>
                         </tr>
 
                     </table>
@@ -185,17 +166,20 @@
 
                     </table>
 
+                    <br>
+
+                    <!-- Place for displaying chosen image or icon -->
+                    <img id="output" name="picturePath"/>
+
+                    <input id="userId" type="hidden" name="user.id" value="user.id"/>
+
+                    <!-- Modal window footer -->
+                    <div class="modal-footer">
+                        <input type="submit" class="buttonSave" value="Save changes" id="buttonSave">
+                        <input type="cancel" class="buttonCancel" data-dismiss="modal" value="Cancel" onclick="window.location.hash = '';">
+                    </div>
+
                 </form>
-
-                <br>
-
-                <!-- Place for displaying chosen image or icon -->
-                <img id="output"/>
-
-                <div class="modal-footer">
-                    <input type="submit" class="buttonSave" value="Save changes" id="buttonSave">
-                    <input type="cancel" class="buttonCancel" data-dismiss="modal" value="Cancel">
-                </div>
 
             </div>
         </div>
@@ -286,6 +270,20 @@
             }
         }
 </script>
+
+<!-- Script for changing URL when opening modal window
+<script>
+        if(window.location.hash.substr(1) == 'addPlant') {
+            $('#addPlant').modal('show');
+        }
+</script>
+
+<script>
+    if(window.location.hash.substr(1) == '') {
+            $('#addPlant').modal('close');
+        }
+</script>
+-->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

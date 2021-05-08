@@ -13,9 +13,6 @@ public class homePageController {
         return "forgotPassPage";
     }
 
-    @RequestMapping("/dashboard")
-    public String dashboardPage() {
-        return "dashboardPage";
-    }
+
 
 }

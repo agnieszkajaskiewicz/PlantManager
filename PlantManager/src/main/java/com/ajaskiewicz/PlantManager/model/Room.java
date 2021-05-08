@@ -5,21 +5,22 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
 @Entity
 @Table
-public class Role {
+public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    private String name;
+    private String roomName;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "room", fetch = FetchType.EAGER)
+    List<Plant> plant;
+
 }
