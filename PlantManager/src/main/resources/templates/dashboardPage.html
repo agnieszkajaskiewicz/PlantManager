@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +22,15 @@
         <img src="/logoPlantManager.png" alt="logoPlantManager" class="logoLeft">
     </div>
     <div class="logOut">
-        <a href="homePage.html">Log out</a>
+        <div sec:authorize="isAuthenticated()">
+            <p>User: <span sec:authentication="name"></span></p>
+
+            <form id="logoutForm" method="POST" th:action="@{/logout}">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </form>
+
+            <a onclick="document.forms['logoutForm'].submit()" class="logOutLink">Log out</a>
+        </div>
     </div>
 </div>
 

@@ -65,7 +65,7 @@ a:visited, a:hover, a:active {
 	position: absolute;
 	transform: rotateY(180deg);
 	backface-visibility: hidden;
-	transition: all .4s linear;
+
 }
 
 .login-html .sign-in,
@@ -218,6 +218,10 @@ a:visited, a:hover, a:active {
 	text-align:center;
 }
 
+.has-error {
+    color: red
+}
+
 /****************/
 /*DASHBOARD PAGE*/
 /****************/
@@ -244,8 +248,12 @@ a:visited, a:hover, a:active {
     position: absolute;
     right: 0;
     margin-top: 20px;
-    width: 6em;
+    width: 10em;
     text-transform: uppercase;
+}
+
+.logOutLink {
+    cursor: pointer;
 }
 
 /* Dashboard page > Collapsible sections */
