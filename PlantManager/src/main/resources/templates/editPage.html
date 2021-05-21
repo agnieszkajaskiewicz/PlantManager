@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Plant Manager</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+
+</head>
+<body>
+
+<!-- Logo and log out -->
+<div class="logoAndLogOut">
+    <div class="logo">
+        <img src="/logoPlantManager.png" alt="logoPlantManager" class="logoLeft">
+    </div>
+    <div class="logOut">
+        <div sec:authorize="isAuthenticated()">
+            <p>User: <span sec:authentication="name"></span></p>
+
+            <form id="logoutForm" method="POST" th:action="@{/logout}">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </form>
+
+            <a onclick="document.forms['logoutForm'].submit()" class="logOutLink">Log out</a>
+        </div>
+    </div>
+</div>
+
+<div class="edit-wrap">
+    <div class="edit-html">
+        <div class="edit-form">
+
+    <!-- Edit form -->
+    <form th:action="@{/dashboard/addPlant}"  th:object="${plant}" method="post">
+        <table>
+
+            <tr>
+                <td>Plant name:</td>
+                <td><input type="text" id="plantNameInModal" th:field="*{plantName}" name="plantName"></td>
+            </tr>
+
+            <tr>
+                <td>Room:</td>
+                <td><input type="text" id="roomInModal" th:field="*{Room.roomName}" name="roomName"></td>
+            </tr>
+
+        </table>
+
+        <br>
+
+        <table>
+            <tr>
+                <td>Care schedule:</td>
+            </tr>
+
+            <tr>
+                <td>Water every</td>
+                <td><input type="number" id="wateringScheduleInModal" th:field="*{WateringSchedule.watering_interval}" name="watering_interval" step=1 pattern="\d{3}" maxlength="3"> days
+                </td>
+            </tr>
+
+            <tr>
+                <td>Last watered</td>
+                <td><input type="date" id="lastWateredDateInModal" th:field="*{WateringSchedule.last_watered_date}" name="last_watered_date"></td>
+            </tr>
+
+        </table>
+
+        <br>
+
+        <table>
+            <tr>
+                <td>Picture:</td>
+            </tr>
+
+
+            <!-- Button for choosing file with plant image -->
+            <tr>
+                <td>
+                    <form action="/action_page.php">
+                        <button id="choosePlantImageButton" type="button">
+                            <label for="file" id="labelForUploadPlantImage">Upload image</label>
+                            <input type="file" name="image" id="file" onchange="loadFile(event)">
+                        </button>
+                    </form>
+                </td>
+            </tr>
+
+            <tr>
+                <td>OR</td>
+            </tr>
+
+            <!-- Button that triggers modal window with predefined plant icons gallery -->
+            <tr>
+                <td>
+                    <button id="chooseIconButton" type="button" data-toggle="modal" data-target="#modalChooseIcon">Choose icon</button>
+                </td>
+            </tr>
+
+        </table>
+
+        <br>
+
+        <!-- Place for displaying chosen image or icon -->
+        <img id="output" name="picturePath"/>
+
+        <!-- Modal window footer -->
+        <div class="modal-footer">
+            <input type="submit" class="buttonSave" value="Save changes" id="buttonSave">
+            <input type="cancel" class="buttonCancel" data-dismiss="modal" value="Cancel" onclick="location.href = '/dashboard';">
+        </div>
+
+        <input name="id" th:field="*{id}" type="hidden"></td>
+
+    </form>
+
+</div>
+</div>
+</div>
+
+
+<!-- Modal window for choosing plant icon -->
+<div id="modalChooseIcon" class="modal hide fade" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-focus-on="input:first">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Choose icon for your plant</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="container"></div>
+            <div class="modal-body">
+
+                <div class="plantIconsGallery">
+                    <input checked="checked" id="icon1" type="radio" name="plantIcon" value="icon1"/>
+                    <label class="plantIconLabel icon1" for="icon1"></label>
+
+                    <input id="icon2" type="radio" name="plantIcon" value="icon2"/>
+                    <label class="plantIconLabel icon2" for="icon2"></label>
+
+                    <input id="icon3" type="radio" name="plantIcon" value="icon3"/>
+                    <label class="plantIconLabel icon3" for="icon3"></label>
+
+                    <input id="icon4" type="radio" name="plantIcon" value="icon4"/>
+                    <label class="plantIconLabel icon4" for="icon4"></label>
+
+                    <input id="icon5" type="radio" name="plantIcon" value="icon5"/>
+                    <label class="plantIconLabel icon5" for="icon5"></label>
+
+                    <input id="icon6" type="radio" name="plantIcon" value="icon6"/>
+                    <label class="plantIconLabel icon6" for="icon6"></label>
+
+                    <input id="icon7" type="radio" name="plantIcon" value="icon7"/>
+                    <label class="plantIconLabel icon7" for="icon7"></label>
+
+                    <input id="icon8" type="radio" name="plantIcon" value="icon8"/>
+                    <label class="plantIconLabel icon8" for="icon8"></label>
+
+                    <input id="icon9" type="radio" name="plantIcon" value="icon9"/>
+                    <label class="plantIconLabel icon9" for="icon9"></label>
+
+                    <input id="icon10" type="radio" name="plantIcon" value="icon10"/>
+                    <label class="plantIconLabel icon10" for="icon10"></label>
+
+                    <input id="icon11" type="radio" name="plantIcon" value="icon11"/>
+                    <label class="plantIconLabel icon11" for="icon11"></label>
+
+                    <input id="icon12" type="radio" name="plantIcon" value="icon12"/>
+                    <label class="plantIconLabel icon12" for="icon12"></label>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="submit" class="buttonSave" value="Choose icon" onclick="displayRadioValue()" data-dismiss="modal">
+                    <input type="cancel" class="buttonCancel" data-dismiss="modal" value="Cancel">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Script for displaying chosen image -->
+<script>
+        var loadFile = function(event) {
+        var image = document.getElementById('output');
+        image.src = URL.createObjectURL(event.target.files[0]);
+        image.style.display = "block";
+        };
+</script>
+
+<!-- Script for displaying chosen predefined icon -->
+<script>
+        function displayRadioValue() {
+            var ele = document.getElementsByName('plantIcon');
+
+            for (i=0; i < ele.length; i++) {
+                if(ele[i].checked)
+                    document.getElementById("output").setAttribute("class", ele[i].value);
+                    document.getElementById("output").style.display = "block";
+            }
+        }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
+

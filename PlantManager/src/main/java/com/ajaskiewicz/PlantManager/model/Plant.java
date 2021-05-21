@@ -1,14 +1,14 @@
 package com.ajaskiewicz.PlantManager.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
 @Table
@@ -19,24 +19,27 @@ public class Plant {
 
     private String plantName;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "roomId")
     private Room room;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "wateringScheduleId")
     private WateringSchedule wateringSchedule;
 
-    private String picture_path;
+//    private String picture_path;
 
-    public Plant() {
+    public Plant(String plantName, String room, Integer wateringInterval, String lastWateredDate) {
+        this.plantName = plantName;
+        this.room = new Room(room);
+        this.wateringSchedule = new WateringSchedule(wateringInterval, lastWateredDate);
     }
 
-    public Plant(String plantName, Room room, Integer wateringInterval, Date lastWateredDate, String picturePath) {
+    public Plant(Integer id, String plantName, String roomName, Integer wateringInterval, String lastWateredDate) {
+        this.id = id;
         this.plantName = plantName;
-        this.room = room;
+        this.room = new Room(roomName);
         this.wateringSchedule = new WateringSchedule(wateringInterval, lastWateredDate);
-        this.picture_path = picturePath;
     }
 
 }

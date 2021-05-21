@@ -1,6 +1,5 @@
 package com.ajaskiewicz.PlantManager.service;
 
-import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.model.Room;
 
 public interface RoomService {

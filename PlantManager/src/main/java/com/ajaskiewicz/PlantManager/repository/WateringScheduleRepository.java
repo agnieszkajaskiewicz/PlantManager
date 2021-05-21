@@ -1,6 +1,5 @@
 package com.ajaskiewicz.PlantManager.repository;
 
-import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.model.WateringSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 

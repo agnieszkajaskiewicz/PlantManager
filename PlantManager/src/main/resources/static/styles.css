@@ -37,7 +37,8 @@ a:visited, a:hover, a:active {
 /*************************************/
 
 .login-wrap,
-.forgotPass-wrap {
+.forgotPass-wrap,
+.edit-wrap{
 	width: 100%;
 	margin: auto;
 	max-width: 525px;
@@ -46,7 +47,8 @@ a:visited, a:hover, a:active {
 }
 
 .login-html,
-.forgotPass-html {
+.forgotPass-html,
+.edit-html{
 	width: 100%;
 	height: 100%;
 	position: absolute;
@@ -103,7 +105,8 @@ a:visited, a:hover, a:active {
 }
 
 .login-form,
-.forgotPass-form {
+.forgotPass-form,
+.edit-form{
 	min-height: 345px;
 	position: relative;
 	perspective: 1000px;
