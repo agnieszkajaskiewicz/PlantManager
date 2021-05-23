@@ -15,4 +15,6 @@ public interface PlantService {
 
         public void delete(int id) throws NotFoundException;
 
+        public Iterable<Plant> findPlantsToBeWateredSoon();
+
 }

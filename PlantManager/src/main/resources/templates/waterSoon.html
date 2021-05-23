@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Plant Manager Dashboard</title>
+    <title>Plant Manager To be watered soon</title>
 
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
@@ -68,50 +68,6 @@
 
 
 <br><br>
-
-<!-- Collapsible section 'Your plants' -->
-<div class="wrap-collapsible">
-    <input id="collapsible2" class="toggle" type="checkbox" checked>
-    <label for="collapsible2" class="lbl-toggle">Your plants:</label>
-
-        <div class="collapsible-content">
-            <div class="content-inner">
-                <main class="cards">
-
-                    <article class="card" th:each="entry : ${plant}">
-                        <div class="image">
-                            <img class="img img-responsive full-width" src="/draecena.jpg">
-                        </div>
-                        <div class="text">
-                            <p th:text="${entry.plantName}"></p>
-                            <!-- Button that triggers modal window for editing/adding plant -->
-                            <a type="button" class="buttonEdit" th:href="@{dashboard/editPlant/{id}(id=${entry.id})}">Edit</a>
-                        </div>
-
-                        <div>
-                            <a th:href="@{/dashboard/deletePlant/{id}(id=${entry.id})}">
-                                <img src="/bin.png" class="binIcon" />
-                            </a>
-                        </div>
-
-                    </article>
-
-
-                    <article class="card">
-                        <div class="image">
-                            <img class="img img-responsive full-width" src="/addIcon.png">
-                        </div>
-                        <div class="text">
-                            <p>Your new plant</p>
-                            <a type="button" class="buttonEdit" th:href="@{dashboard/editPlant}">Add</a>
-                        </div>
-                    </article>
-
-                </main>
-            </div>
-        </div>
-</div>
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
