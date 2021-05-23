@@ -3,7 +3,6 @@ package com.ajaskiewicz.PlantManager.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 @Getter
 @Setter

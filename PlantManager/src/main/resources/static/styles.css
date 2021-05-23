@@ -362,34 +362,25 @@ input[type='checkbox'] {
         min-height: 70px;
 }
 
-.card .text > button {
-    background: #154030;
-    border: 0;
-    padding: 10px;
-    width: 100%;
-    text-transform: uppercase;
-    cursor: pointer;
-    align-self: flex-end;
+.binIcon {
+      max-width: 40%;
+      max-height: 40%;
+      position: relative;
+      left: 40%;
+
 }
 
-/* Modal window for editing/adding plants */
-.modal-content {
-    background-color: #1E5C45;
-}
-
-.modal-title {
-    text-transform: uppercase;
-}
-
-#plantNameInModal,
-#roomInModal,
-#wateringScheduleInModal,
-#lastWateredDateInModal,
+/* Page for editing/adding plants */
+#plantNameEdition,
+#roomEdition,
+#wateringScheduleEdition,
+#lastWateredDateEdition,
 #chooseIconButton {
     color: black;
 }
 
-.buttonSave {
+.buttonSave,
+.buttonEdit {
    background: #154030;
    border: 0;
    padding: 10px;
@@ -410,6 +401,7 @@ input[type='checkbox'] {
    text-align: center;
 }
 
+
 /* Modal window for editing/adding plants > upload image */
 #choosePlantImageButton {
     color: black;
@@ -428,6 +420,14 @@ input[type='checkbox'] {
 }
 
 /* Modal window for editing and adding plants > choose predefined icon */
+.modal-content {
+    background-color: #1E5C45;
+}
+
+.modal-title {
+    text-transform: uppercase;
+}
+
 #chooseIconButton {
     cursor: pointer;
 }

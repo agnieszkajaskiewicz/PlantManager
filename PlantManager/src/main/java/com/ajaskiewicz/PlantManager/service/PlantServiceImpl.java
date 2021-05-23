@@ -31,8 +31,7 @@ public class PlantServiceImpl implements PlantService {
         Optional<Plant> plant = plantRepository.findById(id);
         if (plant.isPresent()) {
             return plant.get();
-        }
-        else {
+        } else {
             throw new NotFoundException("No plant record exist for given ID.");
         }
     }
@@ -42,42 +41,23 @@ public class PlantServiceImpl implements PlantService {
         return plantRepository.save(plant);
     }
 
+    public Plant createOrUpdatePlant(Plant plant) {
+        System.out.println(plant);
 
-    public Plant createOrUpdatePlant(Plant plant, Room room, WateringSchedule wateringSchedule) {
         if (plant.getId() == null) {
             plant = plantRepository.save(plant);
             return plant;
-        }
-        else {
-            Optional<Plant> entity = plantRepository.findById(plant.getId());
-
-            if (entity.isPresent()) {
-
-                Plant newPlant = entity.get();
-
-//                newPlant.setId(newPlant.getId());
-//                newPlant.setPlantName(newPlant.getPlantName());
-//                newPlant.setRoom(room);
-//                newPlant.setWateringSchedule(wateringSchedule);
-
-                newPlant.setId(newPlant.getId());
-                newPlant.setPlantName(newPlant.getPlantName());
-                newPlant.setRoom(newPlant.getRoom());
-                newPlant.setWateringSchedule(newPlant.getWateringSchedule());
-
-                System.out.println(newPlant.getId());
-//                System.out.println(newPlant.getRoom());
-                System.out.println(newPlant.getPlantName());
-//                System.out.println(newPlant.getWateringSchedule());
-
-                plantRepository.save(newPlant);
-
-                return newPlant;
-            } else {
-                plant = plantRepository.save(plant);
-                return plant;
-            }
+        } else {
+            plantRepository.save(plant);
+            return plant;
         }
     }
+
+    @Override
+    public void delete(int id) throws NotFoundException {
+        Optional<Plant> plant = plantRepository.findById(id);
+        plantRepository.deleteById(id);
+    }
+
 
 }
