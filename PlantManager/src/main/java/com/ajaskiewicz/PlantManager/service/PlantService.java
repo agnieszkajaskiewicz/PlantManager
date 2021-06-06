@@ -3,18 +3,24 @@ package com.ajaskiewicz.PlantManager.service;
 import com.ajaskiewicz.PlantManager.model.Plant;
 import javassist.NotFoundException;
 
+import java.util.List;
+
 public interface PlantService {
 
-        public Iterable<Plant> findAll();
+        Iterable<Plant> findAll();
 
-        public Plant find(int id) throws NotFoundException;
+        Plant find(int id) throws NotFoundException;
 
-        public Plant save(Plant plant);
+        Plant save(Plant plant);
 
-        public Plant createOrUpdatePlant(Plant plant);
+        Plant createOrUpdatePlant(Plant plant);
 
-        public void delete(int id) throws NotFoundException;
+        void delete(int id) throws NotFoundException;
 
-        public Iterable<Plant> findPlantsToBeWateredSoon();
+        Iterable<Plant> findPlantsToBeWateredSoon();
+
+        Plant updateLastWateredDate(Plant plant) throws NotFoundException;
+
+//        List<Integer> differenceInDays();
 
 }

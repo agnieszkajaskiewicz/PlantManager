@@ -272,7 +272,7 @@ input[type='checkbox'] {
   display: block;
   font-size: 1.2rem;
   text-transform: uppercase;
-  padding: 1rem;
+  padding: 20px;
   background: #1E5C45;
   cursor: pointer;
   border-radius: 7px;
@@ -322,7 +322,19 @@ input[type='checkbox'] {
   padding: .5rem 1rem;
 }
 
-/* Dashboard page > Collapsible sections > Cards */
+.toBeWatered,
+.goToDashboard {
+   background: #1E5C45;
+   border: 0;
+   padding: 20px;
+   font-size: 1.2rem;
+   width: 100%;
+   text-transform: uppercase;
+   cursor: pointer;
+   border-radius: 5px;
+   }
+
+/* Dashboard page/To be watered soon page > Collapsible sections > Cards */
 .cards {
     display: flex;
     flex-wrap: wrap;
@@ -380,7 +392,8 @@ input[type='checkbox'] {
 }
 
 .buttonSave,
-.buttonEdit {
+.buttonEdit,
+.buttonConfirm {
    background: #154030;
    border: 0;
    padding: 10px;
@@ -399,6 +412,13 @@ input[type='checkbox'] {
    cursor: pointer;
    border-radius: 5px;
    text-align: center;
+}
+
+.plantEditionTitle {
+   text-align: center;
+   text-transform: uppercase;
+   padding: 10px;
+   font-size: 1.3rem;
 }
 
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Plant Manager To be watered soon</title>
+    <title>Plant Manager</title>
 
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
@@ -34,40 +34,36 @@
     </div>
 </div>
 
-<!-- Collapsible section 'To be watered in next 3 days' -->
-<div class="wrap-collapsible">
-    <input id="collapsible2" class="toggle" type="checkbox" checked>
-    <label for="collapsible2" class="lbl-toggle">To be watered in next 3 days:</label>
+<div class="edit-wrap">
+    <div class="edit-html">
+        <div class="edit-form">
 
-    <div class="collapsible-content">
-        <div class="content-inner">
-            <main class="cards">
+            <!-- Edit form -->
+            <form th:action="@{/toBeWateredSoon/confirmWatering}"  th:object="${plant}" method="post">
 
-                <article class="card" th:each="entry : ${plant}">
-                    <div class="image">
-                        <img class="img img-responsive full-width" src="/draecena.jpg">
-                    </div>
-                    <div class="text">
-                        <p th:text="${entry.plantName}"></p>
-                        <!-- Button that triggers modal window for editing/adding plant -->
-                        <a type="button" class="buttonEdit" th:href="@{dashboard/editPlant/{id}(id=${entry.id})}">Edit</a>
-                    </div>
+                <div class="plantEditionTitle">
+                    <p>Have you watered</p>
+                    <p th:text="*{plantName}"></p>
+                    <p>today?</p></div><br>
 
-                    <div>
-                        <a th:href="@{/dashboard/deletePlant/{id}(id=${entry.id})}">
-                            <img src="/bin.png" class="binIcon" />
-                        </a>
-                    </div>
+                <!-- Modal window footer -->
+                <div class="modal-footer">
+                    <input type="submit" class="buttonSave" value="YES" id="buttonSave">
+                    <input type="cancel" class="buttonCancel" data-dismiss="modal" value="NO" onclick="location.href = '/toBeWateredSoon';">
+                </div>
 
-                </article>
+                <input id="id" name="id" th:field="*{id}" type="hidden"></td>
+                <input type="hidden" id="plantNameEdition" th:field="*{plantName}" name="plantName">
+                <input type="hidden" id="roomEdition" th:field="*{Room.roomName}" name="roomName">
+                <input type="hidden" id="wateringScheduleEdition" th:field="*{WateringSchedule.watering_interval}" name="watering_interval" step=1 pattern="\d{3}" maxlength="3">
+                <input type="hidden" id="lastWateredDateEdition" th:field="*{WateringSchedule.last_watered_date}" name="last_watered_date">
 
-            </main>
+            </form>
+
         </div>
     </div>
 </div>
 
-
-<br><br>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

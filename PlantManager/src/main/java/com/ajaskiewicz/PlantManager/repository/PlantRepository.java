@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface PlantRepository extends JpaRepository <Plant, Integer> {
     List<Plant> findAllById(Integer searchValue);
+
 }

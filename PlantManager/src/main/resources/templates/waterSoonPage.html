@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Plant Manager To be watered soon</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+
+</head>
+<body>
+
+<!-- Logo and log out -->
+<div class="logoAndLogOut">
+    <div class="logo">
+        <img src="/logoPlantManager.png" alt="logoPlantManager" class="logoLeft">
+    </div>
+    <div class="logOut">
+        <div sec:authorize="isAuthenticated()">
+            <p>User: <span sec:authentication="name"></span></p>
+
+            <form id="logoutForm" method="POST" th:action="@{/logout}">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </form>
+
+            <a onclick="document.forms['logoutForm'].submit()" class="logOutLink">Log out</a>
+        </div>
+    </div>
+</div>
+
+<!-- Collapsible section 'To be watered in next 3 days' -->
+<div class="wrap-collapsible">
+    <input id="collapsible2" class="toggle" type="checkbox" checked>
+    <label for="collapsible2" class="lbl-toggle">To be watered in next 3 days:</label>
+
+    <div class="collapsible-content">
+        <div class="content-inner">
+            <main class="cards">
+
+                <article class="card" th:each="entry : ${plant}">
+                    <div class="image">
+                        <img class="img img-responsive full-width" src="/draecena.jpg">
+                    </div>
+                    <div class="text">
+                        <p th:text="${entry.plantName}"></p>
+<!--                        <p>(<span th:text="${differenceInDays}"> </span> days)</p>-->
+
+                        <!-- Button that opens page for watering confirmation -->
+                        <a type="button" class="buttonConfirm" th:href="@{toBeWateredSoon/confirm/{id}(id=${entry.id})}">Confirm</a>
+                    </div>
+
+                </article>
+
+            </main>
+        </div>
+    </div>
+</div>
+
+<div class="goToDashboard">
+    <a type="button" class="buttonGoToDashboard" th:href="@{dashboard}">Go back to dashboard</a>
+</div>
+
+
+<br><br>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
+

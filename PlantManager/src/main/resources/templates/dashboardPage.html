@@ -35,35 +35,8 @@
 </div>
 
 <!-- Collapsible section 'To be watered in next 3 days' -->
-<div class="wrap-collapsible">
-    <input id="collapsible2" class="toggle" type="checkbox" checked>
-    <label for="collapsible2" class="lbl-toggle">To be watered in next 3 days:</label>
-
-    <div class="collapsible-content">
-        <div class="content-inner">
-            <main class="cards">
-
-                <article class="card" th:each="entry : ${plant}">
-                    <div class="image">
-                        <img class="img img-responsive full-width" src="/draecena.jpg">
-                    </div>
-                    <div class="text">
-                        <p th:text="${entry.plantName}"></p>
-                        <!-- Button that triggers modal window for editing/adding plant -->
-                        <a type="button" class="buttonEdit" th:href="@{dashboard/editPlant/{id}(id=${entry.id})}">Edit</a>
-                    </div>
-
-                    <div>
-                        <a th:href="@{/dashboard/deletePlant/{id}(id=${entry.id})}">
-                            <img src="/bin.png" class="binIcon" />
-                        </a>
-                    </div>
-
-                </article>
-
-            </main>
-        </div>
-    </div>
+<div class="toBeWatered">
+    <a type="button" class="buttonToBeWatered" th:href="@{toBeWateredSoon}">See plants that should be watered in next 3 days</a>
 </div>
 
 
