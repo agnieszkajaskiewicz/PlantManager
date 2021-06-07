@@ -7,15 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class homePageController {
 
-
     @RequestMapping("/forgotPass")
     public String forgotPassPage() {
         return "forgotPassPage";
-    }
-
-    @RequestMapping("/dashboard")
-    public String dashboardPage() {
-        return "dashboardPage";
     }
 
 }

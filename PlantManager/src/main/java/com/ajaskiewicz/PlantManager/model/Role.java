@@ -11,7 +11,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Entity
-@Table(name = "roles")
+@Table
 public class Role {
 
     @Id
