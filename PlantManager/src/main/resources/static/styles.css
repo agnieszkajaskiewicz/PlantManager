@@ -421,6 +421,12 @@ input[type='checkbox'] {
    font-size: 1.3rem;
 }
 
+.imageOnEditionPage {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+}
+
 
 /* Modal window for editing/adding plants > upload image */
 #choosePlantImageButton {

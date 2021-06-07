@@ -65,7 +65,8 @@ public class PlantServiceImpl implements PlantService {
         List<Plant> plantsToBeWatered = new ArrayList<>();
 
         for (int index = 0; index < allPlants.size(); index++) {
-            if (findDifferenceInDays(allPlants.get(index).getWateringSchedule().getLast_watered_date(), allPlants.get(index).getWateringSchedule().getWatering_interval() ) <= 3) {
+            if (findDifferenceInDays(allPlants.get(index).getWateringSchedule().getLast_watered_date(), allPlants.get(index).getWateringSchedule().getWatering_interval() ) <= 3
+            && findDifferenceInDays(allPlants.get(index).getWateringSchedule().getLast_watered_date(), allPlants.get(index).getWateringSchedule().getWatering_interval() ) > 0) {
                 plantsToBeWatered.add(allPlants.get(index));
             }
         }
@@ -94,8 +95,7 @@ public class PlantServiceImpl implements PlantService {
 
             differenceInDays = ((differenceInTime / (1000 * 60 * 60 * 24)) + wateringInterval) % 365;
 
-            System.out.print("Difference between two dates is: ");
-            System.out.println(differenceInDays + " days");
+            System.out.println("Difference between two dates is: " + differenceInDays + " days");
             return differenceInDays;
 
         } catch (ParseException ex) {

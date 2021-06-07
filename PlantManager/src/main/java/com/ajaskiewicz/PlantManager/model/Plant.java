@@ -3,6 +3,7 @@ package com.ajaskiewicz.PlantManager.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.beans.Transient;
 import java.util.Date;
 
 @Getter
@@ -27,7 +28,7 @@ public class Plant {
     @JoinColumn(name = "wateringScheduleId")
     private WateringSchedule wateringSchedule;
 
-//    private String picture_path;
+    private String imageName;
 
     public Plant(String plantName, String room, Integer wateringInterval, String lastWateredDate) {
         this.plantName = plantName;
@@ -40,6 +41,12 @@ public class Plant {
         this.plantName = plantName;
         this.room = new Room(roomName);
         this.wateringSchedule = new WateringSchedule(wateringInterval, lastWateredDate);
+    }
+
+    @Transient
+    public String getImageName() {
+        if (imageName == null || id == null) return null;
+        return "/uploadedImages/" + id + "/" + imageName;
     }
 
 }

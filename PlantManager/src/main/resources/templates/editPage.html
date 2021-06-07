@@ -39,7 +39,7 @@
         <div class="edit-form">
 
     <!-- Edit form -->
-    <form th:action="@{/dashboard/addPlant}"  th:object="${plant}" method="post">
+    <form th:action="@{/dashboard/addPlant}"  th:object="${plant}" method="post" enctype="multipart/form-data">
         <table>
 
             <tr>
@@ -85,12 +85,10 @@
             <!-- Button for choosing file with plant image -->
             <tr>
                 <td>
-                    <form action="/action_page.php">
                         <button id="choosePlantImageButton" type="button">
                             <label for="file" id="labelForUploadPlantImage">Upload image</label>
-                            <input type="file" name="image" id="file" onchange="loadFile(event)">
+                            <input type="file" name="image" accept="image/png, image/jpeg" id="file" onchange="loadFile(event)"/>
                         </button>
-                    </form>
                 </td>
             </tr>
 
@@ -110,7 +108,10 @@
         <br>
 
         <!-- Place for displaying chosen image or icon -->
-        <img id="output" name="picturePath"/>
+        <img id="output" name="picturePath" th:src="${plant.imageName}"/>
+<!--        <div>-->
+<!--            <img class="imageOnEditionPage" th:src="${plant.imageName}" onError="this.onerror=null;this.src='/addIcon.png';" >-->
+<!--        </div>-->
 
         <!-- Modal window footer -->
         <div class="modal-footer">
