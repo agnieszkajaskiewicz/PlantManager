@@ -19,7 +19,9 @@
 <!-- Logo and log out -->
 <div class="logoAndLogOut">
     <div class="logo">
-        <img src="/logoPlantManager.png" alt="logoPlantManager" class="logoLeft">
+        <a href="/dashboard">
+            <img src="/logoPlantManager.png" alt="logoPlantManager" class="logoLeft">
+        </a>
     </div>
     <div class="logOut">
         <div sec:authorize="isAuthenticated()">
@@ -45,7 +47,8 @@
 
                 <article class="card" th:each="entry : ${plant}">
                     <div class="image">
-                        <img class="img img-responsive full-width" src="/draecena.jpg">
+                        <img class="img img-responsive full-width" th:src="@{/uploadedImages/{id}/{imageName}(id=${entry.id}, imageName=${entry.imageName})}"
+                             onError="this.onerror=null;this.src='/addIcon.png';" >
                     </div>
                     <div class="text">
                         <p th:text="${entry.plantName}"></p>

@@ -11,7 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Controller
@@ -47,9 +50,19 @@ public class PlantController {
     }
 
     @RequestMapping(path = "/addPlant", method = RequestMethod.POST)
-    public String createOrUpdatePlant(Plant plant)
-    {
-        plantService.createOrUpdatePlant(plant);
+    public String createOrUpdatePlant(Plant plant, @RequestParam("image") MultipartFile multipartFile) throws IOException {
+
+        String filename = multipartFile.getOriginalFilename();
+
+        if (multipartFile.isEmpty()) {
+            plantService.createOrUpdatePlant(plant);
+        } else {
+            plant.setImageName(filename);
+            Plant savedPlant = plantService.createOrUpdatePlant(plant);
+
+            String uploadDirectory = "uploadedImages/" + savedPlant.getId();
+            FileUploadUtil.saveFile(uploadDirectory, filename, multipartFile);
+        }
         return "redirect:/dashboard";
     }
 
