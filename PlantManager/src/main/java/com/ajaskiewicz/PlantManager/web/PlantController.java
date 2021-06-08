@@ -53,11 +53,16 @@ public class PlantController {
     public String createOrUpdatePlant(Plant plant, @RequestParam("image") MultipartFile multipartFile) throws IOException {
 
         String filename = multipartFile.getOriginalFilename();
-        plant.setImageName(filename);
-        Plant savedPlant = plantService.createOrUpdatePlant(plant);
 
-        String uploadDirectory = "uploadedImages/" + savedPlant.getId();
-        FileUploadUtil.saveFile(uploadDirectory, filename, multipartFile);
+        if (multipartFile.isEmpty()) {
+            plantService.createOrUpdatePlant(plant);
+        } else {
+            plant.setImageName(filename);
+            Plant savedPlant = plantService.createOrUpdatePlant(plant);
+
+            String uploadDirectory = "uploadedImages/" + savedPlant.getId();
+            FileUploadUtil.saveFile(uploadDirectory, filename, multipartFile);
+        }
         return "redirect:/dashboard";
     }
 

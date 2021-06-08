@@ -46,7 +46,7 @@ public class Plant {
     @Transient
     public String getImageName() {
         if (imageName == null || id == null) return null;
-        return "/uploadedImages/" + id + "/" + imageName;
+        return imageName;
     }
 
 }
