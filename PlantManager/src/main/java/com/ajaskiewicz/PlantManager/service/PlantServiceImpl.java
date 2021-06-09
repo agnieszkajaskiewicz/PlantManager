@@ -1,10 +1,15 @@
 package com.ajaskiewicz.PlantManager.service;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
+import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.repository.PlantRepository;
+import com.ajaskiewicz.PlantManager.repository.UserRepository;
 import com.ajaskiewicz.PlantManager.repository.WateringScheduleRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -20,9 +25,24 @@ public class PlantServiceImpl implements PlantService {
     @Autowired
     private WateringScheduleRepository wateringScheduleRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    public PlantServiceImpl(PlantRepository plantRepository, WateringScheduleRepository wateringScheduleRepository, UserRepository userRepository) {
+        this.plantRepository = plantRepository;
+        this.wateringScheduleRepository = wateringScheduleRepository;
+        this.userRepository = userRepository;
+    }
+
     @Override
     public List<Plant> findAll() {
         List<Plant> result = (List<Plant>) plantRepository.findAll();
+        return result;
+    }
+
+    @Override
+    public List<Plant> findAllByUserId(int id) {
+        List<Plant> result = plantRepository.findAllByUserId(id);
         return result;
     }
 
@@ -43,6 +63,11 @@ public class PlantServiceImpl implements PlantService {
 
     public Plant createOrUpdatePlant(Plant plant) {
         System.out.println(plant);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User queriedUser = userRepository.findByUsername(username);
+        plant.setUser(queriedUser);
 
         if (plant.getId() == null) {
             plant = plantRepository.save(plant);
@@ -65,8 +90,8 @@ public class PlantServiceImpl implements PlantService {
         List<Plant> plantsToBeWatered = new ArrayList<>();
 
         for (int index = 0; index < allPlants.size(); index++) {
-            if (findDifferenceInDays(allPlants.get(index).getWateringSchedule().getLast_watered_date(), allPlants.get(index).getWateringSchedule().getWatering_interval() ) <= 3
-            && findDifferenceInDays(allPlants.get(index).getWateringSchedule().getLast_watered_date(), allPlants.get(index).getWateringSchedule().getWatering_interval() ) > 0) {
+            if (findDifferenceInDays(allPlants.get(index).getWateringSchedule().getLast_watered_date(), allPlants.get(index).getWateringSchedule().getWatering_interval()) <= 3
+                    && findDifferenceInDays(allPlants.get(index).getWateringSchedule().getLast_watered_date(), allPlants.get(index).getWateringSchedule().getWatering_interval()) > 0) {
                 plantsToBeWatered.add(allPlants.get(index));
             }
         }
@@ -132,6 +157,12 @@ public class PlantServiceImpl implements PlantService {
         String today = dateFormat.format(date);
 
         plant.getWateringSchedule().setLast_watered_date(today);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User queriedUser = userRepository.findByUsername(username);
+        plant.setUser(queriedUser);
+
         plantRepository.save(plant);
 
         return plant;

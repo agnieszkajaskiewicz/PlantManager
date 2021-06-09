@@ -1,11 +1,15 @@
 package com.ajaskiewicz.PlantManager.web;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
+import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.PlantService;
 import com.ajaskiewicz.PlantManager.service.RoomService;
+import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.service.WateringScheduleService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,16 +34,18 @@ public class PlantController {
     @Autowired
     private WateringScheduleService wateringScheduleService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("")
     public String showDashboard(Model model) {
-        model.addAttribute("plant", plantService.findAll());
+        model.addAttribute("plant", plantService.findAllByUserId(userService.findIdOfLoggedUser()));
         return "dashboardPage";
     }
 
     @RequestMapping(path = {"/editPlant", "/editPlant/{id}"})
     public String editPlantById(Model model, @PathVariable("id") Optional<Integer> id)
-            throws NotFoundException
-    {
+            throws NotFoundException {
         if (id.isPresent()) {
             Plant entity = plantService.find(id.get());
             model.addAttribute("plant", entity);

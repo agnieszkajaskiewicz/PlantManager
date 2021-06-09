@@ -30,6 +30,10 @@ public class Plant {
 
     private String imageName;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "userId")
+    private User user;
+
     public Plant(String plantName, String room, Integer wateringInterval, String lastWateredDate) {
         this.plantName = plantName;
         this.room = new Room(room);
