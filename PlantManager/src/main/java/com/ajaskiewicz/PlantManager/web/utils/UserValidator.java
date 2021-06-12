@@ -1,4 +1,4 @@
-package com.ajaskiewicz.PlantManager.web;
+package com.ajaskiewicz.PlantManager.web.utils;
 
 import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.UserService;
@@ -19,7 +19,7 @@ public class UserValidator implements Validator {
         return User.class.equals(aClass);
     }
 
-    @Override
+    @Override //todo obskoczyć adnotacjami https://hibernate.org/validator/
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 

@@ -19,7 +19,7 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
+    @Autowired //Autowired konstruktor
     private UserRepository userRepository;
 
     @Override

@@ -1,21 +1,16 @@
-package com.ajaskiewicz.PlantManager.web;
+package com.ajaskiewicz.PlantManager.web.rest;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
-import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.PlantService;
 import com.ajaskiewicz.PlantManager.service.RoomService;
 import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.service.WateringScheduleService;
+import com.ajaskiewicz.PlantManager.web.utils.FileUploadUtil;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -37,7 +32,7 @@ public class PlantController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("")
+    @RequestMapping
     public String showDashboard(Model model) {
         model.addAttribute("plant", plantService.findAllByUserId(userService.findIdOfLoggedUser()));
         return "dashboardPage";
@@ -72,9 +67,9 @@ public class PlantController {
         return "redirect:/dashboard";
     }
 
-    @RequestMapping("/deletePlant/{id}")
-    public String deletePlantById(Plant plant, @PathVariable("id") Optional<Integer> id) throws NotFoundException {
-        plantService.delete(id.get());
+    @RequestMapping(value = "/deletePlant/{id}")
+    public String deletePlantById(@PathVariable("id") Integer id) throws NotFoundException {
+        plantService.delete(id);
         return "redirect:/dashboard";
     }
 

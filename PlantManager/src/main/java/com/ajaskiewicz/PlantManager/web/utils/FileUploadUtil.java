@@ -1,4 +1,4 @@
-package com.ajaskiewicz.PlantManager.web;
+package com.ajaskiewicz.PlantManager.web.utils;
 
 import org.springframework.web.multipart.MultipartFile;
 

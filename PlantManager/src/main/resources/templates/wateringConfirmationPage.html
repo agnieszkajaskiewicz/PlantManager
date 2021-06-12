@@ -57,8 +57,8 @@
                 <input id="id" name="id" th:field="*{id}" type="hidden"></td>
                 <input type="hidden" id="plantNameEdition" th:field="*{plantName}" name="plantName">
                 <input type="hidden" id="roomEdition" th:field="*{Room.roomName}" name="roomName">
-                <input type="hidden" id="wateringScheduleEdition" th:field="*{WateringSchedule.watering_interval}" name="watering_interval" step=1 pattern="\d{3}" maxlength="3">
-                <input type="hidden" id="lastWateredDateEdition" th:field="*{WateringSchedule.last_watered_date}" name="last_watered_date">
+                <input type="hidden" id="wateringScheduleEdition" th:field="*{WateringSchedule.wateringInterval}" name="wateringInterval" step=1 pattern="\d{3}" maxlength="3">
+                <input type="hidden" id="lastWateredDateEdition" th:field="*{WateringSchedule.lastWateredDate}" name="lastWateredDate">
                 <input type="hidden" id="imageName" th:field="*{imageName}">
 
             </form>

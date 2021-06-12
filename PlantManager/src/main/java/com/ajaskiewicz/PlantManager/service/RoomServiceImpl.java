@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service("roomService")
 public class RoomServiceImpl implements RoomService {
 
-    @Autowired
+    @Autowired //@autowired na polu a nie konstruktorze
     private RoomRepository roomRepository;
 
     @Override

@@ -1,8 +1,9 @@
-package com.ajaskiewicz.PlantManager.web;
+package com.ajaskiewicz.PlantManager.web.rest;
 
 import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.SecurityService;
 import com.ajaskiewicz.PlantManager.service.UserService;
+import com.ajaskiewicz.PlantManager.web.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

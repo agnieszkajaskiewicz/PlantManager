@@ -3,14 +3,12 @@ package com.ajaskiewicz.PlantManager.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.beans.Transient;
 import java.util.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table
 public class Plant {
@@ -34,6 +32,10 @@ public class Plant {
     @JoinColumn(name = "userId")
     private User user;
 
+    @Transient
+    private Long wateringDifferenceInDays; //todo przenieść 2 pola z WateringSchedule jako pola klasy Plant
+    //dopisać metodę która dynamicznie zwraca difference in days na podstawie tych pól
+
     public Plant(String plantName, String room, Integer wateringInterval, String lastWateredDate) {
         this.plantName = plantName;
         this.room = new Room(room);
@@ -47,9 +49,10 @@ public class Plant {
         this.wateringSchedule = new WateringSchedule(wateringInterval, lastWateredDate);
     }
 
-    @Transient
     public String getImageName() {
-        if (imageName == null || id == null) return null;
+        if (imageName == null || id == null) {
+            return null;
+        }
         return imageName;
     }
 
