@@ -457,3 +457,13 @@ input[type='checkbox'] {
     background-size: contain;
     margin-bottom: 10px;
 }
+
+/****************/
+/*EMAIL REMINDER*/
+/****************/
+
+#logoInEmailReminder {
+    width: 25%;
+    height: 25%;
+    align: center;
+}
