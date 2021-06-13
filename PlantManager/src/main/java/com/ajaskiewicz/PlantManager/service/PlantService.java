@@ -3,6 +3,8 @@ package com.ajaskiewicz.PlantManager.service;
 import com.ajaskiewicz.PlantManager.model.Plant;
 import javassist.NotFoundException;
 
+import java.util.List;
+
 public interface PlantService {
 
         Iterable<Plant> findAll();
@@ -17,10 +19,7 @@ public interface PlantService {
 
         void delete(int id) throws NotFoundException;
 
-        Iterable<Plant> findPlantsToBeWateredSoon();
+        List<Plant> findPlantsToBeWateredSoon(Integer id);
 
         Plant updateLastWateredDate(Plant plant) throws NotFoundException;
-
-//        List<Integer> differenceInDays();
-
 }

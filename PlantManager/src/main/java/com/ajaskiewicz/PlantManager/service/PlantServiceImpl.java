@@ -1,14 +1,12 @@
 package com.ajaskiewicz.PlantManager.service;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
-import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.repository.PlantRepository;
 import com.ajaskiewicz.PlantManager.repository.UserRepository;
 import com.ajaskiewicz.PlantManager.repository.WateringScheduleRepository;
 import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +15,18 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("plantService")
+@Slf4j
 public class PlantServiceImpl implements PlantService {
 
-    @Autowired
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
     private PlantRepository plantRepository;
 
-    @Autowired
     private WateringScheduleRepository wateringScheduleRepository;
 
-    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     public PlantServiceImpl(PlantRepository plantRepository, WateringScheduleRepository wateringScheduleRepository, UserRepository userRepository) {
         this.plantRepository = plantRepository;
         this.wateringScheduleRepository = wateringScheduleRepository;
@@ -36,19 +35,19 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<Plant> findAll() {
-        List<Plant> result = (List<Plant>) plantRepository.findAll();
+        var result = (List<Plant>) plantRepository.findAll();
         return result;
     }
 
     @Override
     public List<Plant> findAllByUserId(int id) {
-        List<Plant> result = plantRepository.findAllByUserId(id);
+        var result = plantRepository.findAllByUserId(id);
         return result;
     }
 
     @Override
     public Plant find(int id) throws NotFoundException {
-        Optional<Plant> plant = plantRepository.findById(id);
+        var plant = plantRepository.findById(id);
         if (plant.isPresent()) {
             return plant.get();
         } else {
@@ -62,58 +61,58 @@ public class PlantServiceImpl implements PlantService {
     }
 
     public Plant createOrUpdatePlant(Plant plant) {
-        System.out.println(plant);
+        log.info("Create/update request received for: " + plant.toString());
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User queriedUser = userRepository.findByUsername(username);
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var username = authentication.getName();
+        var queriedUser = userRepository.findByUsername(username);
         plant.setUser(queriedUser);
 
-        if (plant.getId() == null) {
-            plant = plantRepository.save(plant);
-            return plant;
-        } else {
-            plantRepository.save(plant);
-            return plant;
-        }
+        plantRepository.save(plant);
+        return plant;
     }
 
     @Override
-    public void delete(int id) {
-        plantRepository.findById(id);
+    public void delete(int id) throws NotFoundException {
+        var optionalPlant = plantRepository.findById(id);
+        optionalPlant.orElseThrow(() -> new NotFoundException(String.format("Plant for id %d not found", id)));
+
         plantRepository.deleteById(id);
     }
 
     @Override
-    public List<Plant> findPlantsToBeWateredSoon() {
-        List<Plant> allPlants = plantRepository.findAll();
-        List<Plant> plantsToBeWatered = new ArrayList<>();
+    public List<Plant> findPlantsToBeWateredSoon(Integer id) {
+        var allPlants = plantRepository.findAllByUserId(id);
+        var plantsToBeWatered = new ArrayList<Plant>();
 
-        for (int index = 0; index < allPlants.size(); index++) {
-            if (findDifferenceInDays(allPlants.get(index).getWateringSchedule().getLast_watered_date(), allPlants.get(index).getWateringSchedule().getWatering_interval()) <= 3
-                    && findDifferenceInDays(allPlants.get(index).getWateringSchedule().getLast_watered_date(), allPlants.get(index).getWateringSchedule().getWatering_interval()) > 0) {
-                plantsToBeWatered.add(allPlants.get(index));
+        for (var i = 0; i < allPlants.size(); i++) {
+            var differenceInDays = findDifferenceInDays(allPlants.get(i).getWateringSchedule().getLastWateredDate(), allPlants.get(i).getWateringSchedule().getWateringInterval());
+
+            if (differenceInDays <= 3) {
+                var plantToBeWatered = allPlants.get(i);
+                plantToBeWatered.setWateringDifferenceInDays(differenceInDays);
+                plantsToBeWatered.add(plantToBeWatered);
             }
         }
+
+        plantsToBeWatered.sort(Comparator.comparing(Plant::getWateringDifferenceInDays));
 
         return plantsToBeWatered;
     }
 
     public static long findDifferenceInDays(String lastWateredDate, Integer wateringInterval) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date = Calendar.getInstance().getTime();
-        String today = sdf.format(date);
+        var date = Calendar.getInstance().getTime(); //todo change to LocalDate(in WateringSchedule)
+        var today = DATE_FORMAT.format(date);
 
         long differenceInDays;
         long differenceInTime;
 
         try {
-            Date lwd = sdf.parse(lastWateredDate);
+            Date lwd = DATE_FORMAT.parse(lastWateredDate);
             System.out.println("Last watered date: " + lastWateredDate);
             System.out.println("Watering interval: " + wateringInterval);
 
-            Date t = sdf.parse(today);
+            Date t = DATE_FORMAT.parse(today);
             System.out.println("Today: " + today);
 
             differenceInTime = lwd.getTime() - t.getTime();
@@ -129,38 +128,16 @@ public class PlantServiceImpl implements PlantService {
         }
     }
 
-    /*
-    public List<Integer> differenceInDays() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date = Calendar.getInstance().getTime();
-        String today = dateFormat.format(date);
-
-        List<Plant> plantsToBeWateredSoon = findPlantsToBeWateredSoon();
-        List<Integer> differenceInDays = new ArrayList<>();
-
-        for (int index = 0; index < plantsToBeWateredSoon.size(); index++) {
-            differenceInDays.add(Math.toIntExact(findDifference(plantsToBeWateredSoon.get(index).getWateringSchedule().getLast_watered_date(), today)));
-        }
-
-        System.out.println(differenceInDays);
-
-        return differenceInDays;
-    }
-     */
-
     @Override
     public Plant updateLastWateredDate(Plant plant) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        var date = Calendar.getInstance().getTime();
+        var today = DATE_FORMAT.format(date);
 
-        Date date = Calendar.getInstance().getTime();
-        String today = dateFormat.format(date);
+        plant.getWateringSchedule().setLastWateredDate(today);
 
-        plant.getWateringSchedule().setLast_watered_date(today);
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User queriedUser = userRepository.findByUsername(username);
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var username = authentication.getName();
+        var queriedUser = userRepository.findByUsername(username);
         plant.setUser(queriedUser);
 
         plantRepository.save(plant);

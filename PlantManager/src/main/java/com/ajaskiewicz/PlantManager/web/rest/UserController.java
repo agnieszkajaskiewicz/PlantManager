@@ -1,8 +1,9 @@
-package com.ajaskiewicz.PlantManager.web;
+package com.ajaskiewicz.PlantManager.web.rest;
 
 import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.SecurityService;
 import com.ajaskiewicz.PlantManager.service.UserService;
+import com.ajaskiewicz.PlantManager.web.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,14 +15,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
 
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private SecurityService securityService;
+    private UserValidator userValidator;
 
     @Autowired
-    private UserValidator userValidator;
+    public UserController(UserService userService, SecurityService securityService, UserValidator userValidator) {
+        this.userService = userService;
+        this.securityService = securityService;
+        this.userValidator = userValidator;
+    }
 
     @GetMapping("/sign-up")
     public String registration(Model model) {
@@ -43,7 +46,6 @@ public class UserController {
         }
 
         userService.save(userForm);
-
         securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
 
         return "redirect:/dashboard";
@@ -54,6 +56,7 @@ public class UserController {
         if(securityService.isAuthenticated()) {
             return "redirect:/dashboard";
         }
+
         if (error != null)
             model.addAttribute("error", "Your username and password is invalid.");
 

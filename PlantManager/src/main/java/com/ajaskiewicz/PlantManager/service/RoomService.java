@@ -4,9 +4,9 @@ import com.ajaskiewicz.PlantManager.model.Room;
 
 public interface RoomService {
 
-    public Iterable<Room> findAll();
+    Iterable<Room> findAll();
 
-    public Room find(int id);
+    Room find(int id);
 
-    public Room save(Room room);
+    Room save(Room room);
 }

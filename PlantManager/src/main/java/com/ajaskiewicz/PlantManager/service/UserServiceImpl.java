@@ -14,14 +14,16 @@ import java.util.HashSet;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private RoleRepository roleRepository;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Override
     public void save(User user) {
@@ -40,9 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer findIdOfLoggedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User queriedUser = userRepository.findByUsername(username);
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var username = authentication.getName();
+        var queriedUser = userRepository.findByUsername(username);
         return queriedUser.getId();
     }
 }

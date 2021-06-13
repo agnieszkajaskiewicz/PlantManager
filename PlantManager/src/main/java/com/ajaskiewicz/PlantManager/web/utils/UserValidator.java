@@ -1,4 +1,4 @@
-package com.ajaskiewicz.PlantManager.web;
+package com.ajaskiewicz.PlantManager.web.utils;
 
 import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.UserService;
@@ -11,22 +11,27 @@ import org.springframework.validation.Validator;
 @Component
 public class UserValidator implements Validator {
 
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public UserValidator(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public boolean supports(Class<?> aClass) {
         return User.class.equals(aClass);
     }
 
-    @Override
+    @Override //todo obskoczyć adnotacjami https://hibernate.org/validator/
     public void validate(Object o, Errors errors) {
-        User user = (User) o;
+        var user = (User) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
         if (user.getUsername().length() < 6 || user.getUsername().length() > 32) {
             errors.rejectValue("username", "Size.userForm.username");
         }
+
         if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
@@ -39,6 +44,5 @@ public class UserValidator implements Validator {
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.rejectValue("passwordCOnfirm", "Diff.userForm.passwordConfirm");
         }
-
     }
 }

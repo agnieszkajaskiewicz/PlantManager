@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 @Service("roomService")
 public class RoomServiceImpl implements RoomService {
 
-    @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    public RoomServiceImpl(RoomRepository roomRepository) {
+        this.roomRepository = roomRepository;
+    }
 
     @Override
     public Iterable<Room> findAll() {

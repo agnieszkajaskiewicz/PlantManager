@@ -5,14 +5,20 @@ import com.ajaskiewicz.PlantManager.repository.WateringScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("wateringScheduleService")
 public class WateringScheduleServiceImpl implements WateringScheduleService {
 
-    @Autowired
     private WateringScheduleRepository wateringScheduleRepository;
 
+    @Autowired
+    public WateringScheduleServiceImpl(WateringScheduleRepository wateringScheduleRepository) {
+        this.wateringScheduleRepository = wateringScheduleRepository;
+    }
+
     @Override
-    public Iterable<WateringSchedule> findAll() {
+    public List<WateringSchedule> findAll() {
         return wateringScheduleRepository.findAll();
     }
 

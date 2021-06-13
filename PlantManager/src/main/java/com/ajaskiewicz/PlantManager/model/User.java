@@ -12,7 +12,6 @@ import java.util.Set;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table
 public class User {
@@ -35,4 +34,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     List<Plant> plant;
+
+
 }
