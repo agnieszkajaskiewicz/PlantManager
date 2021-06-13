@@ -352,8 +352,8 @@ input[type='checkbox'] {
 .image {
     position: relative;
     overflow: hidden;
-    width: 200px;
-    height: 200px;
+    width: 198px;
+    height: 198px;
 
 }
 
@@ -449,108 +449,8 @@ input[type='checkbox'] {
     color: black;
 }
 
-/* Modal window for editing and adding plants > choose predefined icon */
-.modal-content {
-    background-color: #1E5C45;
-}
 
-.modal-title {
-    text-transform: uppercase;
-}
-
-#chooseIconButton {
-    cursor: pointer;
-}
-
-.plantIconsGallery input {
-    margin: -2px;
-    padding: 0;
-    -webkit-appearance: none;
-       -moz-appearance: none;
-            appearance: none;
-}
-
-.icon1 {
-    background-image: url(/plantIcons/plantIcon1.jpg);
-}
-
-.icon2 {
-    background-image: url(/plantIcons/plantIcon2.jpg);
-}
-
-.icon3 {
-    background-image: url(/plantIcons/plantIcon3.jpg);
-}
-
-.icon4 {
-    background-image: url(/plantIcons/plantIcon4.jpg);
-}
-
-.icon5 {
-    background-image: url(/plantIcons/plantIcon5.jpg);
-}
-
-.icon6 {
-    background-image: url(/plantIcons/plantIcon6.jpg);
-}
-
-.icon7 {
-    background-image: url(/plantIcons/plantIcon7.jpg);
-}
-
-.icon8 {
-    background-image: url(/plantIcons/plantIcon8.jpg);
-}
-
-.icon9 {
-    background-image: url(/plantIcons/plantIcon9.jpg);
-}
-
-.icon10 {
-    background-image: url(/plantIcons/plantIcon10.jpg);
-}
-
-.icon11 {
-    background-image: url(/plantIcons/plantIcon11.jpg);
-}
-
-.icon12 {
-    background-image: url(/plantIcons/plantIcon12.jpg);
-}
-
-.plantIconsGallery input:active + .plantIconLabel {
-    opacity: .9;
-}
-
-.plantIconsGallery input:checked + .plantIconLabel {
-    -webkit-filter: none;
-       -moz-filter: none;
-            filter: none;
-}
-
-.plantIconLabel {
-    cursor: pointer;
-    background-size: contain;
-    background-repeat: no-repeat;
-    height: 150px;
-    width: 150px;
-
-    -webkit-transition: all 100ms ease-in;
-       -moz-transition: all 100ms ease-in;
-            transition: all 100ms ease-in;
-
-    -webkit-filter: brightness(1.8) grayscale(.8) opacity(.7);
-       -moz-filter: brightness(1.8) grayscale(.8) opacity(.7);
-            filter: brightness(1.8) grayscale(.8) opacity(.7);
-}
-
-.plantIconLabel:hover {
-    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
-       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
-            filter: brightness(1.2) grayscale(.5) opacity(.9);
-}
-
-/* Place for displaying chosen image/icon */
+/* Place for displaying chosen image */
 #output {
     height: 200px;
     width: 200px;

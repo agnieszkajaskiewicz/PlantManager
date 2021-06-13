@@ -35,19 +35,19 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<Plant> findAll() {
-        List<Plant> result = (List<Plant>) plantRepository.findAll();
+        var result = (List<Plant>) plantRepository.findAll();
         return result;
     }
 
     @Override
     public List<Plant> findAllByUserId(int id) {
-        List<Plant> result = plantRepository.findAllByUserId(id);
+        var result = plantRepository.findAllByUserId(id);
         return result;
     }
 
     @Override
     public Plant find(int id) throws NotFoundException {
-        Optional<Plant> plant = plantRepository.findById(id);
+        var plant = plantRepository.findById(id);
         if (plant.isPresent()) {
             return plant.get();
         } else {
@@ -61,13 +61,12 @@ public class PlantServiceImpl implements PlantService {
     }
 
     public Plant createOrUpdatePlant(Plant plant) {
-        log.info("Create request received for: " + plant.toString());
+        log.info("Create/update request received for: " + plant.toString());
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var username = authentication.getName();
         var queriedUser = userRepository.findByUsername(username);
         plant.setUser(queriedUser);
-
 
         plantRepository.save(plant);
         return plant;
@@ -75,38 +74,35 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public void delete(int id) throws NotFoundException {
-        /*var optionalPlant = plantRepository.findById(id);
-        optionalPlant.orElseThrow(() -> new NotFoundException(String.format("Plant for id %d not found", id)));*/
-
-        var doesExist = plantRepository.existsById(id);
-
-        if(!doesExist) {
-            throw new NotFoundException(String.format("Plant for id %d not found", id));
-        }
+        var optionalPlant = plantRepository.findById(id);
+        optionalPlant.orElseThrow(() -> new NotFoundException(String.format("Plant for id %d not found", id)));
 
         plantRepository.deleteById(id);
     }
 
     @Override
-    public List<Plant> findPlantsToBeWateredSoon() {
-        var allPlants = plantRepository.findAll();
+    public List<Plant> findPlantsToBeWateredSoon(Integer id) {
+        var allPlants = plantRepository.findAllByUserId(id);
         var plantsToBeWatered = new ArrayList<Plant>();
 
         for (var i = 0; i < allPlants.size(); i++) {
             var differenceInDays = findDifferenceInDays(allPlants.get(i).getWateringSchedule().getLastWateredDate(), allPlants.get(i).getWateringSchedule().getWateringInterval());
-            if (differenceInDays <= 3 && differenceInDays > 0) {
+
+            if (differenceInDays <= 3) {
                 var plantToBeWatered = allPlants.get(i);
                 plantToBeWatered.setWateringDifferenceInDays(differenceInDays);
                 plantsToBeWatered.add(plantToBeWatered);
             }
         }
 
+        plantsToBeWatered.sort(Comparator.comparing(Plant::getWateringDifferenceInDays));
+
         return plantsToBeWatered;
     }
 
     public static long findDifferenceInDays(String lastWateredDate, Integer wateringInterval) {
-        Date date = Calendar.getInstance().getTime(); //todo change to LocalDate(in WateringSchedule)
-        String today = DATE_FORMAT.format(date);
+        var date = Calendar.getInstance().getTime(); //todo change to LocalDate(in WateringSchedule)
+        var today = DATE_FORMAT.format(date);
 
         long differenceInDays;
         long differenceInTime;
@@ -131,26 +127,6 @@ public class PlantServiceImpl implements PlantService {
             return 1;
         }
     }
-
-    /*
-    public List<Integer> differenceInDays() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date = Calendar.getInstance().getTime();
-        String today = dateFormat.format(date);
-
-        List<Plant> plantsToBeWateredSoon = findPlantsToBeWateredSoon();
-        List<Integer> differenceInDays = new ArrayList<>();
-
-        for (int index = 0; index < plantsToBeWateredSoon.size(); index++) {
-            differenceInDays.add(Math.toIntExact(findDifference(plantsToBeWateredSoon.get(index).getWateringSchedule().getlastWateredDate(), today)));
-        }
-
-        System.out.println(differenceInDays);
-
-        return differenceInDays;
-    }
-     */
 
     @Override
     public Plant updateLastWateredDate(Plant plant) {

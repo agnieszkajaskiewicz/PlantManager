@@ -8,10 +8,7 @@ import java.util.List;
 
 @Repository
 public interface PlantRepository extends JpaRepository <Plant, Integer> {
-    List<Plant> findAllById(Integer searchValue);
-
     List<Plant> findAllByUserId(Integer userId);
 
     boolean existsById(Integer id);
-
 }

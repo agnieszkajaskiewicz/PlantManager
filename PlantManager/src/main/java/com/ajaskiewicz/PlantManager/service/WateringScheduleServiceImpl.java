@@ -10,8 +10,12 @@ import java.util.List;
 @Service("wateringScheduleService")
 public class WateringScheduleServiceImpl implements WateringScheduleService {
 
-    @Autowired //@Autowired konstruktor
     private WateringScheduleRepository wateringScheduleRepository;
+
+    @Autowired
+    public WateringScheduleServiceImpl(WateringScheduleRepository wateringScheduleRepository) {
+        this.wateringScheduleRepository = wateringScheduleRepository;
+    }
 
     @Override
     public List<WateringSchedule> findAll() {

@@ -4,9 +4,9 @@ import com.ajaskiewicz.PlantManager.model.WateringSchedule;
 
 public interface WateringScheduleService {
 
-    public Iterable<WateringSchedule> findAll();
+    Iterable<WateringSchedule> findAll();
 
-    public WateringSchedule find(int id);
+    WateringSchedule find(int id);
 
-    public WateringSchedule save(WateringSchedule wateringSchedule);
+    WateringSchedule save(WateringSchedule wateringSchedule);
 }
