@@ -222,7 +222,7 @@ a:visited, a:hover, a:active {
 }
 
 .has-error {
-    color: red
+    color: red;
 }
 
 /****************/
@@ -458,12 +458,3 @@ input[type='checkbox'] {
     margin-bottom: 10px;
 }
 
-/****************/
-/*EMAIL REMINDER*/
-/****************/
-
-#logoInEmailReminder {
-    width: 25%;
-    height: 25%;
-    align: center;
-}

@@ -26,6 +26,4 @@ public class Room {
     public Room(String roomName) {
         this.roomName = roomName;
     }
-
-
 }

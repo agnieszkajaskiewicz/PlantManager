@@ -7,17 +7,17 @@ import java.util.List;
 
 public interface PlantService {
 
-        Iterable<Plant> findAll();
+        List<Plant> findAll();
 
-        Plant find(int id) throws NotFoundException;
+        Plant find(Integer id) throws NotFoundException;
 
-        Iterable<Plant> findAllByUserId(int id);
+        List<Plant> findAllByUserId(Integer id);
 
         Plant save(Plant plant);
 
         Plant createOrUpdatePlant(Plant plant);
 
-        void delete(int id) throws NotFoundException;
+        void delete(Integer id) throws NotFoundException;
 
         List<Plant> findPlantsToBeWateredSoon(Integer id);
 

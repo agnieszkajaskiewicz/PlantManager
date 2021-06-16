@@ -5,6 +5,7 @@ import com.ajaskiewicz.PlantManager.service.*;
 import com.ajaskiewicz.PlantManager.web.utils.FileDeleteUtil;
 import com.ajaskiewicz.PlantManager.web.utils.FileUploadUtil;
 import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,8 +47,8 @@ public class PlantController {
         if (!securityService.isAuthenticated()) { return "redirect:/"; }
 
         if (id.isPresent()) {
-            var entity = plantService.find(id.get());
-            model.addAttribute("plant", entity);
+            var plant = plantService.find(id.get());
+            model.addAttribute("plant", plant);
         } else {
             model.addAttribute("plant", new Plant());
         }
@@ -57,7 +58,7 @@ public class PlantController {
 
     @RequestMapping(path = "/addPlant", method = RequestMethod.POST)
     public String createOrUpdatePlant(Plant plant, @RequestParam("image") MultipartFile multipartFile) throws IOException {
-        if (!securityService.isAuthenticated()) { return "redirect:/"; }
+        if (!securityService.isAuthenticated()) { return "redirect:/";}
 
         var filename = multipartFile.getOriginalFilename();
 
@@ -85,5 +86,4 @@ public class PlantController {
 
         return "redirect:/dashboard";
     }
-
 }

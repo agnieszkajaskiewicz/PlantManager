@@ -1,5 +1,6 @@
 package com.ajaskiewicz.PlantManager.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -10,13 +11,10 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.util.Map;
 
 @Service
 public class MailServiceImpl implements MailService {
-
-    private static final String NOREPLY_ADDRESS = "noreply@plantmanager.com";
 
     @Value("classpath:/static/logoPlantManager.png")
     private Resource resourceFile;
@@ -32,17 +30,17 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public void sendMessageUsingThymeleafTemplate(String to, String subject, Map<String, Object> templateModel) throws MessagingException {
-        Context thymeleafContext = new Context();
+        var thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
-        String htmlBody = thymeleafTemplateEngine.process("reminderTemplate.html", thymeleafContext);
+        var htmlBody = thymeleafTemplateEngine.process("reminderTemplate.html", thymeleafContext);
 
         sendHtmlMessage(to, subject, htmlBody);
     }
 
     private void sendHtmlMessage(String to, String subject, String htmlBody) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setFrom(NOREPLY_ADDRESS);
+        var message = mailSender.createMimeMessage();
+        var helper = new MimeMessageHelper(message, true, "UTF-8");
+
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);

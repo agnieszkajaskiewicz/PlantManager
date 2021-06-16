@@ -23,7 +23,7 @@ public class WateringScheduleServiceImpl implements WateringScheduleService {
     }
 
     @Override
-    public WateringSchedule find(int id) {
+    public WateringSchedule find(Integer id) {
         return wateringScheduleRepository.findById(id).get();
     }
 

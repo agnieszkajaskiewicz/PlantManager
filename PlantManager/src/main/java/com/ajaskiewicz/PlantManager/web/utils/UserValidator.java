@@ -23,7 +23,7 @@ public class UserValidator implements Validator {
         return User.class.equals(aClass);
     }
 
-    @Override //todo obskoczyć adnotacjami https://hibernate.org/validator/
+    @Override
     public void validate(Object o, Errors errors) {
         var user = (User) o;
 
@@ -42,7 +42,11 @@ public class UserValidator implements Validator {
         }
 
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
-            errors.rejectValue("passwordCOnfirm", "Diff.userForm.passwordConfirm");
+            errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
+        }
+
+        if (userService.findByEmail(user.getEmail()) != null) {
+            errors.rejectValue("email", "Duplicate.userForm.email");
         }
     }
 }

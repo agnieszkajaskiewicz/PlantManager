@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service("plantService")
@@ -21,9 +22,7 @@ public class PlantServiceImpl implements PlantService {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     private PlantRepository plantRepository;
-
     private WateringScheduleRepository wateringScheduleRepository;
-
     private UserRepository userRepository;
 
     @Autowired
@@ -35,28 +34,31 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<Plant> findAll() {
-        var result = (List<Plant>) plantRepository.findAll();
+        var result = plantRepository.findAll();
         return result;
     }
 
     @Override
-    public List<Plant> findAllByUserId(int id) {
+    public List<Plant> findAllByUserId(Integer id) {
+        log.info("Looking for all plants that belong to user with ID " + id);
         var result = plantRepository.findAllByUserId(id);
+        log.info(result.size() + " plants found");
         return result;
     }
 
     @Override
-    public Plant find(int id) throws NotFoundException {
+    public Plant find(Integer id) throws NotFoundException {
         var plant = plantRepository.findById(id);
         if (plant.isPresent()) {
             return plant.get();
         } else {
-            throw new NotFoundException("No plant record exist for given ID.");
+            throw new NotFoundException("No plant record exist for given ID " + id);
         }
     }
 
     @Override
     public Plant save(Plant plant) {
+        log.info("Saving new plant");
         return plantRepository.save(plant);
     }
 
@@ -73,10 +75,11 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public void delete(int id) throws NotFoundException {
+    public void delete(Integer id) throws NotFoundException {
         var optionalPlant = plantRepository.findById(id);
         optionalPlant.orElseThrow(() -> new NotFoundException(String.format("Plant for id %d not found", id)));
 
+        log.info("Deleting plant with ID " + id);
         plantRepository.deleteById(id);
     }
 
@@ -85,6 +88,7 @@ public class PlantServiceImpl implements PlantService {
         var allPlants = plantRepository.findAllByUserId(id);
         var plantsToBeWatered = new ArrayList<Plant>();
 
+        log.info("Looking for plants that should be watered soon");
         for (var i = 0; i < allPlants.size(); i++) {
             var differenceInDays = findDifferenceInDays(allPlants.get(i).getWateringSchedule().getLastWateredDate(), allPlants.get(i).getWateringSchedule().getWateringInterval());
 
@@ -95,31 +99,34 @@ public class PlantServiceImpl implements PlantService {
             }
         }
 
+        log.info(plantsToBeWatered.size() + " plants found");
+        log.info("Sorting plants that should be watered soon by watering difference in days");
         plantsToBeWatered.sort(Comparator.comparing(Plant::getWateringDifferenceInDays));
 
         return plantsToBeWatered;
     }
 
-    public static long findDifferenceInDays(String lastWateredDate, Integer wateringInterval) {
-        var date = Calendar.getInstance().getTime(); //todo change to LocalDate(in WateringSchedule)
+    public Integer findDifferenceInDays(String lastWateredDate, Integer wateringInterval) {
+        var date = Calendar.getInstance().getTime();
         var today = DATE_FORMAT.format(date);
 
-        long differenceInDays;
-        long differenceInTime;
+        Integer differenceInDays;
+        Integer differenceInTime;
 
+        log.info("Counting days that remain to closest watering");
         try {
-            Date lwd = DATE_FORMAT.parse(lastWateredDate);
-            System.out.println("Last watered date: " + lastWateredDate);
-            System.out.println("Watering interval: " + wateringInterval);
+            var lwd = DATE_FORMAT.parse(lastWateredDate);
+            log.info("Last watered date: " + lastWateredDate);
+            log.info("Watering interval: " + wateringInterval);
 
-            Date t = DATE_FORMAT.parse(today);
-            System.out.println("Today: " + today);
+            var t = DATE_FORMAT.parse(today);
+            log.info("Today: " + today);
 
-            differenceInTime = lwd.getTime() - t.getTime();
+            differenceInTime = Math.toIntExact(lwd.getTime() - t.getTime());
 
             differenceInDays = ((differenceInTime / (1000 * 60 * 60 * 24)) + wateringInterval) % 365;
 
-            System.out.println("Difference between two dates is: " + differenceInDays + " days");
+            log.info("Difference is: " + differenceInDays + " days");
             return differenceInDays;
 
         } catch (ParseException ex) {
@@ -133,6 +140,7 @@ public class PlantServiceImpl implements PlantService {
         var date = Calendar.getInstance().getTime();
         var today = DATE_FORMAT.format(date);
 
+        log.info("Setting last watered date to today");
         plant.getWateringSchedule().setLastWateredDate(today);
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -144,6 +152,4 @@ public class PlantServiceImpl implements PlantService {
 
         return plant;
     }
-
-
 }
