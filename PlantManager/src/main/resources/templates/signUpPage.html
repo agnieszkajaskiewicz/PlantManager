@@ -71,24 +71,25 @@
                     <div class="group">
                         <label for="user" class="label">Username</label>
                         <input id="user" type="text" class="input" th:field="*{username}">
-                        <span class="has-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                        <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                     </div>
 
                     <div class="group">
                         <label for="pass" class="label">Password</label>
                         <input id="pass" type="password" class="input" data-type="password" th:field="*{password}">
-                        <span class="has-error" th:if="${#fields.hasErrors('password')}" th:errors="*{username}"></span>
+                        <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
                     </div>
 
                     <div class="group">
                         <label for="pass" class="label">Repeat Password</label>
                         <input id="pass" type="password" class="input" data-type="password" th:field="*{passwordConfirm}">
-                        <span class="has-error" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></span>
+                        <span class="text-danger" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></span>
                     </div>
 
                     <div class="group">
                         <label for="pass" class="label">Email Address</label>
                         <input id="pass" type="text" class="input" th:field="*{email}">
+                        <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                     </div>
 
                     <div class="group">

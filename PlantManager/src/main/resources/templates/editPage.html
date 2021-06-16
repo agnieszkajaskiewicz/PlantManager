@@ -65,7 +65,7 @@
 
             <tr>
                 <td>Water every</td>
-                <td><input type="number" id="wateringScheduleEdition" th:field="*{WateringSchedule.wateringInterval}" name="wateringInterval" step=1 pattern="\d{3}" maxlength="3"> days
+                <td><input type="number" id="wateringScheduleEdition" th:field="*{WateringSchedule.wateringInterval}" name="wateringInterval" step=1 pattern="\d{3}" min="1" maxlength="3"> days
                 </td>
             </tr>
 

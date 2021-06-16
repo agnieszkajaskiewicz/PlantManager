@@ -53,15 +53,18 @@ public class UserController {
 
     @GetMapping("/sign-in")
     public String login(Model model, String error, String logout) {
-        if(securityService.isAuthenticated()) {
+        if (securityService.isAuthenticated()) {
             return "redirect:/dashboard";
         }
 
-        if (error != null)
+        if (error != null) {
             model.addAttribute("error", "Your username and password is invalid.");
+        }
 
-        if (logout != null)
+        if (logout != null) {
             model.addAttribute("error", "You have been logged out successfully.");
+        }
+
         return "signInPage";
     }
 

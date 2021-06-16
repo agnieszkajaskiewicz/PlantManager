@@ -2,11 +2,13 @@ package com.ajaskiewicz.PlantManager.service;
 
 import com.ajaskiewicz.PlantManager.model.Room;
 
+import java.util.List;
+
 public interface RoomService {
 
-    Iterable<Room> findAll();
+    List<Room> findAll();
 
-    Room find(int id);
+    Room find(Integer id);
 
     Room save(Room room);
 }

@@ -5,6 +5,8 @@ import com.ajaskiewicz.PlantManager.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("roomService")
 public class RoomServiceImpl implements RoomService {
 
@@ -16,12 +18,12 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Iterable<Room> findAll() {
+    public List<Room> findAll() {
         return roomRepository.findAll();
     }
 
     @Override
-    public Room find(int id) {
+    public Room find(Integer id) {
         return roomRepository.findById(id).get();
     }
 

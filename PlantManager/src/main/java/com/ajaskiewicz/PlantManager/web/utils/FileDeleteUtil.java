@@ -16,9 +16,10 @@ public class FileDeleteUtil {
         if (!directory.exists()) {
            log.info("No file to delete");
         }
+
         else {
             var files = directory.listFiles();
-            for (File file : files) {
+            for (var file : files) {
                 file.delete();
                 log.info("Deleted file: " + file.getName());
             }

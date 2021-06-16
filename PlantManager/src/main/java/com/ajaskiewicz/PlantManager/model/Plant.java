@@ -35,8 +35,7 @@ public class Plant {
     private User user;
 
     @Transient
-    private Long wateringDifferenceInDays; //todo przenieść 2 pola z WateringSchedule jako pola klasy Plant
-    //dopisać metodę która dynamicznie zwraca difference in days na podstawie tych pól
+    private Integer wateringDifferenceInDays;
 
     public Plant(String plantName, String room, Integer wateringInterval, String lastWateredDate) {
         this.plantName = plantName;

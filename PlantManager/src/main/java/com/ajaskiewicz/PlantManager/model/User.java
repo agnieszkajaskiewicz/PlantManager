@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -20,13 +21,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank
+    @Size(min = 6, max = 32)
     private String username;
 
+    @Email
     private String email;
 
+    @NotBlank
+    @Size(min = 6, max = 32)
     private String password;
 
     @Transient
+    @NotBlank
+    @Size(min = 6, max = 32)
     private String passwordConfirm;
 
     @ManyToMany
@@ -35,5 +43,5 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     List<Plant> plant;
 
-
+    private String resetPasswordToken;
 }

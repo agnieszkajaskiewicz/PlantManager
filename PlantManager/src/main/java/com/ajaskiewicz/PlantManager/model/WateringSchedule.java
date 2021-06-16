@@ -3,6 +3,7 @@ package com.ajaskiewicz.PlantManager.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
@@ -17,6 +18,7 @@ public class WateringSchedule { //prawdopodobnie można przenieść te 2 pola na
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Positive
     private Integer wateringInterval;
 
     private String lastWateredDate;
