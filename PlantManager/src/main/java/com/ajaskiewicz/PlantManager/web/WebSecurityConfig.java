@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DefaultHttpFirewall defaultHttpFirewall() { //added to hide malicious URL exception('//')
+    public DefaultHttpFirewall defaultHttpFirewall() {
         return new DefaultHttpFirewall();
     }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +12,7 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
           crossorigin="anonymous">
 
-    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
 
 </head>
 <body>
@@ -40,85 +41,93 @@
     <div class="edit-html">
         <div class="edit-form">
 
-    <!-- Edit form -->
-    <form th:action="@{/dashboard/addPlant}"  th:object="${plant}" method="post" enctype="multipart/form-data">
-        <table>
+            <!-- Edit form -->
+            <form th:action="@{/dashboard/addPlant}" th:object="${plant}" method="post" name="plantForm"
+                  enctype="multipart/form-data" role="form">
+                <table>
 
-            <tr>
-                <td>Plant name:</td>
-                <td><input type="text" id="plantNameEdition" th:field="*{plantName}" name="plantName"></td>
-            </tr>
+                    <tr>
+                        <td>Plant name:</td>
+                        <td><input type="text" class="input" id="plantNameEdition" th:field="*{plantName}"
+                                   name="plantName" required oninput="checkPlantName(this);"/></td>
+                    </tr>
 
-            <tr>
-                <td>Room:</td>
-                <td><input type="text" id="roomEdition" th:field="*{Room.roomName}" name="roomName"></td>
-            </tr>
+                    <tr>
+                        <td>Room:</td>
+                        <td><input type="text" id="roomEdition" th:field="*{Room.roomName}" name="roomName" required
+                                   oninput="checkPlantName(this);"/></td>
+                    </tr>
 
-        </table>
+                </table>
 
-        <br>
+                <br>
 
-        <table>
-            <tr>
-                <td>Care schedule:</td>
-            </tr>
+                <table>
+                    <tr>
+                        <td>Care schedule:</td>
+                    </tr>
 
-            <tr>
-                <td>Water every</td>
-                <td><input type="number" id="wateringScheduleEdition" th:field="*{WateringSchedule.wateringInterval}" name="wateringInterval" step=1 pattern="\d{3}" min="1" maxlength="3"> days
-                </td>
-            </tr>
+                    <tr>
+                        <td>Water every</td>
+                        <td><input type="number" id="wateringScheduleEdition"
+                                   th:field="*{WateringSchedule.wateringInterval}" required name="wateringInterval"
+                                   step=1 pattern="\d{3}" min="1" maxlength="3"> days
+                        </td>
+                    </tr>
 
-            <tr>
-                <td>Last watered</td>
-                <td><input type="date" id="lastWateredDateEdition" th:field="*{WateringSchedule.lastWateredDate}" name="lastWateredDate"></td>
-            </tr>
+                    <tr>
+                        <td>Last watered</td>
+                        <td><input type="date" id="lastWateredDateEdition"
+                                   th:field="*{WateringSchedule.lastWateredDate}" required name="lastWateredDate"
+                                   onchange="checkLastWateredDate(this);"></td>
+                    </tr>
 
-        </table>
+                </table>
 
-        <br>
+                <br>
 
-        <table>
-            <tr>
-                <td>Picture:</td>
-            </tr>
+                <table>
+                    <tr>
+                        <td>Picture:</td>
+                    </tr>
 
+                    <!-- Button for choosing file with plant image -->
+                    <tr>
+                        <td>
+                            <button id="choosePlantImageButton" type="button">
+                                <label for="file" id="labelForUploadPlantImage">Upload image</label>
+                                <input type="file" name="image" accept="image/png, image/jpeg" id="file"
+                                       onchange="loadFile(event)"/>
+                            </button>
+                        </td>
+                    </tr>
 
-            <!-- Button for choosing file with plant image -->
-            <tr>
-                <td>
-                        <button id="choosePlantImageButton" type="button">
-                            <label for="file" id="labelForUploadPlantImage">Upload image</label>
-                            <input type="file" name="image" accept="image/png, image/jpeg" id="file" onchange="loadFile(event)"/>
-                        </button>
-                </td>
-            </tr>
+                </table>
 
-        </table>
+                <br>
 
-        <br>
+                <!-- Place for displaying chosen image -->
+                <div>
+                    <img id="output" class="imageOnEditionPage"
+                         th:src="@{/uploadedImages/{id}/{imageName}(id=${plant.id}, imageName=${plant.imageName})}"
+                         onError="this.onerror=null;this.src='/addIcon.png';"/>
+                </div>
 
-        <!-- Place for displaying chosen image or icon -->
-<!--        <img id="output" name="picturePath" th:src="${plant.imageName}"/>-->
-        <div>
-            <img id="output" class="imageOnEditionPage" th:src="@{/uploadedImages/{id}/{imageName}(id=${plant.id}, imageName=${plant.imageName})}"
-                 onError="this.onerror=null;this.src='/addIcon.png';">
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <input type="submit" class="buttonSave" value="Save changes" id="buttonSave">
+                    <input type="cancel" class="buttonCancel" data-dismiss="modal" value="Cancel"
+                           onclick="location.href = '/dashboard';">
+                </div>
+
+                <input id="id" name="id" th:field="*{id}" type="hidden">
+                <input id="imageName" th:field="*{imageName}" type="hidden">
+                <input id="userId" th:field="*{User.id}" type="hidden">
+
+            </form>
+
         </div>
-
-        <!-- Modal window footer -->
-        <div class="modal-footer">
-            <input type="submit" class="buttonSave" value="Save changes" id="buttonSave">
-            <input type="cancel" class="buttonCancel" data-dismiss="modal" value="Cancel" onclick="location.href = '/dashboard';">
-        </div>
-
-        <input id="id" name="id" th:field="*{id}" type="hidden">
-        <input id="imageName" th:field="*{imageName}" type="hidden">
-        <input id="userId" th:field="*{User.id}" type="hidden">
-
-    </form>
-
-</div>
-</div>
+    </div>
 </div>
 
 <!-- Script for displaying chosen image -->
@@ -128,6 +137,46 @@
         image.src = URL.createObjectURL(event.target.files[0]);
         image.style.display = "block";
         };
+
+
+</script>
+
+<!-- Scripts for validating plant fields -->
+<script>
+    function checkPlantName(plantName) {
+        if (plantName.value.length === 0) {
+            plantName.setCustomValidity("Plant name cannot be empty.");
+        } else {
+            plantName.setCustomValidity("");
+        }
+    }
+
+</script>
+
+<script>
+    function checkRoomName(roomName) {
+        if (roomName.value.length === 0) {
+            roomName.setCustomValidity("Room name cannot be empty.");
+        } else {
+            roomName.setCustomValidity("");
+        }
+    }
+
+</script>
+
+<script>
+    function checkLastWateredDate(lastWateredDate) {
+        var selectedText = document.getElementById('lastWateredDateEdition').value;
+        var selectedDate = new Date(selectedText);
+        var now = new Date();
+
+            if (selectedDate > now) {
+                lastWateredDate.setCustomValidity("Last watered date can't be in the future.");
+            } else {
+                lastWateredDate.setCustomValidity("");
+            }
+        }
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

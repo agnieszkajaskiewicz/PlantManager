@@ -47,7 +47,7 @@ public class MailController {
             props.put("name", userService.findById(usersList.get(i).getId()).getUsername());
             props.put("plants", plantsToBeWateredSoon);
 
-            mailService.sendMessageUsingThymeleafTemplate(userService.findById(1).getEmail(), "Plant Manager reminder", props);
+            mailService.sendMessageUsingThymeleafTemplate(userService.findById(usersList.get(i).getId()).getEmail(), "Plant Manager reminder", props);
             log.info("Email reminder sent to username: " + usersList.get(i).getUsername());
         }
     }

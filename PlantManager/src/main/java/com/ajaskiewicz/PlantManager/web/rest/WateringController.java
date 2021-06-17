@@ -56,6 +56,4 @@ public class WateringController {
 
         return "redirect:/toBeWateredSoon";
     }
-
-
 }

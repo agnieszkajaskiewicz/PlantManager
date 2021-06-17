@@ -3,6 +3,7 @@ package com.ajaskiewicz.PlantManager.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Getter
@@ -12,7 +13,7 @@ import javax.validation.constraints.Positive;
 @ToString
 @Entity
 @Table
-public class WateringSchedule { //prawdopodobnie można przenieść te 2 pola na poziom Plant, jako integralne kolumny w bazie danych
+public class WateringSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

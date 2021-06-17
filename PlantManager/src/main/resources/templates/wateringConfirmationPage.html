@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +12,7 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
           crossorigin="anonymous">
 
-    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
 
 </head>
 <body>
@@ -40,25 +41,29 @@
     <div class="edit-html">
         <div class="edit-form">
 
-            <!-- Edit form -->
+            <!-- Confirmation form -->
             <form th:action="@{/toBeWateredSoon/confirmWatering}" th:object="${plant}" method="post">
 
                 <div class="plantEditionTitle">
                     <p>Have you watered</p>
                     <p th:text="*{plantName}"></p>
-                    <p>today?</p></div><br>
+                    <p>today?</p></div>
+                <br>
 
-                <!-- Modal window footer -->
+                <!-- Footer -->
                 <div class="modal-footer">
                     <input type="submit" class="buttonSave" value="YES" id="buttonSave">
-                    <input type="cancel" class="buttonCancel" data-dismiss="modal" value="NO" onclick="location.href = '/toBeWateredSoon';">
+                    <input type="cancel" class="buttonCancel" data-dismiss="modal" value="NO"
+                           onclick="location.href = '/toBeWateredSoon';">
                 </div>
 
                 <input id="id" name="id" th:field="*{id}" type="hidden"></td>
                 <input type="hidden" id="plantNameEdition" th:field="*{plantName}" name="plantName">
                 <input type="hidden" id="roomEdition" th:field="*{Room.roomName}" name="roomName">
-                <input type="hidden" id="wateringScheduleEdition" th:field="*{WateringSchedule.wateringInterval}" name="wateringInterval" step=1 pattern="\d{3}" maxlength="3">
-                <input type="hidden" id="lastWateredDateEdition" th:field="*{WateringSchedule.lastWateredDate}" name="lastWateredDate">
+                <input type="hidden" id="wateringScheduleEdition" th:field="*{WateringSchedule.wateringInterval}"
+                       name="wateringInterval" step=1 pattern="\d{3}" maxlength="3">
+                <input type="hidden" id="lastWateredDateEdition" th:field="*{WateringSchedule.lastWateredDate}"
+                       name="lastWateredDate">
                 <input type="hidden" id="imageName" th:field="*{imageName}">
 
             </form>
