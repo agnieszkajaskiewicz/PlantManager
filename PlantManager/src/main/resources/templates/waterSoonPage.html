@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +12,7 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
           crossorigin="anonymous">
 
-    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
 
 </head>
 <body>
@@ -47,15 +48,18 @@
 
                 <article class="card" th:each="entry : ${plant}">
                     <div class="image">
-                        <img class="img img-responsive full-width" th:src="@{/uploadedImages/{id}/{imageName}(id=${entry.id}, imageName=${entry.imageName})}"
-                             onError="this.onerror=null;this.src='/addIcon.png';" >
+                        <img class="img img-responsive full-width"
+                             th:src="@{/uploadedImages/{id}/{imageName}(id=${entry.id}, imageName=${entry.imageName})}"
+                             onError="this.onerror=null;this.src='/addIcon.png';">
                     </div>
                     <div class="text">
                         <p th:text="${entry.plantName}"></p>
-                        <h6>(<small th:text="${entry.wateringDifferenceInDays}" id="wateringDifferenceInDays"></small> days left)</h6>
+                        <h6>(<small th:text="${entry.wateringDifferenceInDays}" id="wateringDifferenceInDays"></small>
+                            days left)</h6>
 
                         <!-- Button that opens page for watering confirmation -->
-                        <a type="button" class="buttonConfirm" th:href="@{toBeWateredSoon/confirm/{id}(id=${entry.id})}">Confirm</a>
+                        <a type="button" class="buttonConfirm"
+                           th:href="@{toBeWateredSoon/confirm/{id}(id=${entry.id})}">Confirm</a>
                     </div>
 
                 </article>

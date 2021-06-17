@@ -386,7 +386,9 @@ input[type='checkbox'] {
 
 }
 
-/* Page for editing/adding plants */
+/*********************/
+/*ADD/EDIT PLANT PAGE*/
+/*********************/
 #plantNameEdition,
 #roomEdition,
 #wateringScheduleEdition,
@@ -457,4 +459,3 @@ input[type='checkbox'] {
     background-size: contain;
     margin-bottom: 10px;
 }
-

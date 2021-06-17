@@ -21,20 +21,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
-    @Size(min = 6, max = 32)
     private String username;
 
     @Email
     private String email;
 
-    @NotBlank
-    @Size(min = 6, max = 32)
     private String password;
 
     @Transient
-    @NotBlank
-    @Size(min = 6, max = 32)
     private String passwordConfirm;
 
     @ManyToMany

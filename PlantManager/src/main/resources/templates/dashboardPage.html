@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +12,7 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
           crossorigin="anonymous">
 
-    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" th:href="@{/styles.css}"/>
 
 </head>
 <body>
@@ -36,9 +37,10 @@
     </div>
 </div>
 
-<!-- Collapsible section 'To be watered in next 3 days' -->
+<!-- Section 'To be watered in next 3 days' -->
 <div class="toBeWatered">
-    <a type="button" class="buttonToBeWatered" th:href="@{toBeWateredSoon}">See plants that should be watered in next 3 days</a>
+    <a type="button" class="buttonToBeWatered" th:href="@{toBeWateredSoon}">See plants that should be watered in next 3
+        days</a>
 </div>
 
 
@@ -49,43 +51,45 @@
     <input id="collapsible2" class="toggle" type="checkbox" checked>
     <label for="collapsible2" class="lbl-toggle">Your plants:</label>
 
-        <div class="collapsible-content">
-            <div class="content-inner">
-                <main class="cards">
+    <div class="collapsible-content">
+        <div class="content-inner">
+            <main class="cards">
 
-                    <article class="card" th:each="entry : ${plant}">
-                        <div class="image">
-                            <img class="img" th:src="@{/uploadedImages/{id}/{imageName}(id=${entry.id}, imageName=${entry.imageName})}"
-                                onError="this.onerror=null;this.src='/addIcon.png';" >
-                        </div>
-                        <div class="text">
-                            <p th:text="${entry.plantName}"></p>
-                            <!-- Button that triggers modal window for editing/adding plant -->
-                            <a type="button" class="buttonEdit" th:href="@{dashboard/editPlant/{id}(id=${entry.id})}">Edit</a>
-                        </div>
+                <article class="card" th:each="entry : ${plant}">
+                    <div class="image">
+                        <img class="img"
+                             th:src="@{/uploadedImages/{id}/{imageName}(id=${entry.id}, imageName=${entry.imageName})}"
+                             onError="this.onerror=null;this.src='/addIcon.png';">
+                    </div>
+                    <div class="text">
+                        <p th:text="${entry.plantName}"></p>
+                        <!-- Button that redirects to page for editing plant -->
+                        <a type="button" class="buttonEdit"
+                           th:href="@{dashboard/editPlant/{id}(id=${entry.id})}">Edit</a>
+                    </div>
 
-                        <div>
-                            <a th:href="@{dashboard/deletePlant/{id}(id=${entry.id})}">
-                                <img src="/bin.png" class="binIcon" />
-                            </a>
-                        </div>
+                    <div>
+                        <a th:href="@{dashboard/deletePlant/{id}(id=${entry.id})}">
+                            <img src="/bin.png" class="binIcon"/>
+                        </a>
+                    </div>
 
-                    </article>
+                </article>
 
+                <article class="card">
+                    <div class="image">
+                        <img class="img img-responsive full-width" src="/addIcon.png">
+                    </div>
+                    <div class="text">
+                        <p>Your new plant</p>
+                        <!-- Button that redirects to page for adding new plant -->
+                        <a type="button" class="buttonEdit" th:href="@{dashboard/editPlant}">Add</a>
+                    </div>
+                </article>
 
-                    <article class="card">
-                        <div class="image">
-                            <img class="img img-responsive full-width" src="/addIcon.png">
-                        </div>
-                        <div class="text">
-                            <p>Your new plant</p>
-                            <a type="button" class="buttonEdit" th:href="@{dashboard/editPlant}">Add</a>
-                        </div>
-                    </article>
-
-                </main>
-            </div>
+            </main>
         </div>
+    </div>
 </div>
 
 
