@@ -1,6 +1,5 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
-import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.service.MailService;
 import com.ajaskiewicz.PlantManager.service.PlantService;
 import com.ajaskiewicz.PlantManager.service.UserService;
@@ -10,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import javax.mail.MessagingException;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +36,6 @@ public class MailController {
         for (var i = 0; i < usersList.size(); i++) {
 
             var plantsToBeWateredSoon = plantService.findPlantsToBeWateredSoon(usersList.get(i).getId());
-            plantsToBeWateredSoon.sort(Comparator.comparing(Plant::getWateringDifferenceInDays));
 
             if (plantsToBeWateredSoon.isEmpty()) {
                 log.info("Nothing to be watered soon for user: " + usersList.get(i).getUsername() + " Reminder not sent.");
