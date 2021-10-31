@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Login.module.css';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 class Login extends React.Component {
     constructor(props) {
@@ -25,19 +27,23 @@ class Login extends React.Component {
             <div className={styles.Login} data-testid="Login">
                 Login Component
                 <div>
-                    <input id="tab-1" type="radio" name="tab" checked/> {/*todo dziwne nazwy, 'tab'*/}
-                    <label htmlFor="tab-1" className={styles.tab}>Sign In</label>
-                    <input id="tab-2" type="radio" name="tab" />
-                    <label htmlFor="tab-2" className={styles.tab}>Sign Up</label>
+                    <Form>
+                        <div className="mb-3">
+                            <Form.Check inline id="choice-1" name="choice" type="radio"/>
+                            <Form.Label htmlFor="choice-1" className={styles.choice}>Sign In</Form.Label>
+                            <Form.Check inline id="choice-2" name="choice" type="radio"/>
+                            <Form.Label htmlFor="choice-2" className={styles.choice}>Sign Up</Form.Label>
+                        </div>
+                    </Form>
                 </div>
 
-                <form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit}>
                     <div>
                         <label htmlFor="username" className={styles.label}>Username</label>
                         <input type="text" className={styles.input} value={this.state.username} onChange={this.handleChange}/>
                     </div>
-                    <input type="submit" value="Wyślij" />
-                </form>
+                    <Button type="submit" variant="success">Wyślij</Button>
+                </Form>
             </div>
         )
     }
