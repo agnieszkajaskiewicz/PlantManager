@@ -27,23 +27,18 @@ class Login extends React.Component {
             <div className={styles.Login} data-testid="Login">
                 Login Component
                 <div>
-                    <Form>
-                        <div className="mb-3">
-                            <Form.Check inline id="choice-1" name="choice" type="radio"/>
+                    <Form onSubmit={this.handleSubmit}>
+                        <div className={styles.loginForm}>
+                            <Form.Check inline id="choice-1" name="choice" type="radio" defaultChecked={true}/>
                             <Form.Label htmlFor="choice-1" className={styles.choice}>Sign In</Form.Label>
                             <Form.Check inline id="choice-2" name="choice" type="radio"/>
                             <Form.Label htmlFor="choice-2" className={styles.choice}>Sign Up</Form.Label>
+                            <label htmlFor="username" >Username</label>
+                            <input type="text" value={this.state.username} onChange={this.handleChange}/>
+                            <Button type="submit" variant="success">Wyślij</Button>
                         </div>
                     </Form>
                 </div>
-
-                <Form onSubmit={this.handleSubmit}>
-                    <div>
-                        <label htmlFor="username" className={styles.label}>Username</label>
-                        <input type="text" className={styles.input} value={this.state.username} onChange={this.handleChange}/>
-                    </div>
-                    <Button type="submit" variant="success">Wyślij</Button>
-                </Form>
             </div>
         )
     }

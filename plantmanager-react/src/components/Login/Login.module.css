@@ -1,4 +1,10 @@
-.Login {}
+.Login {
+    width: 100%;
+    margin: auto;
+    max-width: 525px;
+    min-height: 720px;
+    position: relative;
+}
 
 .choice {
     border-color: #154030;
@@ -10,12 +16,18 @@
     border-bottom: 2px solid transparent;
 }
 
-.login-form .label .group .button .input {
+.choice:checked{
+    border-color: indianred;
+}
+
+.loginForm {
     width: 100%;
+    height: 100%;
+    position: absolute;
     color: #fff;
     display: block;
     border: none;
-    padding: 15px 20px;
+    padding: 70px 70px 50px 70px;
     border-radius: 15px;
-    background: rgba(255,255,255,.1);
+    background: #1E5C45;
 }
