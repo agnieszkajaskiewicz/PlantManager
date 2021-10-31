@@ -1,9 +1,11 @@
 import logo from './logoPlantManager.png';
 import './App.css';
+import Login from './components/Login/Login';
 
 function App() {
   return (
     <div className="App">
+      <Login/>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
