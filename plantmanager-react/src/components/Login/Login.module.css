@@ -1,17 +1,47 @@
 .Login {
+    text-align: left;
     width: 100%;
     margin: auto;
     max-width: 525px;
     min-height: 720px;
     position: relative;
+    font-family: 'Athiti', sans-serif;
+    text-transform: uppercase;
 }
 
 .choice {
-    text-transform: uppercase;
     font-size: 22px;
     padding-bottom: 5px;
     margin: 0 15px 10px 0;
     display: inline-block;
+}
+
+input.loginInput, input.loginInput:focus {
+    border: none;
+    padding: 15px 20px;
+    border-radius: 15px;
+    background-color: rgba(255,255,255,.1);
+}
+
+label.loginInput {
+    text-align: left;
+    display: block;
+    color: #aaa;
+    font-size: 12px;
+    margin-bottom: 0;
+    margin-top: 1.5em;
+}
+
+button.loginInput {
+    margin-top: 2em;
+    display: block;
+    background: #154030;
+    width: 100%;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 15px;
+    font-family: 'Athiti', sans-serif;
+    text-transform: uppercase;
 }
 
 .loginForm {
