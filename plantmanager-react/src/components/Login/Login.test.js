@@ -13,7 +13,7 @@ describe('<Login />', () => {
         expect(login).toBeInTheDocument();
     });
 
-    test('it should open \'sing up\' panel on click', () => {
+    test('it should open \'sing up\' panel on \'sing up\' label click', () => {
             //given
             render(<Login/>);
             const signUpLabel = screen.getByText('Sign Up');
