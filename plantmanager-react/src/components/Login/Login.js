@@ -19,6 +19,8 @@ class Login extends React.Component {
         this.state = {
             username: '',
             password: '',
+            repeatPassword: '',
+            email: '',
             whichSelected: 'choice-1' //todo replace hardcoded id with variable
         };
 
@@ -28,11 +30,11 @@ class Login extends React.Component {
     }
 
     handleChange(event) {
-        this.setState({username: event.target.value});
+        this.setState({[event.target.id]: event.target.value});
     }
 
-    handleSubmit(event) {
-        alert('Podano następujący username: ' + this.state.username);
+    handleSubmit(event) { //ta logika obecnie "obsługuje" tylko sign up form
+        alert('Podano następujące dane: ' + this.state.username + ' ' + this.state.email + ' ' + this.state.password + ' ' + this.state.repeatPassword);
         event.preventDefault();
     }
 
@@ -46,13 +48,13 @@ class Login extends React.Component {
             <Form.Control id="username" type="text" value={this.state.username} className={styles.loginInput}
                           onChange={this.handleChange}/>
             <Form.Label htmlFor="password" className={styles.loginInput}>Password</Form.Label>
-            <Form.Control id="password" type="password" value={this.state.username} className={styles.loginInput}
+            <Form.Control id="password" type="password" value={this.state.password} className={styles.loginInput}
                           onChange={this.handleChange}/>
             <Form.Label htmlFor="repeatPassword" className={styles.loginInput}>Repeat password</Form.Label>
-            <Form.Control id="repeatPassword" type="password" value={this.state.username} className={styles.loginInput}
+            <Form.Control id="repeatPassword" type="password" value={this.state.repeatPassword} className={styles.loginInput}
                           onChange={this.handleChange}/>
             <Form.Label htmlFor="email" className={styles.loginInput}>Email address</Form.Label>
-            <Form.Control id="email" type="email" value={this.state.username} className={styles.loginInput}
+            <Form.Control id="email" type="email" value={this.state.email} className={styles.loginInput}
                           onChange={this.handleChange}/>
             <Button type="submit" className={styles.loginInput}>Sign Up</Button></>;
 
@@ -63,8 +65,11 @@ class Login extends React.Component {
             <Form.Label htmlFor="password" className={styles.loginInput}>Password</Form.Label>
             <Form.Control id="password" type="password" value={this.state.username} className={styles.loginInput}
                           onChange={this.handleChange}/>
-            <Form.Check id="keepSignedIn" type="checkbox" className={styles.keepSignedIn} defaultChecked={true}/>
-            <Form.Label htmlFor="keepSignedIn" className={styles.loginInput}>Keep me signed in</Form.Label>
+            <Form.Check id="keepSignedIn" >
+                <Form.Check.Input type="checkbox" defaultChecked={true} />
+                <Form.Label htmlFor="keepSignedIn" className={styles.loginInput} style={{display: "inline-block", marginTop: "1.2em"}}>Keep me signed in</Form.Label>
+            </Form.Check>
+            <Button type="submit" className={styles.loginInput} style={{marginTop: '15%'}}>Sign In</Button>
         </>
         return (
             <div className={styles.Login} data-testid="Login">
