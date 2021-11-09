@@ -25,22 +25,17 @@ class ForgotPassword extends React.Component {
         }
 
     render() {
-            const forgotPasswordForm = <>
-                <Form.Label className={styles.formTitle}>Forgot your password?</Form.Label>
-                <Form.Label className={styles.formLabel}>Please insert your email in the input below and we will send you the link to reset your password.</Form.Label>
-                <Form.Label htmlFor="email" className={styles.emailInput}>Email address</Form.Label>
-                <Form.Control id="email" type="email" value={this.state.email} className={styles.emailInput}
-                                          onChange={this.handleChange}/>
-                <Button type="submit" className={styles.emailInput}>Send</Button>
-            </>;
-
         return (
             <div className={styles.ForgotPassword} data-testid="ForgotPassword">
-            Forgot Password Component
+                Forgot Password Component
                     <div>
                         <Form onSubmit={this.handleSubmit}>
                             <div className={styles.forgotPasswordForm}>
-                                {this.state = forgotPasswordForm}
+                                <Form.Label className={styles.formTitle}>Forgot your password?</Form.Label>
+                                <Form.Label className={styles.formLabel}>Please insert your email in the input below and we will send you the link to reset your password.</Form.Label>
+                                <Form.Label htmlFor="email" className={styles.emailInput}>Email address</Form.Label>
+                                <Form.Control id="email" type="email" value={this.state.email} className={styles.emailInput} onChange={this.handleChange}/>
+                                <Button type="submit" className={styles.emailInput}>Send</Button>
                             </div>
                         </Form>
                     </div>
@@ -48,6 +43,5 @@ class ForgotPassword extends React.Component {
         )
     }
 }
-
 
 export default ForgotPassword;
