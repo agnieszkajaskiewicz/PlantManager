@@ -1,11 +1,15 @@
 import logo from './logoPlantManager.png';
 import './App.css';
 import Login from './components/Login/Login';
+import ForgotPassword from './components/ForgotPassword/ForgotPassword';
+import Homepage from './components/Homepage/Homepage';
 
 function App() {
   return (
     <div className="App">
       <Login/>
+      <ForgotPassword/>
+      <Homepage/>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
