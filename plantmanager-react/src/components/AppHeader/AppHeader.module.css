@@ -1,0 +1,20 @@
+@media screen and (min-width: 641px) {
+    .AppLogo {
+          height: 200px;
+          width: auto;
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: 40px;
+          margin-top: 40px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .AppLogo {
+          height: 120px;
+          width: auto;
+          margin-bottom: 20px;
+          margin-top: 20px;
+    }
+}
+
