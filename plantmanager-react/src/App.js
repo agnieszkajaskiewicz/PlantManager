@@ -12,8 +12,8 @@ function App() {
         <Router>
             <div className="App">
                 <Routes>
-                    <Route exact path="/" element={<Homepage />} />
-                    <Route path="/login/:where" element={<Login />} />
+                    <Route path="/" element={<Homepage />} />
+                    <Route path="/login/:where" element={<Login />}/>
                     <Route path="/forgotPassword" element={<ForgotPassword />} />
                 </Routes>
                 <header className="App-header">
