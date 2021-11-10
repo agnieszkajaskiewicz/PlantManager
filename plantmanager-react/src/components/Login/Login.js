@@ -16,11 +16,13 @@ const unselectedBorderStyle = {
 };
 
 const Login = () => {
+    const {where} = useParams();
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [whichSelected, setWhichSelected] = useState('choice-1');
+    const [whichSelected, setWhichSelected] = useState( where === 'signIn' ? 'choice-1' : 'choice-2'); //todo
 
     const handleSubmit = (event) =>  { //ta logika obecnie "obsługuje" tylko sign up form
         alert('Podano następujące dane: ' + username + ' ' + email + ' ' + password + ' ' + repeatPassword);
@@ -68,12 +70,12 @@ const Login = () => {
                         <Form.Check hidden={true} style={{display: 'none'}} inline id="choice-1" name="choice"
                                     type="radio"
                                     defaultChecked={true} onChange={event => setWhichSelected(event.target.id)}/>
-                        <Form.Label htmlFor="choice-1"
+                        <Form.Label for="choice-1"
                                     style={whichSelected === 'choice-1' ? selectedBorderStyle : unselectedBorderStyle}
                                     className={styles.choice}>Sign In</Form.Label>
                         <Form.Check hidden={true} inline id="choice-2" name="choice" type="radio"
                                     onChange={event => setWhichSelected(event.target.id)}/>
-                        <Form.Label htmlFor="choice-2"
+                        <Form.Label for="choice-2"
                                     style={whichSelected === 'choice-2' ? selectedBorderStyle : unselectedBorderStyle}
                                     className={styles.choice}>Sign Up</Form.Label>
                         {whichSelected === 'choice-1' ? signInForm : signUpForm}

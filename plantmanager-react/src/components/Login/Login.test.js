@@ -16,7 +16,7 @@ describe('<Login />', () => {
     test('it should open \'sing up\' panel on \'sing up\' label click', () => {
             //given
             render(<Login/>);
-            const signUpLabel = screen.getByText('Sign Up');
+            const signUpLabel = screen.getByText('Sign Up', {selector: 'label'});
             //when
             signUpLabel.click();
             //then
