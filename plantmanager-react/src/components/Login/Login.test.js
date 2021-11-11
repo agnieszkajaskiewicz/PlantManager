@@ -4,6 +4,13 @@ import renderer from 'react-test-renderer';
 import '@testing-library/jest-dom/extend-expect';
 import Login from './Login';
 
+const mockedUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => mockedUsedNavigate
+}));
+
 describe('<Login />', () => {
     test('it should mount', () => {
         render(<Login/>);
@@ -22,6 +29,8 @@ describe('<Login />', () => {
             //then
             const signUpButton = screen.getByRole('button');
             expect(signUpButton.textContent).toEqual('Sign Up');
+            expect(mockedUsedNavigate).toHaveBeenCalledTimes(1);
+            expect(mockedUsedNavigate).toHaveBeenCalledWith('/login/signUp')
         }
     );
 });

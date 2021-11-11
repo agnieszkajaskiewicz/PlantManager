@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './Login.module.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useParams } from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 
 
 const selectedBorderStyle = {
@@ -15,18 +15,28 @@ const unselectedBorderStyle = {
     borderBottom: 'transparent'
 };
 
+
 const Login = () => {
     const {where} = useParams();
+    const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [whichSelected, setWhichSelected] = useState( where === 'signIn' ? 'choice-1' : 'choice-2'); //todo
+    const [whichSelected, setWhichSelected] = useState(where);
 
-    const handleSubmit = (event) =>  { //ta logika obecnie "obsługuje" tylko sign up form
+    const signIn = 'signIn';
+    const signUp = 'signUp';
+
+    const handleSubmit = (event) => { //ta logika obecnie "obsługuje" tylko sign up form
         alert('Podano następujące dane: ' + username + ' ' + email + ' ' + password + ' ' + repeatPassword);
         event.preventDefault();
+    }
+
+    const goToSubpage = (event) => {
+        navigate('/login/' + event.target.id);
+        setWhichSelected(event.target.id);
     }
 
     const signUpForm = <>
@@ -61,24 +71,25 @@ const Login = () => {
         <Button type="submit" className={styles.loginInput} style={{marginTop: '15%'}}>Sign In</Button>
     </>
 
+
     return (
         <div className={styles.Login} data-testid="Login">
             Login Component
             <div>
                 <Form onSubmit={event => handleSubmit(event)}>
                     <div className={styles.loginForm}>
-                        <Form.Check hidden={true} style={{display: 'none'}} inline id="choice-1" name="choice"
+                        <Form.Check hidden={true} style={{display: 'none'}} inline id={signIn} name="choice"
                                     type="radio"
-                                    defaultChecked={true} onChange={event => setWhichSelected(event.target.id)}/>
-                        <Form.Label for="choice-1"
-                                    style={whichSelected === 'choice-1' ? selectedBorderStyle : unselectedBorderStyle}
+                                    defaultChecked={whichSelected === signIn} onChange={event => goToSubpage(event)}/>
+                        <Form.Label htmlFor={signIn}
+                                    style={whichSelected === signIn ? selectedBorderStyle : unselectedBorderStyle}
                                     className={styles.choice}>Sign In</Form.Label>
-                        <Form.Check hidden={true} inline id="choice-2" name="choice" type="radio"
-                                    onChange={event => setWhichSelected(event.target.id)}/>
-                        <Form.Label for="choice-2"
-                                    style={whichSelected === 'choice-2' ? selectedBorderStyle : unselectedBorderStyle}
+                        <Form.Check hidden={true} inline id={signUp} name="choice" type="radio"
+                                    defaultChecked={whichSelected === signUp} onChange={event => goToSubpage(event)}/>
+                        <Form.Label htmlFor={signUp}
+                                    style={whichSelected === signUp ? selectedBorderStyle : unselectedBorderStyle}
                                     className={styles.choice}>Sign Up</Form.Label>
-                        {whichSelected === 'choice-1' ? signInForm : signUpForm}
+                        {whichSelected === signIn ? signInForm : signUpForm}
                     </div>
                 </Form>
             </div>
