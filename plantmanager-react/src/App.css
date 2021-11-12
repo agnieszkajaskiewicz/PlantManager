@@ -43,9 +43,10 @@
     padding: 15px 20px;
     border-radius: 15px;
     background-color: rgba(255,255,255,.1);
+    color: white;
 }
 
-.App-button {
+.appButton {
     margin-top: 1em;
     display: block;
     background: #154030;
@@ -57,6 +58,16 @@
     color: white;
 }
 
-.App-button:hover {
+.appButton:hover {
     background: #0b2d23;
+}
+
+a:link {
+    color: white;
+    text-decoration: none;
+}
+
+a:visited, a:hover, a:active {
+    color: #aaa;
+    text-decoration: none;
 }

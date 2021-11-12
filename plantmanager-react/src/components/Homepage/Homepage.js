@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Homepage.module.css';
-import Button from 'react-bootstrap/Button';
 import {useNavigate} from "react-router-dom";
-
 import '../../App.css';
 
 const Homepage = () => {
@@ -15,7 +13,6 @@ const Homepage = () => {
 
     return (
         <div className="mainContainer" data-testid="Homepage">
-            Homepage Component
             <div className="formContainer">
                 <label className={styles.text}>
                     Have you recently killed the plant<br/>
@@ -28,8 +25,8 @@ const Homepage = () => {
                     What would you like to do now?
                 </label>
 
-                <Button className="App-button" onClick={() => goToLoginPage("signIn")}>Sign me in</Button>
-                <Button className="App-button" onClick={() => goToLoginPage("signUp")}>I'm new here, sign me up</Button>
+                <button className="appButton" onClick={() => goToLoginPage("signIn")}>Sign me in</button>
+                <button className="appButton" onClick={() => goToLoginPage("signUp")}>I'm new here, sign me up</button>
             </div>
         </div>
     )

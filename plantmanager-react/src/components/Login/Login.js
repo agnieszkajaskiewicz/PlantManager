@@ -53,7 +53,7 @@ const Login = () => {
         <label htmlFor="email" className="formLabel">Email address</label>
         <input id="email" type="email" value={email} className="formInput"
                       onChange={event => setEmail(event.target.value)}/>
-        <button type="submit" className={styles.loginInput}>Sign Up</Button>
+        <button type="submit" className="appButton">Sign Up</button>
     </>;
 
     const signInForm = <>
@@ -65,19 +65,22 @@ const Login = () => {
                       onChange={event => setPassword(event.target.value)}/>
         <Form.Check id="keepSignedIn">
             <Form.Check.Input type="checkbox" defaultChecked={true}/>
-            <label className="formLabel" style={{display: "inline-block", marginTop: "1.2em"}}>Keep me
-                signed in</Form.Label>
+            <label className={styles.checkboxLabel}>Keep me signed in</label>
         </Form.Check>
-        <button type="submit" className={styles.loginInput} style={{marginTop: '15%'}}>Sign In</Button>
+        <button type="submit" className="appButton">Sign In</button>
+
+        <div className={styles.hr}></div>
+        <div className={styles.linkElement}>
+            <a href="/forgotPassword">Forgot password?</a>
+        </div>
     </>
 
 
     return (
-        <div className={styles.Login} data-testid="Login">
-            Login Component
+        <div className="mainContainer" data-testid="Login">
             <div>
                 <Form onSubmit={event => handleSubmit(event)}>
-                    <div className={styles.loginForm}>
+                    <div className="formContainer">
                         <Form.Check hidden={true} style={{display: 'none'}} inline id={signIn} name="choice"
                                     type="radio"
                                     defaultChecked={whichSelected === signIn} onChange={event => goToSubpage(event)}/>
