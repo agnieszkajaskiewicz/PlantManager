@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './Login.module.css';
 import '../../App.css';
 import Form from 'react-bootstrap/Form';
+import {useParams, useNavigate} from "react-router-dom";
+
 
 const selectedBorderStyle = {
     borderBottom: '2px solid',
@@ -13,91 +15,86 @@ const unselectedBorderStyle = {
     borderBottom: 'transparent'
 };
 
-class Login extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            repeatPassword: '',
-            email: '',
-            whichSelected: 'choice-1' //todo replace hardcoded id with variable
-        };
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
-    }
+const Login = () => {
+    const {where} = useParams();
+    const navigate = useNavigate();
 
-    handleChange(event) {
-        this.setState({[event.target.id]: event.target.value});
-    }
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [whichSelected, setWhichSelected] = useState(where);
 
-    handleSubmit(event) { //ta logika obecnie "obsługuje" tylko sign up form
-        alert('Podano następujące dane: ' + this.state.username + ' ' + this.state.email + ' ' + this.state.password + ' ' + this.state.repeatPassword);
+    const signIn = 'signIn';
+    const signUp = 'signUp';
+
+    const handleSubmit = (event) => { //ta logika obecnie "obsługuje" tylko sign up form
+        alert('Podano następujące dane: ' + username + ' ' + email + ' ' + password + ' ' + repeatPassword);
         event.preventDefault();
     }
 
-    handleSelect(event) {
-        this.setState({whichSelected: event.target.id});
+    const goToSubpage = (event) => {
+        navigate('/login/' + event.target.id);
+        setWhichSelected(event.target.id);
     }
 
-    render() {
-        const signUpForm = <>
-            <label htmlFor="username" className="formLabel">Username</label>
-            <input id="username" type="text" value={this.state.username} className="formInput"
-                          onChange={this.handleChange}/>
-            <label htmlFor="password" className="formLabel">Password</label>
-            <input id="password" type="password" value={this.state.password} className="formInput"
-                          onChange={this.handleChange}/>
-            <label htmlFor="repeatPassword" className="formLabel">Repeat password</label>
-            <input id="repeatPassword" type="password" value={this.state.repeatPassword}
-                          className="formInput"
-                          onChange={this.handleChange}/>
-            <label htmlFor="email" className="formLabel">Email address</label>
-            <input id="email" type="email" value={this.state.email} className="formInput"
-                          onChange={this.handleChange}/>
-            <button type="submit" className="App-button">Sign Up</button>
-        </>;
+    const signUpForm = <>
+        <label htmlFor="username" className="formLabel">Username</label>
+        <input id="username" type="text" value={username} className="formInput"
+                      onChange={event => setUsername(event.target.value)}/>
+        <label htmlFor="password" className="formLabel">Password</label>
+        <input id="password" type="password" value={password} className="formInput"
+                      onChange={event => setPassword(event.target.value)}/>
+        <label htmlFor="repeatPassword" className="formLabel">Repeat password</label>
+        <input id="repeatPassword" type="password" value={repeatPassword}
+                      className="formInput"
+                      onChange={event => setRepeatPassword(event.target.value)}/>
+        <label htmlFor="email" className="formLabel">Email address</label>
+        <input id="email" type="email" value={email} className="formInput"
+                      onChange={event => setEmail(event.target.value)}/>
+        <button type="submit" className={styles.loginInput}>Sign Up</Button>
+    </>;
 
-        const signInForm = <>
-            <label htmlFor="username" className="formLabel">Username</label>
-            <input id="username" type="text" value={this.state.username} className="formInput"
-                          onChange={this.handleChange}/>
-            <label htmlFor="password" className="formLabel">Password</label>
-            <input id="password" type="password" value={this.state.username} className="formInput"
-                          onChange={this.handleChange}/>
-            <Form.Check id="keepSignedIn">
-                <Form.Check.Input type="checkbox" defaultChecked={true}/>
-                <label className="formLabel" style={{display: "inline-block", marginTop: "1.2em"}}>Keep me
-                    signed in</label>
-            </Form.Check>
-            <button type="submit" className="App-button" style={{marginTop: '15%'}}>Sign In</button>
-        </>
-        return (
-            <div className="mainContainer" data-testid="Login">
-                Login Component
-                <div>
-                    <Form onSubmit={this.handleSubmit}>
-                        <div className="formContainer">
-                            <Form.Check hidden={true} style={{display: 'none'}} inline id="choice-1" name="choice"
-                                        type="radio"
-                                        defaultChecked={true} onChange={this.handleSelect}/>
-                            <label htmlFor="choice-1"
-                                        style={this.state.whichSelected === 'choice-1' ? selectedBorderStyle : unselectedBorderStyle}
-                                        className={styles.choice}>Sign In</label>
-                            <Form.Check hidden={true} inline id="choice-2" name="choice" type="radio"
-                                        onChange={this.handleSelect}/>
-                            <label htmlFor="choice-2"
-                                        style={this.state.whichSelected === 'choice-2' ? selectedBorderStyle : unselectedBorderStyle}
-                                        className={styles.choice}>Sign Up</label>
-                            {this.state.whichSelected === 'choice-1' ? signInForm : signUpForm}
-                        </div>
-                    </Form>
-                </div>
+    const signInForm = <>
+        <label htmlFor="username" className="formLabel">Username</label>
+        <input id="username" type="text" value={username} className="formInput"
+                      onChange={event => setUsername(event.target.value)}/>
+        <label htmlFor="password" className="formLabel">Password</label>
+        <input id="password" type="password" value={password} className="formInput"
+                      onChange={event => setPassword(event.target.value)}/>
+        <Form.Check id="keepSignedIn">
+            <Form.Check.Input type="checkbox" defaultChecked={true}/>
+            <label className="formLabel" style={{display: "inline-block", marginTop: "1.2em"}}>Keep me
+                signed in</Form.Label>
+        </Form.Check>
+        <button type="submit" className={styles.loginInput} style={{marginTop: '15%'}}>Sign In</Button>
+    </>
+
+
+    return (
+        <div className={styles.Login} data-testid="Login">
+            Login Component
+            <div>
+                <Form onSubmit={event => handleSubmit(event)}>
+                    <div className={styles.loginForm}>
+                        <Form.Check hidden={true} style={{display: 'none'}} inline id={signIn} name="choice"
+                                    type="radio"
+                                    defaultChecked={whichSelected === signIn} onChange={event => goToSubpage(event)}/>
+                        <label htmlFor={signIn}
+                                    style={whichSelected === signIn ? selectedBorderStyle : unselectedBorderStyle}
+                                    className={styles.choice}>Sign In</label>
+                        <Form.Check hidden={true} inline id={signUp} name="choice" type="radio"
+                                    defaultChecked={whichSelected === signUp} onChange={event => goToSubpage(event)}/>
+                        <label htmlFor={signUp}
+                                    style={whichSelected === signUp ? selectedBorderStyle : unselectedBorderStyle}
+                                    className={styles.choice}>Sign Up</label>
+                        {whichSelected === signIn ? signInForm : signUpForm}
+                    </div>
+                </Form>
             </div>
-        )
-    }
+        </div>
+    )
 }
 
 Login.propTypes = {};
