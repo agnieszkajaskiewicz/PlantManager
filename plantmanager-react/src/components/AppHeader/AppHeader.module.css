@@ -6,6 +6,7 @@
           margin-right: auto;
           margin-bottom: 40px;
           margin-top: 40px;
+          cursor: pointer;
     }
 }
 
@@ -15,6 +16,7 @@
           width: auto;
           margin-bottom: 20px;
           margin-top: 20px;
+          cursor: pointer;
     }
 }
 

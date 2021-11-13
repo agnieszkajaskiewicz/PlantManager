@@ -69,9 +69,8 @@ const Login = () => {
         </Form.Check>
         <button type="submit" className="appButton">Sign In</button>
 
-        <div className={styles.hr}></div>
-        <div className={styles.linkElement}>
-            <a href="/forgotPassword">Forgot password?</a>
+        <div className={styles.linkContainer}>
+            <span className={styles.linkElement} onClick={() => navigate('/forgotPassword')}>Forgot password?</span>
         </div>
     </>
 

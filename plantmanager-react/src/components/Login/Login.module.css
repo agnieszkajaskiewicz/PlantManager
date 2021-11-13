@@ -23,16 +23,26 @@ input[type="checkbox"]:checked {
 
 .checkboxLabel {
     display: inline-block;
-    margin-top: 0.8em;
+    margin-top: 1.2em;
+    color: #aaa;
+    font-size: 12px;
+    text-transform: uppercase;
 }
 
-.hr {
-    height: 2px;
-	margin: 60px 0 50px 0;
-	background: rgba(255,255,255,.2);
-}
-
-.linkElement {
+.linkContainer {
     text-align: center;
+    color: #aaa;
+}
+
+.linkElement:hover {
+    cursor: pointer;
+}
+
+.linkElement::before {
+    content:"";
+    display: block;
+    margin-bottom: 40px;
+    margin-top: 50px;
+    border-top: 2px solid rgba(255,255,255,.2);
 }
 

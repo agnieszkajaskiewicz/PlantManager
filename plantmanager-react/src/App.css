@@ -61,13 +61,3 @@
 .appButton:hover {
     background: #0b2d23;
 }
-
-a:link {
-    color: white;
-    text-decoration: none;
-}
-
-a:visited, a:hover, a:active {
-    color: #aaa;
-    text-decoration: none;
-}
