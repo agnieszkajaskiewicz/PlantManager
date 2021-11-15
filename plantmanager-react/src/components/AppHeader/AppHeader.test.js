@@ -2,7 +2,7 @@ import React from 'react';
 import {render, screen} from '@testing-library/react';
 import renderer from 'react-test-renderer';
 import '@testing-library/jest-dom/extend-expect';
-import Homepage from './Homepage';
+import AppHeader from './AppHeader';
 
 const mockedUsedNavigate = jest.fn();
 
@@ -11,13 +11,13 @@ jest.mock('react-router-dom', () => ({
     useNavigate: () => mockedUsedNavigate
 }));
 
-describe('<Homepage />', () => {
+describe('<AppHeader />', () => {
     test('it should mount', () => {
-        render(<Homepage/>);
+        render(<AppHeader/>);
 
-        const homepage = screen.getByTestId('Homepage');
+        const appHeader = screen.getByTestId('AppHeader');
 
-        expect(homepage).toBeInTheDocument();
+        expect(appHeader).toBeInTheDocument();
     });
 
 });

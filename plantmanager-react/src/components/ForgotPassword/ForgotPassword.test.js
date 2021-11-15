@@ -4,7 +4,7 @@ import renderer from 'react-test-renderer';
 import '@testing-library/jest-dom/extend-expect';
 import ForgotPassword from './ForgotPassword';
 
-describe('<Forgot Password />', () => {
+describe('<ForgotPassword />', () => {
     test('it should mount', () => {
         render(<ForgotPassword/>);
 

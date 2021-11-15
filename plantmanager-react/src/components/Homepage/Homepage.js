@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Homepage.module.css';
-import Button from 'react-bootstrap/Button';
 import {useNavigate} from "react-router-dom";
-
+import '../../App.css';
 
 const Homepage = () => {
     const navigate = useNavigate();
@@ -13,10 +12,9 @@ const Homepage = () => {
     }
 
     return (
-        <div className={styles.Homepage} data-testid="Homepage">
-            Homepage Component
-            <div className={styles.homepageView}>
-                <label>
+        <div className="mainContainer" data-testid="Homepage">
+            <div className="formContainer">
+                <label className={styles.text}>
                     Have you recently killed the plant<br/>
                     because you actually forgot about it?<br/>
                     It won't happen again with your Plant Manager!<br/>
@@ -27,8 +25,8 @@ const Homepage = () => {
                     What would you like to do now?
                 </label>
 
-                <Button className={styles.buttonGoTo} onClick={() => goToLoginPage("signIn")}>Sign me in</Button>
-                <Button className={styles.buttonGoTo} onClick={() => goToLoginPage("signUp")}>I'm new here, sign me up</Button>
+                <button className="appButton" onClick={() => goToLoginPage("signIn")}>Sign me in</button>
+                <button className="appButton" onClick={() => goToLoginPage("signUp")}>I'm new here, sign me up</button>
             </div>
         </div>
     )
