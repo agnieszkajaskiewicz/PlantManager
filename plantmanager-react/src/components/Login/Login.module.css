@@ -6,21 +6,6 @@
     text-transform: uppercase;
 }
 
-input[type="checkbox"] {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    margin-top: 1em;
-    margin-right: .25em;
-    vertical-align: top;
-    color: #fff;
-    background: rgba(255,255,255,.1);
-}
-
-input[type="checkbox"]:checked {
-    background: #154030;
-}
-
 .checkboxLabel {
     display: inline-block;
     margin-top: 1.2em;
@@ -36,6 +21,7 @@ input[type="checkbox"]:checked {
 
 .linkElement:hover {
     cursor: pointer;
+    color: #ffffff;
 }
 
 .linkElement::before {
