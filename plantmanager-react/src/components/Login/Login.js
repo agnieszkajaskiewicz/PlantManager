@@ -4,6 +4,7 @@ import styles from './Login.module.css';
 import '../../App.css';
 import Form from 'react-bootstrap/Form';
 import {useParams, useNavigate} from "react-router-dom";
+import {useDependencies} from '../../DependencyContext';
 
 
 const selectedBorderStyle = {
@@ -75,6 +76,11 @@ const Login = () => {
     </>
 
 
+    //***********************************************
+    //Strzelamy do backendu po healthcheck
+    const {authService} = useDependencies();
+    authService.authUser();
+    //***********************************************
     return (
         <div className="mainContainer" data-testid="Login">
             <div>
