@@ -10,8 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -108,33 +109,19 @@ public class PlantServiceImpl implements PlantService {
         return plantsToBeWatered;
     }
 
-    public Integer findDifferenceInDays(String lastWateredDate, Integer wateringInterval) {
-        var date = Calendar.getInstance().getTime();
-        var today = DATE_FORMAT.format(date);
+    private Integer findDifferenceInDays(String lastWateredDate, Integer wateringInterval) {
+        var today = LocalDate.now();
+        var lwd = LocalDate.parse(lastWateredDate);
 
-        Integer differenceInDays;
-        Integer differenceInTime;
+        log.info("Today: " + today);
+        log.info("Last watered date: " + lastWateredDate);
+        log.info("Watering interval: " + wateringInterval);
 
-        log.info("Counting days that remain to closest watering");
-        try {
-            var lwd = DATE_FORMAT.parse(lastWateredDate);
-            log.info("Last watered date: " + lastWateredDate);
-            log.info("Watering interval: " + wateringInterval);
+        log.info("Counting days that remain to the closest watering");
+        var differenceInDays = (int) ChronoUnit.DAYS.between(today, lwd.plusDays(wateringInterval));
 
-            var t = DATE_FORMAT.parse(today);
-            log.info("Today: " + today);
-
-            differenceInTime = Math.toIntExact(lwd.getTime() - t.getTime());
-
-            differenceInDays = ((differenceInTime / (1000 * 60 * 60 * 24)) + wateringInterval) % 365;
-
-            log.info("Difference is: " + differenceInDays + " days");
-            return differenceInDays;
-
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-            return 1;
-        }
+        log.info("Difference is: " + differenceInDays + " days");
+        return differenceInDays;
     }
 
     @Override
