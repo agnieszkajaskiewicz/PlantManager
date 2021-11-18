@@ -13,7 +13,8 @@ const AuthService = {
                 const config = {
                     headers: {
                         'content-type': 'multipart/form-data'
-                    }
+                    },
+                    withCredentials: true
                 }
                 let formData = new FormData();
                 formData.append('username', username);
@@ -26,7 +27,15 @@ const AuthService = {
             loginUser()
                 .then(
                 response => {
-                    console.log(response);
+                    //console.log(response);
+                    axios.get("http://" + backendServerURL + "/dashboard/test", {withCredentials: true} )
+                        .then(response => {
+                            console.log(response);
+                        })
+                        .catch(error => {
+                            console.log(error.response)
+                        })
+
                 }
             ).catch(error => {
                 console.log(error);
