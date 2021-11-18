@@ -51,7 +51,7 @@ public class UserController {
         return "redirect:/dashboard";
     }
 
-    @GetMapping("/sign-in")
+    @GetMapping("/sign-in") //ten endpoint jest wołany tylko na logout, prawdopodobnie go nie potrzebujemy
     public String login(Model model, String error, String logout) {
         if (securityService.isAuthenticated()) {
             return "redirect:/dashboard";

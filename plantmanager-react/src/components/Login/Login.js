@@ -18,6 +18,8 @@ const unselectedBorderStyle = {
 
 
 const Login = () => {
+    const {authService} = useDependencies();
+
     const {where} = useParams();
     const navigate = useNavigate();
 
@@ -38,6 +40,10 @@ const Login = () => {
     const goToSubpage = (event) => {
         navigate('/login/' + event.target.id);
         setWhichSelected(event.target.id);
+    }
+
+    const loginUser = (username, password) => {
+        authService.authUser(username, password);
     }
 
     const signUpForm = <>
@@ -68,7 +74,7 @@ const Login = () => {
             <Form.Check.Input type="checkbox" defaultChecked={true}/>
             <label className={styles.checkboxLabel}>Keep me signed in</label>
         </Form.Check>
-        <button type="submit" className="appButton">Sign In</button>
+        <button type="submit" className="appButton" onClick={() =>loginUser(username, password)}>Sign In</button>
 
         <div className={styles.linkContainer}>
             <span className={styles.linkElement} onClick={() => navigate('/forgotPassword')}>Forgot password?</span>
@@ -78,13 +84,12 @@ const Login = () => {
 
     //***********************************************
     //Strzelamy do backendu po healthcheck
-    const {authService} = useDependencies();
     authService.authUser();
     //***********************************************
     return (
         <div className="mainContainer" data-testid="Login">
             <div>
-                <Form onSubmit={event => handleSubmit(event)}>
+                <Form /*onSubmit={event => handleSubmit(event)}*/>
                     <div className="formContainer">
                         <Form.Check hidden={true} style={{display: 'none'}} inline id={signIn} name="choice"
                                     type="radio"
