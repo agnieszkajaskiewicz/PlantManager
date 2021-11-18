@@ -82,14 +82,10 @@ const Login = () => {
     </>
 
 
-    //***********************************************
-    //Strzelamy do backendu po healthcheck
-    authService.authUser();
-    //***********************************************
     return (
         <div className="mainContainer" data-testid="Login">
             <div>
-                <Form /*onSubmit={event => handleSubmit(event)}*/>
+                {/*<form onSubmit={() => loginUser(username, password)}>*/}
                     <div className="formContainer">
                         <Form.Check hidden={true} style={{display: 'none'}} inline id={signIn} name="choice"
                                     type="radio"
@@ -104,7 +100,7 @@ const Login = () => {
                                     className={styles.choice}>Sign Up</label>
                         {whichSelected === signIn ? signInForm : signUpForm}
                     </div>
-                </Form>
+                {/*</form>*/}
             </div>
         </div>
     )

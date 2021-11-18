@@ -10,20 +10,27 @@ const AuthService = {
 
         if (username && password) {
             const loginUser = () => {
-                //tu się wywala z jakiegoś powodu
-                return axios.post("http://" + backendServerURL + "/sign-in", {
-                    username: username,
-                    password: password
-                });
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                let formData = new FormData();
+                formData.append('username', username);
+                formData.append('password', password);
+
+                return axios.post("http://" + backendServerURL + "/sign-in", formData, config);
+
             }
 
-            loginUser().then(
+            loginUser()
+                .then(
                 response => {
-                    debugger;
+                    console.log(response);
                 }
             ).catch(error => {
-                debugger;
-            })
+                console.log(error);
+            });
         }
         getHealthCheck()
             .then(response => {
