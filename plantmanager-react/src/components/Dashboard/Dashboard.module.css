@@ -1,0 +1,15 @@
+.toBeWatered {
+    background: #1E5C45;
+    border: 0;
+    padding: 20px;
+    font-size: 1.2rem;
+    width: 100%;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.toBeWatered:hover {
+    color: #aaaaaa;
+}

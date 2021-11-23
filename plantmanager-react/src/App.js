@@ -7,6 +7,7 @@ import {DependencyProvider} from "./DependencyContext";
 import AuthService from "./services/AuthService/AuthService";
 
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
                         <Route path="/" element={<Homepage/>}/>
                         <Route path="/login/:where" element={<Login/>}/>
                         <Route path="/forgotPassword" element={<ForgotPassword/>}/>
+                        <Route path="/dashboard" element={<Dashboard/>}/>
                     </Routes>
                 </div>
             </DependencyProvider>

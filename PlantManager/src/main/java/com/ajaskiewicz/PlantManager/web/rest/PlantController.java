@@ -6,6 +6,7 @@ import com.ajaskiewicz.PlantManager.web.utils.FileDeleteUtil;
 import com.ajaskiewicz.PlantManager.web.utils.FileUploadUtil;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,12 +35,12 @@ public class PlantController {
     }
 
     @GetMapping("/test")
-    public String test() {
+    public ResponseEntity<String> test() { //todo remove when no longer needed
         if(!securityService.isAuthenticated()) {
-            return " Nie udało się";
+            return ResponseEntity.ok(" Nie udało się");
         }
 
-        return "Udało się";
+        return ResponseEntity.ok("Udało się");
     }
 
     @RequestMapping
