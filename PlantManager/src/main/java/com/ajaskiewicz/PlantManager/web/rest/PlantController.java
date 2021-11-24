@@ -6,6 +6,7 @@ import com.ajaskiewicz.PlantManager.web.utils.FileDeleteUtil;
 import com.ajaskiewicz.PlantManager.web.utils.FileUploadUtil;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -36,7 +38,7 @@ public class PlantController {
 
     @GetMapping("/test")
     public ResponseEntity<String> test() { //todo remove when no longer needed
-        if(!securityService.isAuthenticated()) {
+        if (!securityService.isAuthenticated()) {
             return ResponseEntity.ok(" Nie udało się");
         }
 
@@ -45,15 +47,29 @@ public class PlantController {
 
     @RequestMapping
     public String showDashboard(Model model) {
-        if (!securityService.isAuthenticated()) { return "redirect:/"; }
+        if (!securityService.isAuthenticated()) {
+            return "redirect:/";
+        }
 
         model.addAttribute("plant", plantService.findAllByUserId(userService.findIdOfLoggedUser()));
         return "dashboardPage";
     }
 
+    @GetMapping(value = "/v2")
+    public ResponseEntity<List<Plant>> getPlantsForLoggedUser() {
+        if (!securityService.isAuthenticated()) { //todo to powinno być załatwione z automatu spring security
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        var plants = plantService.findAllByUserId(userService.findIdOfLoggedUser());
+
+        return ResponseEntity.ok(plants);
+    }
+
     @RequestMapping(path = {"/editPlant", "/editPlant/{id}"})
     public String editPlantById(Model model, @PathVariable("id") Optional<Integer> id) throws NotFoundException {
-        if (!securityService.isAuthenticated()) { return "redirect:/"; }
+        if (!securityService.isAuthenticated()) {
+            return "redirect:/";
+        }
 
         if (id.isPresent()) {
             var plant = plantService.find(id.get());
@@ -67,7 +83,9 @@ public class PlantController {
 
     @RequestMapping(path = "/addPlant", method = RequestMethod.POST)
     public String createOrUpdatePlant(Plant plant, @RequestParam("image") MultipartFile multipartFile) throws IOException {
-        if (!securityService.isAuthenticated()) { return "redirect:/";}
+        if (!securityService.isAuthenticated()) {
+            return "redirect:/";
+        }
 
         var filename = multipartFile.getOriginalFilename();
 
@@ -86,7 +104,9 @@ public class PlantController {
 
     @RequestMapping(value = "/deletePlant/{id}")
     public String deletePlantById(@PathVariable("id") Integer id) throws NotFoundException, IOException {
-        if (!securityService.isAuthenticated()) { return "redirect:/"; }
+        if (!securityService.isAuthenticated()) {
+            return "redirect:/";
+        }
 
         var deleteDirectory = "uploadedImages/" + id;
         FileDeleteUtil.deleteFile(deleteDirectory);

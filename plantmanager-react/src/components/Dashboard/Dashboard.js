@@ -1,10 +1,33 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './Dashboard.module.css';
 import {Collapse} from "react-bootstrap";
+import axios from "axios";
 
 const Dashboard = () => {
     const [open, setOpen] = useState(true);
+    const [data, setData] = useState({
+        plants: [],
+        isFetching: false
+    });
+
+    useEffect(() => {
+        const backendServerURL = process.env.REACT_APP_SERVER_URL;
+        const fetchPlants = async () => {
+            try {
+                setData({plants: data.plants, isFetching: true});
+                const response = await axios.get("http://" + backendServerURL + "/dashboard/v2", {withCredentials: true} )
+                //debugger;
+                setData({plants: response.data, isFetching: false});
+            } catch (exception) {
+                console.log(exception);
+                //todo obsługa błędów
+            }
+        };//todo move to some separate service
+        fetchPlants();
+    }, []);
+
+
     return (
 
 
