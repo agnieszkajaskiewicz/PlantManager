@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './Dashboard.module.css';
-import {Collapse} from "react-bootstrap";
+import {Card, Collapse} from "react-bootstrap";
 import axios from "axios";
+
+import addIcon from '../../img/addIcon.png';
+import bin from '../../img/bin.png';
 
 const Dashboard = () => {
     const [open, setOpen] = useState(true);
@@ -16,7 +19,7 @@ const Dashboard = () => {
         const fetchPlants = async () => {
             try {
                 setData({plants: data.plants, isFetching: true});
-                const response = await axios.get("http://" + backendServerURL + "/dashboard/v2", {withCredentials: true} )
+                const response = await axios.get("http://" + backendServerURL + "/dashboard/v2", {withCredentials: true})
                 //debugger;
                 setData({plants: response.data, isFetching: false});
             } catch (exception) {
@@ -31,25 +34,77 @@ const Dashboard = () => {
     return (
 
 
-  <div className={styles.Dashboard} data-testid="Dashboard">
-    Dashboard Component
-      Można użyć "card" z Boostrapa
-      <div className={styles.toBeWatered}>
-          <span>See plants that should be watered in next 3 days</span>
-      </div>
-      <br/>
-      <div className={styles.toBeWatered} data-toggle="collapse"  data-target="#plants">
-          <input id="collapseCheck" className={styles.toggle} hidden={true} type="checkbox" defaultChecked={false}/>
-          <label htmlFor="collapseCheck" className={styles.lblToggle} onClick={() => setOpen(!open)}>Your plants:</label>
-      </div>
-      <Collapse in={open}>
-          <div className={styles.container} id="plants">
-              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
-              keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-          </div>
-      </Collapse>
-  </div>
-)};
+        <div className={styles.Dashboard} data-testid="Dashboard">
+            Dashboard Component
+            <div className={styles.toBeWatered}>
+                <span>See plants that should be watered in next 3 days</span>
+            </div>
+            <br/>
+            <div className={styles.toBeWatered} data-toggle="collapse" data-target="#plants">
+                <input id="collapseCheck" className={styles.toggle} hidden={true} type="checkbox"
+                       defaultChecked={false}/>
+                <label htmlFor="collapseCheck" className={styles.lblToggle} onClick={() => setOpen(!open)}>Your
+                    plants:</label>
+            </div>
+            <Collapse in={open}>
+                <div className={styles.container} id="plants">
+                    <Card className={styles.cardContainer}>
+                        <img src={addIcon} alt="Add Plant" className={styles.plantImg}/>
+                        <Card.Body className={styles.plantCard}>
+                            <Card.Title>Pan Tadeusz</Card.Title>
+                            <Card.Text>
+                                Litwo
+                                <br/>
+                                Ojczyzno moja
+                                <br/>
+                                Ty jesteś jak zdrowie
+                                <br/>
+                                Ile trzeba cenić
+                            </Card.Text>
+                            <button className="appButton" style={ {width: 'auto', display: 'inline'} }>ADD</button>
+                        </Card.Body>
+                    </Card>
+
+                    <Card className={styles.cardContainer}>
+                        <img src={addIcon} alt="Add Plant" className={styles.plantImg}/>
+                        <Card.Body className={styles.plantCard}>
+                            <Card.Title>Pan Tadeusz</Card.Title>
+                            <Card.Text>
+                                Litwo
+                                <br/>
+                                Ojczyzno moja
+                                <br/>
+                                Ty jesteś jak zdrowie
+                                <br/>
+                                Ile trzeba cenić
+                            </Card.Text>
+                            <button className="appButton" style={ {width: 'auto', display: 'inline'} }>ADD</button>
+                        </Card.Body>
+                    </Card>
+
+                    <Card className={styles.cardContainer}>
+                        <img src={addIcon} alt="Add Plant" className={styles.plantImg}/>
+                        <Card.Body className={styles.plantCard}>
+                            <Card.Title>Pan Tadeusz</Card.Title>
+                            <Card.Text>
+                                Litwo
+                                <br/>
+                                Ojczyzno moja
+                                <br/>
+                                Ty jesteś jak zdrowie
+                                <br/>
+                                Ile trzeba cenić
+                            </Card.Text>
+                            <button className="appButton" style={ {width: 'auto', display: 'inline'} }>EDIT</button>
+                            <img src={bin} alt="Remove plant" className={styles.removeImg}/>
+                        </Card.Body>
+                    </Card>
+                </div>
+            </Collapse>
+
+        </div>
+    )
+};
 
 Dashboard.propTypes = {};
 
