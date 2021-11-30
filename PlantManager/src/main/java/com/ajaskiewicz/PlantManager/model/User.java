@@ -2,12 +2,9 @@ package com.ajaskiewicz.PlantManager.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.util.Collection;
+import javax.validation.constraints.Email;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +26,7 @@ public class User {
     private String password;
 
     @Transient
-    private String passwordConfirm;
+    private String repeatPassword;
 
     @ManyToMany
     private Set<Role> roles;

@@ -19,6 +19,7 @@ const unselectedBorderStyle = {
 
 const Login = () => {
     const {authService} = useDependencies();
+    const {registerService} = useDependencies();
 
     const {where} = useParams();
     const navigate = useNavigate();
@@ -46,6 +47,10 @@ const Login = () => {
         authService.authUser(username, password);
     }
 
+    const registerUser = (username, password, repeatPassword, email) => {
+        registerService.createUser(username, password, repeatPassword, email);
+    }
+
     const signUpForm = <>
         <label htmlFor="username" className="formLabel">Username</label>
         <input id="username" type="text" value={username} className="formInput"
@@ -60,7 +65,7 @@ const Login = () => {
         <label htmlFor="email" className="formLabel">Email address</label>
         <input id="email" type="email" value={email} className="formInput"
                       onChange={event => setEmail(event.target.value)}/>
-        <button type="submit" className="appButton">Sign Up</button>
+        <button type="submit" className="appButton" onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
     </>;
 
     const signInForm = <>

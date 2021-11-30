@@ -5,12 +5,14 @@ import com.ajaskiewicz.PlantManager.service.SecurityService;
 import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.web.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class UserController {
@@ -46,9 +48,17 @@ public class UserController {
         }
 
         userService.save(userForm);
-        securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
+        securityService.autoLogin(userForm.getUsername(), userForm.getRepeatPassword());
 
         return "redirect:/dashboard";
+    }
+
+    @PostMapping("/sign-up/v2")
+    public ResponseEntity<String> registration(@RequestBody User user) {
+        userService.save(user);
+        securityService.autoLogin(user.getUsername(), user.getRepeatPassword());
+
+        return ResponseEntity.ok("User registered successfully");
     }
 
     @GetMapping("/sign-in") //ten endpoint jest wołany tylko na logout, prawdopodobnie go nie potrzebujemy
