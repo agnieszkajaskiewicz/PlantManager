@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 
@@ -18,11 +20,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotEmpty(message = "This field is required.")
+    @Size(min = 6, max = 32, message = "Please use between 6 and 32 characters.")
     private String username;
 
-    @Email
+    @Email(message = "Use proper email format.")
+    @NotEmpty(message = "This field is required.")
     private String email;
 
+    @NotEmpty(message = "This field is required.")
+    @Size(min = 6, max = 32, message = "Please use between 6 and 32 characters.")
     private String password;
 
     @Transient

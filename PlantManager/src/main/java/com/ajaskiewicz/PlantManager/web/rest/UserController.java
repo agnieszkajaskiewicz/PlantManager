@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
+
 @Controller
 public class UserController {
 
@@ -54,7 +56,7 @@ public class UserController {
     }
 
     @PostMapping("/sign-up/v2")
-    public ResponseEntity<String> registration(@RequestBody User user) {
+    public ResponseEntity<String> registration(@Valid @RequestBody User user) {
         userService.save(user);
         securityService.autoLogin(user.getUsername(), user.getRepeatPassword());
 
