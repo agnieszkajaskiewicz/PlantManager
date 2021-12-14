@@ -29,6 +29,10 @@ const Login = () => {
     const [repeatPassword, setRepeatPassword] = useState('');
     const [email, setEmail] = useState('');
     const [whichSelected, setWhichSelected] = useState(where);
+    const [usernameError, setUsernameError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [repeatPasswordError, setRepeatPasswordError] = useState('');
+    const [emailError, setEmailError] = useState('');
 
     const signIn = 'signIn';
     const signUp = 'signUp';
@@ -54,17 +58,29 @@ const Login = () => {
     const signUpForm = <>
         <label htmlFor="username" className="formLabel">Username</label>
         <input id="username" type="text" value={username} className="formInput"
-                      onChange={event => setUsername(event.target.value)}/>
+                      onChange={event => setUsername(event.target.value)} required/>
+        {
+            usernameError ? <span style={{ color: 'red', fontSize: '12px'}}>{usernameError}</span> : ''
+        }               
         <label htmlFor="password" className="formLabel">Password</label>
         <input id="password" type="password" value={password} className="formInput"
-                      onChange={event => setPassword(event.target.value)}/>
+                      onChange={event => setPassword(event.target.value)} required/>
+        {
+            passwordError ? <span style={{ color: 'red', fontSize: '12px'}}>{passwordError}</span> : ''
+        }               
         <label htmlFor="repeatPassword" className="formLabel">Repeat password</label>
         <input id="repeatPassword" type="password" value={repeatPassword}
                       className="formInput"
-                      onChange={event => setRepeatPassword(event.target.value)}/>
+                      onChange={event => setRepeatPassword(event.target.value)} required/>
+        {
+            repeatPasswordError ? <span style={{ color: 'red', fontSize: '12px'}}>{repeatPasswordError}</span> : ''
+        }               
         <label htmlFor="email" className="formLabel">Email address</label>
         <input id="email" type="email" value={email} className="formInput"
                       onChange={event => setEmail(event.target.value)}/>
+        {
+            emailError ? <span style={{ color: 'red', fontSize: '12px'}}>{emailError}</span> : ''
+        }              
         <button type="submit" className="appButton" onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
     </>;
 
