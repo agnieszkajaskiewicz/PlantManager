@@ -87,18 +87,17 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public List<Plant> findPlantsToBeWateredSoon(Integer id) {
-        var allPlants = plantRepository.findAllByUserId(id);
+    public List<Plant> findPlantsToBeWateredSoon(Integer userId) {
+        var allPlants = plantRepository.findAllByUserId(userId);
         var plantsToBeWatered = new ArrayList<Plant>();
 
         log.info("Looking for plants that should be watered soon");
-        for (var i = 0; i < allPlants.size(); i++) {
-            var differenceInDays = findDifferenceInDays(allPlants.get(i).getWateringSchedule().getLastWateredDate(), allPlants.get(i).getWateringSchedule().getWateringInterval());
+        for (Plant plant : allPlants) {
+            var differenceInDays = findDifferenceInDays(plant.getWateringSchedule().getLastWateredDate(), plant.getWateringSchedule().getWateringInterval());
 
             if (differenceInDays <= 3) {
-                var plantToBeWatered = allPlants.get(i);
-                plantToBeWatered.setWateringDifferenceInDays(differenceInDays);
-                plantsToBeWatered.add(plantToBeWatered);
+                plant.setWateringDifferenceInDays(differenceInDays);
+                plantsToBeWatered.add(plant);
             }
         }
 
