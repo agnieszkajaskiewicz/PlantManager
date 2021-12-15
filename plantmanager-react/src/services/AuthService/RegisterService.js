@@ -12,16 +12,18 @@ const RegisterService = {
                     withCredentials: true
                 }
                 const userData = {
-                    username,
-                    password,
-                    repeatPassword,
-                    email
+                    username: username,
+                    password: password,
+                    repeatPassword: repeatPassword,
+                    email: email
                 }
 
                 return axios.post("http://" + backendServerURL + "/sign-up/v2", userData, config);
             }
 
-            registerUser()
+            return registerUser;
+
+            /*registerUser()
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.fieldErrors) {
@@ -47,7 +49,7 @@ const RegisterService = {
                     axios.get("http://" + backendServerURL + "/dashboard");
                 }    
                 })
-                .catch((error) => error);    
+                .catch((error) => error);    */
         }
     }
 };

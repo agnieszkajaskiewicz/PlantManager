@@ -52,7 +52,31 @@ const Login = () => {
     }
 
     const registerUser = (username, password, repeatPassword, email) => {
-        registerService.createUser(username, password, repeatPassword, email);
+
+        const user = registerService.createUser(username, password, repeatPassword, email);
+        //debugger;
+        user()
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log("wrócił błąd");
+                console.log(error.response);
+
+                error.response.data.fieldErrors.forEach(fieldError => { //todo dokończyć
+                    if(fieldError.field === "email") {
+                        setEmailError(fieldError.message)
+                    }
+
+                    if(fieldError.field === "password") {
+                        setPasswordError(fieldError.message)
+                    }
+
+                    if(fieldError.field === "username") {
+                        setUsernameError(fieldError.message)
+                    }
+                })
+            })
     }
 
     const signUpForm = <>

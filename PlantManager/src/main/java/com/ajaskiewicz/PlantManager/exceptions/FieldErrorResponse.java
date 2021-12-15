@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class FieldErrorResponse {
+public class FieldErrorResponse { //todo dodać timestamp
 
     private List<CustomFieldError> fieldErrors;
 
