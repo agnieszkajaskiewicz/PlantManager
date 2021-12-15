@@ -5,6 +5,7 @@ import Homepage from './components/Homepage/Homepage';
 import AppHeader from './components/AppHeader/AppHeader';
 import {DependencyProvider} from "./DependencyContext";
 import AuthService from "./services/AuthService/AuthService";
+import PlantService from "./services/PlantService/PlantService";
 
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -13,7 +14,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 function App() {
     return (
         <Router>
-            <DependencyProvider authService={AuthService}>
+            <DependencyProvider authService={AuthService} plantService={PlantService}>
                 <div className="App">
                     <AppHeader/>
                     <Routes>
