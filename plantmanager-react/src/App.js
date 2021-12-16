@@ -5,7 +5,8 @@ import Homepage from './components/Homepage/Homepage';
 import AppHeader from './components/AppHeader/AppHeader';
 import {DependencyProvider} from "./DependencyContext";
 import AuthService from "./services/AuthService/AuthService";
-import RegisterService from "./services/AuthService/RegisterService";
+import RegistrationService from "./services/RegistrationService/RegistrationService";
+import ValidationService from "./services/ValidationService/ValidationService";
 
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -14,7 +15,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 function App() {
     return (
         <Router>
-            <DependencyProvider authService={AuthService} registerService={RegisterService}>
+            <DependencyProvider authService={AuthService} registrationService={RegistrationService} validationService={ValidationService}>
                 <div className="App">
                     <AppHeader/>
                     <Routes>

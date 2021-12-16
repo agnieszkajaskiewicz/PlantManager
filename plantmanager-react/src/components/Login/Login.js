@@ -18,8 +18,7 @@ const unselectedBorderStyle = {
 
 
 const Login = () => {
-    const {authService} = useDependencies();
-    const {registerService} = useDependencies();
+    const {authService, registrationService, validationService} = useDependencies();
 
     const {where} = useParams();
     const navigate = useNavigate();
@@ -52,10 +51,7 @@ const Login = () => {
     }
 
     const registerUser = (username, password, repeatPassword, email) => {
-
-        const user = registerService.createUser(username, password, repeatPassword, email);
-        //debugger;
-        user()
+        registrationService.createUser(username, password, repeatPassword, email)
             .then(response => {
                 console.log(response);
             })
@@ -64,25 +60,36 @@ const Login = () => {
                 console.log(error.response);
 
                 error.response.data.fieldErrors.forEach(fieldError => { //todo dokończyć
-                    if(fieldError.field === "email") {
+                    if (fieldError.field === "email") {
                         setEmailError(fieldError.message)
                     }
 
-                    if(fieldError.field === "password") {
+                    if (fieldError.field === "password") {
                         setPasswordError(fieldError.message)
                     }
 
-                    if(fieldError.field === "username") {
+                    if (fieldError.field === "username") {
                         setUsernameError(fieldError.message)
                     }
                 })
             })
     }
 
+    const processUsernameInput = (event) => {
+        const providedUsername = event.target.value;
+        const errorMessage = validationService.validateUsername(providedUsername);
+        if(errorMessage) {
+            setUsernameError(errorMessage.message);
+        } else {
+            setUsernameError('');
+        }
+        setUsername(providedUsername);
+    }
+
     const signUpForm = <>
         <label htmlFor="username" className="formLabel">Username</label>
         <input id="username" type="text" value={username} className="formInput"
-                      onChange={event => setUsername(event.target.value)} required/>
+                      onChange={event => processUsernameInput(event)} required/>
         {
             usernameError ? <span style={{ color: 'red', fontSize: '12px'}}>{usernameError}</span> : ''
         }               
@@ -104,8 +111,9 @@ const Login = () => {
                       onChange={event => setEmail(event.target.value)}/>
         {
             emailError ? <span style={{ color: 'red', fontSize: '12px'}}>{emailError}</span> : ''
-        }              
-        <button type="submit" className="appButton" onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
+        }
+        {/*todo the logic related to disabling the button must be updated*/}
+        <button type="submit" className="appButton" disabled={usernameError !== ''} onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
     </>;
 
     const signInForm = <>
