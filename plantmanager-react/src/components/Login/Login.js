@@ -78,7 +78,7 @@ const Login = () => {
     const processUsernameInput = (event) => {
         const providedUsername = event.target.value;
         const errorMessage = validationService.validateUsername(providedUsername);
-        if(errorMessage) {
+        if (errorMessage) {
             setUsernameError(errorMessage.message);
         } else {
             setUsernameError('');
@@ -86,31 +86,53 @@ const Login = () => {
         setUsername(providedUsername);
     }
 
+    const processPasswordInput = (event) => {
+        const providedPassword = event.target.value;
+        const errorMessage = validationService.validatePassword(providedPassword);
+        if (errorMessage) {
+            setPasswordError(errorMessage.message);
+        } else {
+            setPasswordError('');
+        }
+        setPassword(providedPassword);
+    }
+
+    const processRepeatPasswordInput = (event) => {
+        const providedRepeatPassword = event.target.value;
+        const errorMessage = validationService.validateRepeatPassword(password, providedRepeatPassword);
+        if (errorMessage) {
+            setRepeatPasswordError(errorMessage.message);
+        } else {
+            setRepeatPasswordError('');
+        }
+        setRepeatPassword(providedRepeatPassword);
+    }
+
     const signUpForm = <>
         <label htmlFor="username" className="formLabel">Username</label>
         <input id="username" type="text" value={username} className="formInput"
                       onChange={event => processUsernameInput(event)} required/>
         {
-            usernameError ? <span style={{ color: 'red', fontSize: '12px'}}>{usernameError}</span> : ''
+            usernameError ? <span className="errorMessage">{usernameError}</span> : ''
         }               
         <label htmlFor="password" className="formLabel">Password</label>
-        <input id="password" type="password" value={password} className="formInput"
-                      onChange={event => setPassword(event.target.value)} required/>
+        <input id="password" type="password" value={password} className="formInput" 
+                      onChange={event => processPasswordInput(event)} required/>
         {
-            passwordError ? <span style={{ color: 'red', fontSize: '12px'}}>{passwordError}</span> : ''
+            passwordError ? <span className="errorMessage">{passwordError}</span> : ''
         }               
         <label htmlFor="repeatPassword" className="formLabel">Repeat password</label>
         <input id="repeatPassword" type="password" value={repeatPassword}
                       className="formInput"
-                      onChange={event => setRepeatPassword(event.target.value)} required/>
+                      onChange={event => processRepeatPasswordInput(event)} required/>
         {
-            repeatPasswordError ? <span style={{ color: 'red', fontSize: '12px'}}>{repeatPasswordError}</span> : ''
+            repeatPasswordError ? <span className="errorMessage">{repeatPasswordError}</span> : ''
         }               
         <label htmlFor="email" className="formLabel">Email address</label>
         <input id="email" type="email" value={email} className="formInput"
                       onChange={event => setEmail(event.target.value)}/>
         {
-            emailError ? <span style={{ color: 'red', fontSize: '12px'}}>{emailError}</span> : ''
+            emailError ? <span className="errorMessage">{emailError}</span> : ''
         }
         {/*todo the logic related to disabling the button must be updated*/}
         <button type="submit" className="appButton" disabled={usernameError !== ''} onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
