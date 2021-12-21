@@ -23,6 +23,7 @@ import java.util.List;
 public class PlantServiceImpl implements PlantService {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final int SAFE_AMOUNT_OF_DAYS_IN_THE_FUTURE = 3;
 
     private PlantRepository plantRepository;
     private WateringScheduleRepository wateringScheduleRepository;
@@ -91,12 +92,12 @@ public class PlantServiceImpl implements PlantService {
         var allPlants = plantRepository.findAllByUserId(userId);
         var plantsToBeWatered = new ArrayList<Plant>();
 
-        log.info("Looking for plants that should be watered soon");
+        log.info("Looking for plants that should be watered soon for userId: {}", userId);
         for (Plant plant : allPlants) {
-            var differenceInDays = findDifferenceInDays(plant.getWateringSchedule().getLastWateredDate(), plant.getWateringSchedule().getWateringInterval());
+            var lastTimeWateredInDays = findWateringDifferenceInDays(plant.getWateringSchedule().getLastWateredDate(), plant.getWateringSchedule().getWateringInterval());
 
-            if (differenceInDays <= 3) {
-                plant.setWateringDifferenceInDays(differenceInDays);
+            if (lastTimeWateredInDays <= SAFE_AMOUNT_OF_DAYS_IN_THE_FUTURE) { //todo być może to mogła by być wartość personalizowana użytkownika - "chcę aby informować mnie o podlaniu nadchodzącym w przeciągu X dni" (?)
+                plant.setWateringDifferenceInDays(lastTimeWateredInDays);
                 plantsToBeWatered.add(plant);
             }
         }
@@ -108,7 +109,7 @@ public class PlantServiceImpl implements PlantService {
         return plantsToBeWatered;
     }
 
-    private Integer findDifferenceInDays(String lastWateredDate, Integer wateringInterval) {
+    private Integer findWateringDifferenceInDays(String lastWateredDate, Integer wateringInterval) {
         var today = LocalDate.now();
         var lwd = LocalDate.parse(lastWateredDate);
 

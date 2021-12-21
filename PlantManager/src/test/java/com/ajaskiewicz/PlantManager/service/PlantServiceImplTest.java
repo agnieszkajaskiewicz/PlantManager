@@ -39,33 +39,41 @@ class PlantServiceImplTest {
     }
 
     @Test
-    public void shouldCalculateCorrectPositiveDifferenceInDays() {
+    public void shouldCalculateCorrectDifferenceInDays() {
         //given
         var allUserPlants = preparePlants();
         when(plantRepository.findAllByUserId(USER_ID)).thenReturn(allUserPlants);
         //when
         var result = plantService.findPlantsToBeWateredSoon(USER_ID);
         //then
-        assertEquals(1, result.size());
-        assertEquals(1, result.get(0).getId());
-        assertEquals(2, result.get(0).getWateringDifferenceInDays());
+        assertEquals(2, result.size());
+        assertEquals(-2, result.get(0).getWateringDifferenceInDays());
+        assertEquals(1, result.get(1).getWateringDifferenceInDays());
     }
 
     private List<Plant> preparePlants() {
-        var plantThatShouldBeWatered = new Plant();
-        plantThatShouldBeWatered.setId(1);
-        var wateringScheduleThatShouldBeWatered = new WateringSchedule();
-        wateringScheduleThatShouldBeWatered.setLastWateredDate(LocalDate.now().minusDays(5).format(FORMATTER));
-        wateringScheduleThatShouldBeWatered.setWateringInterval(3);
-        plantThatShouldBeWatered.setWateringSchedule(wateringScheduleThatShouldBeWatered);
+        var plantThatShouldBeWateredTwoDaysAgo = new Plant();
+        plantThatShouldBeWateredTwoDaysAgo.setId(1);
+        var wateringScheduleThatShouldBeWateredTwoDaysAgo = new WateringSchedule();
+        wateringScheduleThatShouldBeWateredTwoDaysAgo.setLastWateredDate(LocalDate.now().minusDays(5).format(FORMATTER));
+        wateringScheduleThatShouldBeWateredTwoDaysAgo.setWateringInterval(3);
+        plantThatShouldBeWateredTwoDaysAgo.setWateringSchedule(wateringScheduleThatShouldBeWateredTwoDaysAgo);
+
+        var plantThatShouldBeWateredTomorrow = new Plant();
+        plantThatShouldBeWateredTomorrow.setId(2);
+        var wateringScheduleThatShouldBeWateredTomorrow = new WateringSchedule();
+        wateringScheduleThatShouldBeWateredTomorrow.setLastWateredDate(LocalDate.now().minusDays(2).format(FORMATTER));
+        wateringScheduleThatShouldBeWateredTomorrow.setWateringInterval(3);
+        plantThatShouldBeWateredTomorrow.setWateringSchedule(wateringScheduleThatShouldBeWateredTomorrow);
 
         var plantThatShouldNotBeWatered = new Plant();
-        plantThatShouldNotBeWatered.setId(2);
-        var wateringScheduleThatNotShouldBeWatered = new WateringSchedule();
-        wateringScheduleThatNotShouldBeWatered.setLastWateredDate(LocalDate.now().minusDays(2).format(FORMATTER));
-        wateringScheduleThatNotShouldBeWatered.setWateringInterval(3);
-        plantThatShouldNotBeWatered.setWateringSchedule(wateringScheduleThatNotShouldBeWatered);
+        plantThatShouldNotBeWatered.setId(3);
+        var wateringScheduleThatShouldNotBeWatered = new WateringSchedule();
+        wateringScheduleThatShouldNotBeWatered.setLastWateredDate(LocalDate.now().format(FORMATTER));
+        wateringScheduleThatShouldNotBeWatered.setWateringInterval(4);
+        plantThatShouldNotBeWatered.setWateringSchedule(wateringScheduleThatShouldNotBeWatered);
 
-        return newArrayList(plantThatShouldBeWatered, plantThatShouldNotBeWatered);
+
+        return newArrayList(plantThatShouldBeWateredTwoDaysAgo, plantThatShouldBeWateredTomorrow, plantThatShouldNotBeWatered);
     }
 }
