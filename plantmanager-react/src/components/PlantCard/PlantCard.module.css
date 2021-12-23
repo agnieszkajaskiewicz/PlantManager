@@ -1,0 +1,31 @@
+div.container {
+    width: fit-content;
+    box-shadow: 2px 2px 6px 0 rgba(0,0,0,0.3);
+    background-color: transparent;
+}
+
+.plantImg {
+    width: 14rem;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.removeImg {
+    display: block;
+    margin: 1rem auto 1.5rem;
+    width: 3rem;
+    cursor: pointer;
+}
+
+.plantCard {
+    padding-top: 1rem;
+    width: 14rem;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    background-color: #1E5C45;
+}

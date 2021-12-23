@@ -11,4 +11,8 @@ describe('<Dashboard />', () => {
 
     expect(dashboard).toBeInTheDocument();
   });
+
+  test('it should display correct cards with plants from payload', () => {
+
+  });
 });

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './Dashboard.module.css';
 import {Card, Collapse} from "react-bootstrap";
+import PlantCard from '../PlantCard/PlantCard';
 
 import addIcon from '../../img/addIcon.png';
 import bin from '../../img/bin.png';
@@ -100,6 +101,11 @@ const Dashboard = () => {
                             <img src={bin} alt="Remove plant" className={styles.removeImg}/>
                         </Card.Body>
                     </Card>
+
+                    <PlantCard plantData={{
+                        name: 'Pejotl'
+                    }}/>
+                    <PlantCard plantData={null}/>
                 </div>
             </Collapse>
 
