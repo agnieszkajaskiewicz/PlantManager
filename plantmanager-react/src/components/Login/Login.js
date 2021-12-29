@@ -119,6 +119,8 @@ const Login = () => {
         setEmail(providedEmail);
     }
 
+    const invalidData = !username || !password || !repeatPassword || !email || usernameError || passwordError || repeatPasswordError || emailError;
+
     const signUpForm = <>
         <label htmlFor="username" className="formLabel">Username</label>
         <input id="username" type="text" value={username} className="formInput"
@@ -145,8 +147,7 @@ const Login = () => {
         {
             emailError ? <span className="errorMessage">{emailError}</span> : ''
         }
-        {/*todo the logic related to disabling the button must be updated*/}
-        <button type="submit" className="appButton" disabled={usernameError !== ''} onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
+        <button type="submit" className="appButton" disabled={ invalidData } onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
     </>;
 
     const signInForm = <>
