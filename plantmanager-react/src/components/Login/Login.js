@@ -60,16 +60,16 @@ const Login = () => {
                 console.log(error.response);
 
                 error.response.data.fieldErrors.forEach(fieldError => { //todo dokończyć
-                    if (fieldError.field === "email") {
-                        setEmailError(fieldError.message)
+                    if (fieldError.field === "username") {
+                        setUsernameError(fieldError.message)
                     }
 
                     if (fieldError.field === "password") {
                         setPasswordError(fieldError.message)
                     }
-
-                    if (fieldError.field === "username") {
-                        setUsernameError(fieldError.message)
+                    
+                    if (fieldError.field === "email") {
+                        setEmailError(fieldError.message)
                     }
                 })
             })

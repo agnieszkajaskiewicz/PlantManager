@@ -1,16 +1,17 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
+import com.ajaskiewicz.PlantManager.exceptions.ControllerErrorHandler;
 import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.SecurityService;
 import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.web.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -41,6 +42,7 @@ public class UserController {
         return "signUpPage";
     }
 
+    /*
     @PostMapping("/sign-up")
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
@@ -54,9 +56,16 @@ public class UserController {
 
         return "redirect:/dashboard";
     }
+     */
 
     @PostMapping("/sign-up/v2")
-    public ResponseEntity<String> registration(@Valid @RequestBody User user) {
+    public ResponseEntity registration(@Valid @RequestBody User user, BindingResult bindingResult) {
+        userValidator.validate(user, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         userService.save(user);
         securityService.autoLogin(user.getUsername(), user.getRepeatPassword());
 

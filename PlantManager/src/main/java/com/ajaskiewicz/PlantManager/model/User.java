@@ -29,7 +29,6 @@ public class User {
     private String email;
 
     @NotEmpty(message = "This field is required.")
-    @Size(min = 6, max = 32, message = "Please use between 6 and 32 characters.")
     private String password;
 
     @Transient
