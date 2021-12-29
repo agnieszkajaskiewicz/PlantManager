@@ -108,6 +108,17 @@ const Login = () => {
         setRepeatPassword(providedRepeatPassword);
     }
 
+    const processEmailInput = (event) => {
+        const providedEmail = event.target.value;
+        const errorMessage = validationService.validateEmail(email);
+        if (errorMessage) {
+            setEmailError(errorMessage.message);
+        } else {
+            setEmailError('');
+        }
+        setEmail(providedEmail);
+    }
+
     const signUpForm = <>
         <label htmlFor="username" className="formLabel">Username</label>
         <input id="username" type="text" value={username} className="formInput"
@@ -130,7 +141,7 @@ const Login = () => {
         }               
         <label htmlFor="email" className="formLabel">Email address</label>
         <input id="email" type="email" value={email} className="formInput"
-                      onChange={event => setEmail(event.target.value)}/>
+                      onChange={event => processEmailInput(event)} required/>
         {
             emailError ? <span className="errorMessage">{emailError}</span> : ''
         }

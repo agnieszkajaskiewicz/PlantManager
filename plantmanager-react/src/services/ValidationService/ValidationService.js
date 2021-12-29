@@ -1,3 +1,5 @@
+import { validate } from 'react-email-validator';
+
 const usernameMinLength = 6;
 const usernameMaxLength = 32;
 const passwordMinLength = 6;
@@ -6,6 +8,7 @@ const passwordMaxLength = 32;
 const emptyFieldMessage = "This field is required."
 const wrongLengthMessage = "Please use between 6 and 32 characters."
 const passwordsMismatch = "Passwords don't match."
+const invalidEmailMessage = "Enter a valid email."
 
 const ValidationService = {
     validateUsername: (username) => {
@@ -42,10 +45,27 @@ const ValidationService = {
 
     validateRepeatPassword: (password, repeatPassword) => {
         if (password !== "" && repeatPassword !== "" && password !== repeatPassword) {
-            console.log("password:" + password + " repeatPassword: " + repeatPassword);
             return {
                 field: 'repeatPassword',
                 message: passwordsMismatch
+            };
+        }
+    },
+
+    validateEmail: (email) => {
+        if (email === "") {
+            return {
+                field: 'email',
+                message: emptyFieldMessage
+            };
+        }
+
+        const isEmail = validate(email);  
+
+        if (!isEmail) {    
+            return {
+                field: 'email',
+                message: invalidEmailMessage
             };
         }
     }
