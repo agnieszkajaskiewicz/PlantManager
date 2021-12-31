@@ -53,23 +53,26 @@ const Login = () => {
     const registerUser = (username, password, repeatPassword, email) => {
         registrationService.createUser(username, password, repeatPassword, email)
             .then(response => {
-                console.log(response);
+                if (response.status === 200) {
+                    navigate('/dashboard');
+                }
             })
             .catch(error => {
-                console.log("wrócił błąd");
-                console.log(error.response);
-
-                error.response.data.fieldErrors.forEach(fieldError => { //todo dokończyć
+                error.response.data.map(fieldError => {
                     if (fieldError.field === "username") {
-                        setUsernameError(fieldError.message)
+                        setUsernameError(fieldError.defaultMessage)
                     }
 
                     if (fieldError.field === "password") {
-                        setPasswordError(fieldError.message)
+                        setPasswordError(fieldError.defaultMessage)
+                    }
+
+                    if (fieldError.field === "repeatPassword") {
+                        setRepeatPasswordError(fieldError.defaultMessage)
                     }
                     
                     if (fieldError.field === "email") {
-                        setEmailError(fieldError.message)
+                        setEmailError(fieldError.defaultMessage)
                     }
                 })
             })
@@ -147,7 +150,7 @@ const Login = () => {
         {
             emailError ? <span className="errorMessage">{emailError}</span> : ''
         }
-        <button type="submit" className="appButton" disabled={ invalidData } onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
+        <button type="submit" className="appButton" disabled={invalidData} onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
     </>;
 
     const signInForm = <>
