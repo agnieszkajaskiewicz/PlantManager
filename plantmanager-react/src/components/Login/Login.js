@@ -5,6 +5,7 @@ import '../../App.css';
 import Form from 'react-bootstrap/Form';
 import {useParams, useNavigate} from "react-router-dom";
 import {useDependencies} from '../../DependencyContext';
+import axios from 'axios';
 
 
 const selectedBorderStyle = {
@@ -35,6 +36,7 @@ const Login = () => {
 
     const signIn = 'signIn';
     const signUp = 'signUp';
+    const backendServerURL = process.env.REACT_APP_SERVER_URL;
 
     const handleSubmit = (event) => { //ta logika obecnie "obsługuje" tylko sign up form
         alert('Podano następujące dane: ' + username + ' ' + email + ' ' + password + ' ' + repeatPassword);
@@ -47,8 +49,22 @@ const Login = () => {
     }
 
     const loginUser = (username, password) => {
-        authService.authUser(username, password);
-    }
+        authService.authUser(username, password)
+            .then(response => {
+                axios.get("http://" + backendServerURL + "/dashboard", {withCredentials: true} )
+                    .then(response => {
+                        navigate('/dashboard');
+                    })
+                    .catch(error => {
+                        //todo: validate inputs and show errors (invalid username/pass)
+                        console.log(error.response)
+                    })
+
+            }
+        ).catch(error => {
+            console.log(error);
+        });
+        }
 
     const registerUser = (username, password, repeatPassword, email) => {
         registrationService.createUser(username, password, repeatPassword, email)
@@ -164,7 +180,7 @@ const Login = () => {
             <Form.Check.Input type="checkbox" defaultChecked={true}/>
             <label className={styles.checkboxLabel}>Keep me signed in</label>
         </Form.Check>
-        <button type="submit" className="appButton" onClick={() =>loginUser(username, password)}>Sign In</button>
+        <button type="submit" className="appButton" onClick={() => loginUser(username, password)}>Sign In</button>
 
         <div className={styles.linkContainer}>
             <span className={styles.linkElement} onClick={() => navigate('/forgotPassword')}>Forgot password?</span>

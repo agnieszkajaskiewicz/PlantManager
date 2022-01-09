@@ -17,35 +17,6 @@ const RegistrationService = {
             }
 
             return axios.post("http://" + backendServerURL + "/sign-up/v2", userData, config);
-
-
-            /*registerUser()
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.fieldErrors) {
-                        data.fieldErrors.forEach(fieldError => {
-
-                            if (fieldError.field === 'username') {
-                                Login.setUsernameError(fieldError.message);
-                            }     
-
-                            if (fieldError.field === 'password') {
-                                Login.setPasswordError(fieldError.message);
-                            }
-
-                            if (fieldError.field === 'repeatPassword') {
-                                Login.setRepeatPasswordError(fieldError.message);
-                            }
-
-                            if (fieldError.field === 'email') {
-                                Login.setEmailError(fieldError.message);
-                            }
-                    });
-                } else {
-                    axios.get("http://" + backendServerURL + "/dashboard");
-                }    
-                })
-                .catch((error) => error);    */
         }
     }
 };

@@ -4,7 +4,6 @@ import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.SecurityService;
 import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.web.utils.UserValidator;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
