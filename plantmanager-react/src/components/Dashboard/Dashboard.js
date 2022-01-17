@@ -2,10 +2,12 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './Dashboard.module.css';
 import {Card, Collapse} from "react-bootstrap";
-import axios from "axios";
+import PlantCard from '../PlantCard/PlantCard';
 
 import addIcon from '../../img/addIcon.png';
 import bin from '../../img/bin.png';
+
+import {useDependencies} from '../../DependencyContext';
 
 const Dashboard = () => {
     const [open, setOpen] = useState(true);
@@ -13,21 +15,21 @@ const Dashboard = () => {
         plants: [],
         isFetching: false
     });
+    const {plantService} = useDependencies();
 
     useEffect(() => {
-        const backendServerURL = process.env.REACT_APP_SERVER_URL;
-        const fetchPlants = async () => {
+        const fetchPlantsForLoggedUser = async () => {
             try {
                 setData({plants: data.plants, isFetching: true});
-                const response = await axios.get("http://" + backendServerURL + "/dashboard/v2", {withCredentials: true})
+                const response = await plantService.fetchPlantsForLoggedUser();
                 //debugger;
                 setData({plants: response.data, isFetching: false});
             } catch (exception) {
                 console.log(exception);
                 //todo obsługa błędów
             }
-        };//todo move to some separate service
-        fetchPlants();
+        };
+        fetchPlantsForLoggedUser();
     }, []);
 
 
@@ -99,6 +101,11 @@ const Dashboard = () => {
                             <img src={bin} alt="Remove plant" className={styles.removeImg}/>
                         </Card.Body>
                     </Card>
+
+                    <PlantCard plantData={{
+                        name: 'Pejotl'
+                    }}/>
+                    <PlantCard plantData={null}/>
                 </div>
             </Collapse>
 

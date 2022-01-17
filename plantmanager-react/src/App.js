@@ -5,6 +5,7 @@ import Homepage from './components/Homepage/Homepage';
 import AppHeader from './components/AppHeader/AppHeader';
 import {DependencyProvider} from "./DependencyContext";
 import AuthService from "./services/AuthService/AuthService";
+import PlantService from "./services/PlantService/PlantService";
 import RegistrationService from "./services/RegistrationService/RegistrationService";
 import ValidationService from "./services/ValidationService/ValidationService";
 
@@ -15,7 +16,10 @@ import Dashboard from "./components/Dashboard/Dashboard";
 function App() {
     return (
         <Router>
-            <DependencyProvider authService={AuthService} registrationService={RegistrationService} validationService={ValidationService}>
+            <DependencyProvider authService={AuthService}
+                                registrationService={RegistrationService}
+                                validationService={ValidationService}
+                                plantService={PlantService}>
                 <div className="App">
                     <AppHeader/>
                     <Routes>
