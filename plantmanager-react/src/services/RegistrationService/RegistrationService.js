@@ -1,7 +1,6 @@
 import axios from "axios"
 
 const RegistrationService = {
-
     createUser: (username, password, repeatPassword, email) => {
         const backendServerURL = process.env.REACT_APP_SERVER_URL;
 

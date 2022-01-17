@@ -68,6 +68,24 @@ const ValidationService = {
                 message: invalidEmailMessage
             };
         }
+    },
+
+    validateSignInUsername: (username) => {
+        if (username === "") {
+            return {
+                field: 'username',
+                message: emptyFieldMessage
+            };
+        }
+    },
+
+    validateSignInPassword: (password) => {
+        if (password === "") {
+            return {
+                field: 'password',
+                message: emptyFieldMessage
+            };
+        }
     }
 }
 

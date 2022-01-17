@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -51,6 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/sign-in")
                 .successHandler((req, res, auth) -> res.setStatus(HttpStatus.OK.value()))
+                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 //.defaultSuccessUrl("/dashboard", true)
                 .permitAll()
                 .and()

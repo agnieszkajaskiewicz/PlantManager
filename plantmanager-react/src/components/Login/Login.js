@@ -53,16 +53,18 @@ const Login = () => {
             .then(response => {
                 axios.get("http://" + backendServerURL + "/dashboard", {withCredentials: true} )
                     .then(response => {
-                        navigate('/dashboard');
+                        if (response.status === 200) {
+                            navigate('/dashboard');
+                        }
                     })
                     .catch(error => {
-                        //todo: validate inputs and show errors (invalid username/pass)
-                        console.log(error.response)
+                        console.log(error.response);
                     })
-
+            })
+        .catch(error => {
+            if (error.response === 401) {
+                setPasswordError('Invalid username or password');
             }
-        ).catch(error => {
-            console.log(error);
         });
         }
 
@@ -138,7 +140,31 @@ const Login = () => {
         setEmail(providedEmail);
     }
 
-    const invalidData = !username || !password || !repeatPassword || !email || usernameError || passwordError || repeatPasswordError || emailError;
+    const processSignInUsernameInput = (event) => {
+        const providedUsername = event.target.value;
+        const errorMessage = validationService.validateSignInUsername(providedUsername);
+        if (errorMessage) {
+            setUsernameError(errorMessage.message);
+        } else {
+            setUsernameError('');
+        }
+        setUsername(providedUsername);
+    }
+
+    const processSignInPasswordInput = (event) => {
+        const providedPassword = event.target.value;
+        const errorMessage = validationService.validateSignInPassword(providedPassword);
+        if (errorMessage) {
+            setPasswordError(errorMessage.message);
+        } else {
+            setPasswordError('');
+        }
+        setPassword(providedPassword);
+    }
+
+    const invalidSignUpData = !username || !password || !repeatPassword || !email || usernameError || passwordError || repeatPasswordError || emailError;
+
+    const invalidSignInData = !username || !password || usernameError || passwordError;
 
     const signUpForm = <>
         <label htmlFor="username" className="formLabel">Username</label>
@@ -166,21 +192,27 @@ const Login = () => {
         {
             emailError ? <span className="errorMessage">{emailError}</span> : ''
         }
-        <button type="submit" className="appButton" disabled={invalidData} onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
+        <button type="submit" className="appButton" disabled={invalidSignUpData} onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
     </>;
 
     const signInForm = <>
         <label htmlFor="username" className="formLabel">Username</label>
         <input id="username" type="text" value={username} className="formInput"
-                      onChange={event => setUsername(event.target.value)}/>
+                      onChange={event => processSignInUsernameInput(event)}/>
+        {
+            usernameError ? <span className="errorMessage">{usernameError}</span> : ''
+        }               
         <label htmlFor="password" className="formLabel">Password</label>
         <input id="password" type="password" value={password} className="formInput"
-                      onChange={event => setPassword(event.target.value)}/>
+                      onChange={event => processSignInPasswordInput(event)}/>
+        {
+            passwordError ? <span className="errorMessage">{passwordError}</span> : ''
+        }  
         <Form.Check id="keepSignedIn">
             <Form.Check.Input type="checkbox" defaultChecked={true}/>
             <label className={styles.checkboxLabel}>Keep me signed in</label>
         </Form.Check>
-        <button type="submit" className="appButton" onClick={() => loginUser(username, password)}>Sign In</button>
+        <button type="submit" className="appButton" disabled={invalidSignInData} onClick={() => loginUser(username, password)}>Sign In</button>
 
         <div className={styles.linkContainer}>
             <span className={styles.linkElement} onClick={() => navigate('/forgotPassword')}>Forgot password?</span>
