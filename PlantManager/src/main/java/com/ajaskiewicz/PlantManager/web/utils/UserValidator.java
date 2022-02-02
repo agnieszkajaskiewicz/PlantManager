@@ -33,12 +33,12 @@ public class UserValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "repeatPassword", "NotEmpty");
         if (!user.getRepeatPassword().equals(user.getPassword())) {
-            errors.rejectValue("passwordConfirm", "Not empty", "Diff.userForm.passwordConfirm");
+            errors.rejectValue("passwordConfirm", "Not matched", "Diff.userForm.passwordConfirm");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty");
         if (userService.findByEmail(user.getEmail()) != null) {
-            errors.rejectValue("email", "Duplicate" , "Duplicate.userForm.email");
+            errors.rejectValue("email", "Duplicate", "Duplicate.userForm.email");
         }
     }
 }

@@ -41,22 +41,6 @@ public class UserController {
         return "signUpPage";
     }
 
-    /*
-    @PostMapping("/sign-up")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
-        userValidator.validate(userForm, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return "signUpPage";
-        }
-
-        userService.save(userForm);
-        securityService.autoLogin(userForm.getUsername(), userForm.getRepeatPassword());
-
-        return "redirect:/dashboard";
-    }
-     */
-
     @PostMapping("/sign-up/v2")
     public ResponseEntity registration(@Valid @RequestBody User user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult);

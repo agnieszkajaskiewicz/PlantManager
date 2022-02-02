@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
 import styles from './Login.module.css';
 import '../../App.css';
 import Form from 'react-bootstrap/Form';
 import {useParams, useNavigate} from "react-router-dom";
 import {useDependencies} from '../../DependencyContext';
-import axios from 'axios';
 
 
 const selectedBorderStyle = {
@@ -36,12 +34,6 @@ const Login = () => {
 
     const signIn = 'signIn';
     const signUp = 'signUp';
-    const backendServerURL = process.env.REACT_APP_SERVER_URL;
-
-    const handleSubmit = (event) => { //ta logika obecnie "obsługuje" tylko sign up form
-        alert('Podano następujące dane: ' + username + ' ' + email + ' ' + password + ' ' + repeatPassword);
-        event.preventDefault();
-    }
 
     const goToSubpage = (event) => {
         navigate('/login/' + event.target.id);
@@ -51,22 +43,16 @@ const Login = () => {
     const loginUser = (username, password) => {
         authService.authUser(username, password)
             .then(response => {
-                axios.get("http://" + backendServerURL + "/dashboard", {withCredentials: true} )
-                    .then(response => {
-                        if (response.status === 200) {
-                            navigate('/dashboard');
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error.response);
-                    })
-            })
-        .catch(error => {
-            if (error.response === 401) {
-                setPasswordError('Invalid username or password');
-            }
-        });
-        }
+                if (response.status === 200) {
+                    navigate('/dashboard');
+                }
+            })             
+            .catch(error => {
+                if (error.response.status === 401) {
+                    setPasswordError('Invalid username or password');
+                }
+            });
+    }
 
     const registerUser = (username, password, repeatPassword, email) => {
         registrationService.createUser(username, password, repeatPassword, email)
@@ -98,24 +84,12 @@ const Login = () => {
 
     const processUsernameInput = (event) => {
         const providedUsername = event.target.value;
-        const errorMessage = validationService.validateUsername(providedUsername);
-        if (errorMessage) {
-            setUsernameError(errorMessage.message);
-        } else {
-            setUsernameError('');
-        }
-        setUsername(providedUsername);
+        processFieldInput(providedUsername, validationService.validateUsername, setUsername, setUsernameError);
     }
 
     const processPasswordInput = (event) => {
         const providedPassword = event.target.value;
-        const errorMessage = validationService.validatePassword(providedPassword);
-        if (errorMessage) {
-            setPasswordError(errorMessage.message);
-        } else {
-            setPasswordError('');
-        }
-        setPassword(providedPassword);
+        processFieldInput(providedPassword, validationService.validatePassword, setPassword, setPasswordError);
     }
 
     const processRepeatPasswordInput = (event) => {
@@ -131,35 +105,28 @@ const Login = () => {
 
     const processEmailInput = (event) => {
         const providedEmail = event.target.value;
-        const errorMessage = validationService.validateEmail(email);
-        if (errorMessage) {
-            setEmailError(errorMessage.message);
-        } else {
-            setEmailError('');
-        }
-        setEmail(providedEmail);
+        processFieldInput(providedEmail, validationService.validateEmail, setEmail, setEmailError);
     }
 
     const processSignInUsernameInput = (event) => {
         const providedUsername = event.target.value;
-        const errorMessage = validationService.validateSignInUsername(providedUsername);
-        if (errorMessage) {
-            setUsernameError(errorMessage.message);
-        } else {
-            setUsernameError('');
-        }
-        setUsername(providedUsername);
+        processFieldInput(providedUsername, validationService.validateSignInUsername, setUsername, setUsernameError);
     }
 
     const processSignInPasswordInput = (event) => {
         const providedPassword = event.target.value;
-        const errorMessage = validationService.validateSignInPassword(providedPassword);
+        processFieldInput(providedPassword, validationService.validateSignInPassword, setPassword, setPasswordError);
+    }
+
+    const processFieldInput = (fieldValue, validationMethod, setFieldValueMethod, setFieldErrorMethod) => {
+        const errorMessage = validationMethod(fieldValue);
         if (errorMessage) {
-            setPasswordError(errorMessage.message);
+            setFieldErrorMethod(errorMessage.message);
         } else {
-            setPasswordError('');
+            setFieldErrorMethod('');
         }
-        setPassword(providedPassword);
+
+        setFieldValueMethod(fieldValue);
     }
 
     const invalidSignUpData = !username || !password || !repeatPassword || !email || usernameError || passwordError || repeatPasswordError || emailError;
@@ -223,22 +190,20 @@ const Login = () => {
     return (
         <div className="mainContainer" data-testid="Login">
             <div>
-                {/*<form onSubmit={() => loginUser(username, password)}>*/}
-                    <div className="formContainer">
-                        <Form.Check hidden={true} style={{display: 'none'}} inline id={signIn} name="choice"
-                                    type="radio"
-                                    defaultChecked={whichSelected === signIn} onChange={event => goToSubpage(event)}/>
-                        <label htmlFor={signIn}
-                                    style={whichSelected === signIn ? selectedBorderStyle : unselectedBorderStyle}
-                                    className={styles.choice}>Sign In</label>
-                        <Form.Check hidden={true} inline id={signUp} name="choice" type="radio"
-                                    defaultChecked={whichSelected === signUp} onChange={event => goToSubpage(event)}/>
-                        <label htmlFor={signUp}
-                                    style={whichSelected === signUp ? selectedBorderStyle : unselectedBorderStyle}
-                                    className={styles.choice}>Sign Up</label>
-                        {whichSelected === signIn ? signInForm : signUpForm}
-                    </div>
-                {/*</form>*/}
+                <div className="formContainer">
+                    <Form.Check hidden={true} style={{display: 'none'}} inline id={signIn} name="choice"
+                                type="radio"
+                                defaultChecked={whichSelected === signIn} onChange={event => goToSubpage(event)}/>
+                    <label htmlFor={signIn}
+                                style={whichSelected === signIn ? selectedBorderStyle : unselectedBorderStyle}
+                                className={styles.choice}>Sign In</label>
+                    <Form.Check hidden={true} inline id={signUp} name="choice" type="radio"
+                                defaultChecked={whichSelected === signUp} onChange={event => goToSubpage(event)}/>
+                    <label htmlFor={signUp}
+                                style={whichSelected === signUp ? selectedBorderStyle : unselectedBorderStyle}
+                                className={styles.choice}>Sign Up</label>
+                    {whichSelected === signIn ? signInForm : signUpForm}
+                </div>
             </div>
         </div>
     )
