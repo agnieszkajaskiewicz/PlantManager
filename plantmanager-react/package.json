@@ -42,5 +42,8 @@
   },
   "devDependencies": {
     "react-test-renderer": "^17.0.2"
+  },
+  "jest": {
+    "transformIgnorePatterns": [ "/node_modules/(?!react-email-validator)" ]
   }
 }

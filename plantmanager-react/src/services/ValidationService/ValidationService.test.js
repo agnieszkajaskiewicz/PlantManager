@@ -39,4 +39,38 @@ describe('Validation Service', () => {
         //then
         expect(errorMessage).toBeUndefined();
     })
+
+    test('it should validate empty password', () => {
+        //when
+        const errorMessage = ValidationService.validatePassword("");
+        //then
+        expect(errorMessage).toBeTruthy();
+        expect(errorMessage.field).toEqual('password');
+        expect(errorMessage.message).toEqual('This field is required.');
+    })
+
+    test('it should validate too short password', () => {
+        //when
+        const errorMessage = ValidationService.validatePassword("pass");
+        //then
+        expect(errorMessage).toBeTruthy();
+        expect(errorMessage.field).toEqual('password');
+        expect(errorMessage.message).toEqual('Please use between 6 and 32 characters.');
+    })
+
+    test('it should validate too long password', () => {
+        //when
+        const errorMessage = ValidationService.validatePassword("passwordpasswordpasswordpasswordpassword");
+        //then
+        expect(errorMessage).toBeTruthy();
+        expect(errorMessage.field).toEqual('password');
+        expect(errorMessage.message).toEqual('Please use between 6 and 32 characters.');
+    })
+
+    test('it should show no errors for valid password', () => {
+        //when
+        const errorMessage = ValidationService.validatePassword(validPassword);
+        //then
+        expect(errorMessage).toBeUndefined();
+    })
 })
