@@ -110,12 +110,12 @@ const Login = () => {
 
     const processSignInUsernameInput = (event) => {
         const providedUsername = event.target.value;
-        processFieldInput(providedUsername, validationService.validateSignInUsername, setUsername, setUsernameError);
+        processFieldInput(providedUsername, validationService.validateUsername, setUsername, setUsernameError);
     }
 
     const processSignInPasswordInput = (event) => {
         const providedPassword = event.target.value;
-        processFieldInput(providedPassword, validationService.validateSignInPassword, setPassword, setPasswordError);
+        processFieldInput(providedPassword, validationService.validatePassword, setPassword, setPasswordError);
     }
 
     const processFieldInput = (fieldValue, validationMethod, setFieldValueMethod, setFieldErrorMethod) => {
