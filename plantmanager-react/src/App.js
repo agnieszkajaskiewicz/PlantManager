@@ -14,8 +14,9 @@ import Dashboard from "./components/Dashboard/Dashboard";
 function App() {
     return (
         <Router>
-            <DependencyProvider authService={AuthService} plantService={PlantService}>
-                <div className="App">
+            <DependencyProvider authService={AuthService}
+                                plantService={PlantService}>
+                <div className="App" data-testid="App">
                     <AppHeader/>
                     <Routes>
                         <Route path="/" element={<Homepage/>}/>
