@@ -22,7 +22,6 @@ const Dashboard = () => {
             try {
                 setData({plants: data.plants, isFetching: true});
                 const response = await plantService.fetchPlantsForLoggedUser();
-                //debugger;
                 setData({plants: response.data, isFetching: false});
             } catch (exception) {
                 console.log(exception);
@@ -32,10 +31,9 @@ const Dashboard = () => {
         fetchPlantsForLoggedUser();
     }, []);
 
+    const plantCards = data.plants.map((plant, index) => <PlantCard key={index} plantData={plant} />);
 
     return (
-
-
         <div className={styles.Dashboard} data-testid="Dashboard">
             Dashboard Component
             <div className={styles.toBeWatered}>
@@ -89,13 +87,7 @@ const Dashboard = () => {
                         <Card.Body className={styles.plantCard}>
                             <Card.Title>Pan Tadeusz</Card.Title>
                             <Card.Text>
-                                Litwo
-                                <br/>
-                                Ojczyzno moja
-                                <br/>
-                                Ty jesteś jak zdrowie
-                                <br/>
-                                Ile trzeba cenić
+                                Click
                             </Card.Text>
                             <button className="appButton" style={ {width: 'auto', display: 'inline'} }>EDIT</button>
                             <img src={bin} alt="Remove plant" className={styles.removeImg}/>
@@ -103,9 +95,11 @@ const Dashboard = () => {
                     </Card>
 
                     <PlantCard plantData={{
-                        name: 'Pejotl'
+                        plantName: 'Pejotl'
                     }}/>
                     <PlantCard plantData={null}/>
+
+                    {plantCards}
                 </div>
             </Collapse>
 

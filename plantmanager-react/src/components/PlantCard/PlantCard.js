@@ -9,7 +9,7 @@ const PlantCard = (props) => (
     <Card className={styles.container} data-testid="PlantCard">
         <img src={addIcon} alt="Add Plant" className={styles.plantImg}/>
         <Card.Body className={styles.plantCard}>
-            <Card.Title>{props.plantData ? props.plantData.name : 'Your new plant'}</Card.Title>
+            <Card.Title>{props.plantData ? props.plantData.plantName : 'Your new plant'}</Card.Title>
             <button className="appButton" style={ {width: 'auto', display: 'inline'} }>{props.plantData ? 'EDIT' : 'ADD'}</button>
             {(props.plantData) &&
                 <img src={bin} alt="Remove plant" className={styles.removeImg}/>
