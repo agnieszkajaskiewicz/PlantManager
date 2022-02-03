@@ -20,7 +20,7 @@ function App() {
                                 registrationService={RegistrationService}
                                 validationService={ValidationService}
                                 plantService={PlantService}>
-                <div className="App">
+                <div className="App" data-testid="App">
                     <AppHeader/>
                     <Routes>
                         <Route path="/" element={<Homepage/>}/>
