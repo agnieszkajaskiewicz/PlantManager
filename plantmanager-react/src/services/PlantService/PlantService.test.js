@@ -29,6 +29,15 @@ describe('Plant Service', () => {
         expect(responsePromise).toEqual('test');
     });
 
+    test('it should call backend with plant id for plant removal operation', async () => {
+        //given
+        const plantId = 123;
+        //when
+        PlantService.deletePlantById(plantId);
+        //then
+        expect(axios.delete).toHaveBeenCalledWith("http://test_url/dashboard/deletePlant/v2/123", {withCredentials: true});
+    });
+
     afterAll(() => {
         process.env = OLD_ENV;
     });

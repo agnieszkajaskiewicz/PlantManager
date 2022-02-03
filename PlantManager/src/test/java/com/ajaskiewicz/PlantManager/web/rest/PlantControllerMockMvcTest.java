@@ -15,6 +15,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -72,5 +73,18 @@ class PlantControllerMockMvcTest {
         verify(plantService).findAllByUserId(loggedUserId);
         verify(plantMapper).plantToPlantCardDto(plantEntity);
         verifyNoMoreInteractions(securityService, userService, plantService, plantMapper);
+    }
+
+    @Test
+    void shouldDeletePlantById() throws Exception {
+        //given
+        var plantId = 12;
+        when(securityService.isAuthenticated()).thenReturn(true);
+        //when && then
+        mockMvc.perform(delete("/dashboard/deletePlant/v2/12"))
+                .andExpect(status().isOk());
+        verify(securityService).isAuthenticated();
+        verify(plantService).delete(plantId);
+        verifyNoMoreInteractions(plantService, securityService);
     }
 }

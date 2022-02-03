@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/dashboard")
 public class PlantController {
 
+    private static final String UPLOADED_IMAGES_PATH = "uploadedImages/";
+
     private PlantService plantService;
     private RoomService roomService;
     private WateringScheduleService wateringScheduleService;
@@ -104,7 +106,7 @@ public class PlantController {
             plant.setImageName(filename);
             var savedPlant = plantService.createOrUpdatePlant(plant);
 
-            var uploadDirectory = "uploadedImages/" + savedPlant.getId();
+            var uploadDirectory = UPLOADED_IMAGES_PATH + savedPlant.getId();
             FileUploadUtil.saveFile(uploadDirectory, filename, multipartFile);
         }
 
@@ -117,11 +119,27 @@ public class PlantController {
             return "redirect:/";
         }
 
-        var deleteDirectory = "uploadedImages/" + id;
-        FileDeleteUtil.deleteFile(deleteDirectory);
+        deletePlantImage(id);
 
         plantService.delete(id);
 
         return "redirect:/dashboard";
+    }
+
+    private void deletePlantImage(Integer id) throws IOException {
+        var deleteDirectory = UPLOADED_IMAGES_PATH + id;
+        FileDeleteUtil.deleteFile(deleteDirectory);
+    }
+
+    @DeleteMapping(value = "/deletePlant/v2/{id}")
+    public ResponseEntity<?> deletePlantByIdV2(@PathVariable("id") Integer id) throws IOException, NotFoundException {
+        if (!securityService.isAuthenticated()) { //todo to powinno być załatwione z automatu spring security
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        deletePlantImage(id);
+        plantService.delete(id);
+
+        return ResponseEntity.ok().build();
     }
 }
