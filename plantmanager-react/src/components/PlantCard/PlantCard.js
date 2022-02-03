@@ -1,9 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styles from './PlantCard.module.css';
 import {Card} from "react-bootstrap";
 import addIcon from "../../img/addIcon.png";
 import bin from "../../img/bin.png";
+
+//todo responsywny rozmiar czcionki
+//todo responsywna szerokość, wysokość przy nadmiernym skurczeniu
 
 const PlantCard = (props) => (
     <Card className={styles.container} data-testid="PlantCard">

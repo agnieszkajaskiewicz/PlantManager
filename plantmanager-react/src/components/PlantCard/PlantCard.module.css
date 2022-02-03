@@ -1,16 +1,17 @@
 div.container {
-    width: fit-content;
     box-shadow: 2px 2px 6px 0 rgba(0,0,0,0.3);
     background-color: transparent;
 }
 
 .plantImg {
-    width: 14rem;
+    min-width: 150px;
+    max-width: 250px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
-    margin-left: 10px;
-    margin-top: 10px;
 }
 
 .removeImg {
@@ -21,8 +22,10 @@ div.container {
 }
 
 .plantCard {
+    min-height: 200px;
+    min-width: 150px;
+    max-width: 250px;
     padding-top: 1rem;
-    width: 14rem;
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
