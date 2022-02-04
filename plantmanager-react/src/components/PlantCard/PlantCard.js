@@ -20,7 +20,7 @@ const PlantCard = (props) => {
                 setIsDeleted(true);
             })
             .catch(error => {
-                const message = error.response.data.message === ''  ? 'Coś nie pykło :(' : error.response.data.message;
+                const message = error.response.data.message === ''  ? 'Something went wrong :(' : error.response.data.message;
                 props.setApiError(message);
             });
     }
@@ -33,7 +33,7 @@ const PlantCard = (props) => {
         <Card data-testid="PlantCard" style={isDeleted ? {display: 'none'} : containerStyle}>
             <img src={addIcon} alt="Add Plant" className={styles.plantImg}/>
             <Card.Body className={styles.plantCard}>
-                <Card.Title>{props.plantData ? props.plantData.plantName : 'Your new plant'}</Card.Title>
+                <Card.Title data-testid="PlantName">{props.plantData ? props.plantData.plantName : 'Your new plant'}</Card.Title>
                 <button className="appButton"
                         style={{width: 'auto', display: 'inline'}}>{props.plantData ? 'EDIT' : 'ADD'}</button>
                 {(props.plantData) &&

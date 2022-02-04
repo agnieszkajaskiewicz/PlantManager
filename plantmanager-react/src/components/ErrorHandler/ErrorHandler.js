@@ -3,7 +3,7 @@ import styles from './ErrorHandler.module.css';
 
 const ErrorHandler = (props) => (
     <div className={styles.ErrorHandler} data-testid="ErrorHandler">
-        Niestety, wystąpił błąd: {props.message}
+        Unfortunately, an error occurred: {props.message}
     </div>
 );
 

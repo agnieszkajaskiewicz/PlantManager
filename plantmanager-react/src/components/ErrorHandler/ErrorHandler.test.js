@@ -11,4 +11,15 @@ describe('<ErrorHandler />', () => {
 
     expect(errorHandler).toBeInTheDocument();
   });
+
+  test('it should display correct message', () => {
+    //given
+    debugger;
+    const message = "Error_Message";
+    //when
+    render(<ErrorHandler message={message} />);
+    //then
+    const errorHandler = screen.getByTestId('ErrorHandler');
+    expect(errorHandler.innerHTML).toBe('Unfortunately, an error occurred: ' + message);
+  })
 });
