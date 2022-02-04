@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styles from './Dashboard.module.css';
 import {Collapse} from "react-bootstrap";
 import PlantCard from '../PlantCard/PlantCard';
+import ErrorHandler from "../ErrorHandler/ErrorHandler";
 
 import {useDependencies} from '../../DependencyContext';
 
@@ -11,6 +12,7 @@ const Dashboard = () => {
         plants: [],
         isFetching: false
     });
+    const [apiError, setApiError] = useState('');
     const {plantService} = useDependencies();
 
     useEffect(() => {
@@ -27,11 +29,12 @@ const Dashboard = () => {
         fetchPlantsForLoggedUser();
     }, []);
 
-    const plantCards = data.plants.map((plant, index) => <PlantCard key={index} plantData={plant} />);
+    const plantCards = data.plants.map((plant, index) => <PlantCard key={index} plantData={plant}
+                                                                    setApiError={setApiError}/>);
 
     return (
         <div className={styles.Dashboard} data-testid="Dashboard">
-            Dashboard Component
+            {apiError !== '' && <ErrorHandler message={apiError} />}
             <div className={styles.toBeWatered}>
                 <span>See plants that should be watered in next 3 days</span>
             </div>
@@ -47,7 +50,7 @@ const Dashboard = () => {
                     {plantCards}
                     <PlantCard plantData={{
                         plantName: 'Pejotl'
-                    }}/>
+                    }} setApiError={setApiError} />
                     <PlantCard plantData={null}/>
                 </div>
             </Collapse>

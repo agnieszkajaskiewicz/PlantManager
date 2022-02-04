@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from './PlantCard.module.css';
 import {Card} from "react-bootstrap";
 import addIcon from "../../img/addIcon.png";
@@ -8,14 +8,29 @@ import {useDependencies} from '../../DependencyContext';
 //todo responsywna szerokość, wysokość przy nadmiernym skurczeniu
 
 const PlantCard = (props) => {
+    const [isDeleted, setIsDeleted] = useState(false);
     const {plantService} = useDependencies();
 
     const deletePlant = (plantId) => {
-        plantService.deletePlantById(plantId);
+        plantService.deletePlantById(plantId)
+            .then(response => {
+                if (response.status === 200) {
+                    props.setApiError('');
+                }
+                setIsDeleted(true);
+            })
+            .catch(error => {
+                const message = error.response.data.message === ''  ? 'Coś nie pykło :(' : error.response.data.message;
+                props.setApiError(message);
+            });
     }
 
+    const containerStyle = {
+        boxShadow: '2px 2px 6px 0 rgba(0,0,0,0.3)',
+        backgroundColor: 'transparent'
+    }
     return (
-        <Card className={styles.container} data-testid="PlantCard">
+        <Card data-testid="PlantCard" style={isDeleted ? {display: 'none'} : containerStyle}>
             <img src={addIcon} alt="Add Plant" className={styles.plantImg}/>
             <Card.Body className={styles.plantCard}>
                 <Card.Title>{props.plantData ? props.plantData.plantName : 'Your new plant'}</Card.Title>
