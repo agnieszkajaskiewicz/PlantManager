@@ -14,7 +14,6 @@ describe('<ErrorHandler />', () => {
 
   test('it should display correct message', () => {
     //given
-    debugger;
     const message = "Error_Message";
     //when
     render(<ErrorHandler message={message} />);
