@@ -110,12 +110,12 @@ const Login = () => {
 
     const processSignInUsernameInput = (event) => {
         const providedUsername = event.target.value;
-        processFieldInput(providedUsername, validationService.validateUsername, setUsername, setUsernameError);
+        processFieldInput(providedUsername, validationService.validateSignInUsername, setUsername, setUsernameError);
     }
 
     const processSignInPasswordInput = (event) => {
         const providedPassword = event.target.value;
-        processFieldInput(providedPassword, validationService.validatePassword, setPassword, setPasswordError);
+        processFieldInput(providedPassword, validationService.validateSignInPassword, setPassword, setPasswordError);
     }
 
     const processFieldInput = (fieldValue, validationMethod, setFieldValueMethod, setFieldErrorMethod) => {
@@ -202,7 +202,7 @@ const Login = () => {
                     <label htmlFor={signUp}
                                 style={whichSelected === signUp ? selectedBorderStyle : unselectedBorderStyle}
                                 className={styles.choice}>Sign Up</label>
-                    {whichSelected === signIn ? signInForm : signUpForm}
+                        {whichSelected === signIn ? signInForm : signUpForm}
                 </div>
             </div>
         </div>
