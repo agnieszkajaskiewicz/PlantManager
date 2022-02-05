@@ -1,12 +1,15 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
+import com.ajaskiewicz.PlantManager.model.PlantCardDTO;
+import com.ajaskiewicz.PlantManager.model.mapper.PlantMapper;
 import com.ajaskiewicz.PlantManager.service.*;
 import com.ajaskiewicz.PlantManager.web.utils.FileDeleteUtil;
 import com.ajaskiewicz.PlantManager.web.utils.FileUploadUtil;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,24 +19,29 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/dashboard")
 public class PlantController {
+
+    private static final String UPLOADED_IMAGES_PATH = "uploadedImages/";
 
     private PlantService plantService;
     private RoomService roomService;
     private WateringScheduleService wateringScheduleService;
     private UserService userService;
     private SecurityService securityService;
+    private PlantMapper plantMapper;
 
     @Autowired
-    public PlantController(PlantService plantService, RoomService roomService, WateringScheduleService wateringScheduleService, UserService userService, SecurityService securityService) {
+    public PlantController(PlantService plantService, RoomService roomService, WateringScheduleService wateringScheduleService, UserService userService, SecurityService securityService, PlantMapper plantMapper) {
         this.plantService = plantService;
         this.roomService = roomService;
         this.wateringScheduleService = wateringScheduleService;
         this.userService = userService;
         this.securityService = securityService;
+        this.plantMapper = plantMapper;
     }
 
     @GetMapping("/test")
@@ -55,14 +63,17 @@ public class PlantController {
         return "dashboardPage";
     }
 
-    @GetMapping(value = "/v2")
-    public ResponseEntity<List<Plant>> getPlantsForLoggedUser() {
+    @GetMapping(value = "/v2", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PlantCardDTO>> getPlantsForLoggedUser() {
         if (!securityService.isAuthenticated()) { //todo to powinno być załatwione z automatu spring security
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         var plants = plantService.findAllByUserId(userService.findIdOfLoggedUser());
+        var plantDtos = plants.stream()
+                .map(plantEntity -> plantMapper.plantToPlantCardDto(plantEntity))
+                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(plants);
+        return ResponseEntity.ok(plantDtos);
     }
 
     @RequestMapping(path = {"/editPlant", "/editPlant/{id}"})
@@ -95,7 +106,7 @@ public class PlantController {
             plant.setImageName(filename);
             var savedPlant = plantService.createOrUpdatePlant(plant);
 
-            var uploadDirectory = "uploadedImages/" + savedPlant.getId();
+            var uploadDirectory = UPLOADED_IMAGES_PATH + savedPlant.getId();
             FileUploadUtil.saveFile(uploadDirectory, filename, multipartFile);
         }
 
@@ -108,11 +119,27 @@ public class PlantController {
             return "redirect:/";
         }
 
-        var deleteDirectory = "uploadedImages/" + id;
-        FileDeleteUtil.deleteFile(deleteDirectory);
+        deletePlantImage(id);
 
         plantService.delete(id);
 
         return "redirect:/dashboard";
+    }
+
+    private void deletePlantImage(Integer id) throws IOException {
+        var deleteDirectory = UPLOADED_IMAGES_PATH + id;
+        FileDeleteUtil.deleteFile(deleteDirectory);
+    }
+
+    @DeleteMapping(value = "/deletePlant/v2/{id}")
+    public ResponseEntity<?> deletePlantByIdV2(@PathVariable("id") Integer id) throws IOException, NotFoundException {
+        if (!securityService.isAuthenticated()) { //todo to powinno być załatwione z automatu spring security
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        deletePlantImage(id);
+        plantService.delete(id);
+
+        return ResponseEntity.ok().build();
     }
 }
