@@ -67,9 +67,59 @@ describe('Validation Service', () => {
         expect(errorMessage.message).toEqual('Please use between 6 and 32 characters.');
     })
 
-    test('it should show no errors for valid password', () => {
+    test('it should return no errors for valid password', () => {
         //when
         const errorMessage = ValidationService.validatePassword(validPassword);
+        //then
+        expect(errorMessage).toBeUndefined();
+    }),
+
+    test('it should validate empty repeatPassword', () => {
+        //when
+        const errorMessage = ValidationService.validateRepeatPassword(validPassword, "");
+        //then
+        expect(errorMessage).toBeTruthy();
+        expect(errorMessage.field).toEqual('repeatPassword');
+        expect(errorMessage.message).toEqual('This field is required.');
+    }),
+
+    test('it should validate repeatPassword against password', () => {
+        //when
+        const errorMessage = ValidationService.validateRepeatPassword(validPassword, "123456");
+        //then
+        expect(errorMessage).toBeTruthy();
+        expect(errorMessage.field).toEqual('repeatPassword');
+        expect(errorMessage.message).toEqual('Passwords don\'t match.');
+    }),
+
+    test('it should return no errors when repeatPassword matches password', () => {
+        //when
+        const errorMessage = ValidationService.validateRepeatPassword(validPassword, "123456789");
+        //then
+        expect(errorMessage).toBeUndefined();
+    }),
+
+    test('it should validate empty email', () => {
+        //when
+        const errorMessage = ValidationService.validateEmail("");
+        //then
+        expect(errorMessage).toBeTruthy();
+        expect(errorMessage.field).toEqual('email');
+        expect(errorMessage.message).toEqual('This field is required.');
+    }),
+
+    test('it should validate not valid email', () => {
+        //when
+        const errorMessage = ValidationService.validateEmail("user_email.com");
+        //then
+        expect(errorMessage).toBeTruthy();
+        expect(errorMessage.field).toEqual('email');
+        expect(errorMessage.message).toEqual('Enter a valid email.');
+    }),
+
+    test('it should return no errors for valid email', () => {
+        //when
+        const errorMessage = ValidationService.validateEmail(validEmail);
         //then
         expect(errorMessage).toBeUndefined();
     })

@@ -44,6 +44,13 @@ const ValidationService = {
     },
 
     validateRepeatPassword: (password, repeatPassword) => {
+        if (repeatPassword === "") {
+            return {
+                field: 'repeatPassword',
+                message: emptyFieldMessage
+            };
+        }
+        
         if (password !== "" && repeatPassword !== "" && password !== repeatPassword) {
             return {
                 field: 'repeatPassword',
