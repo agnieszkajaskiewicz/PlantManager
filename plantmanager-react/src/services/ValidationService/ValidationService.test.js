@@ -122,5 +122,37 @@ describe('Validation Service', () => {
         const errorMessage = ValidationService.validateEmail(validEmail);
         //then
         expect(errorMessage).toBeUndefined();
+    }),
+
+    test('it should validate empty username in sign in form', () => {
+        //when
+        const errorMessage = ValidationService.validateSignInUsername("");
+        //then
+        expect(errorMessage).toBeTruthy();
+        expect(errorMessage.field).toEqual('username');
+        expect(errorMessage.message).toEqual('This field is required.');
+    }),
+
+    test('it should return no errors for valid username in sign in form', () => {
+        //when
+        const errorMessage = ValidationService.validateSignInUsername(validUsername);
+        //then
+        expect(errorMessage).toBeUndefined();
+    }),
+
+    test('it should validate empty password in sign in form', () => {
+        //when
+        const errorMessage = ValidationService.validateSignInPassword("");
+        //then
+        expect(errorMessage).toBeTruthy();
+        expect(errorMessage.field).toEqual('password');
+        expect(errorMessage.message).toEqual('This field is required.');
+    }),
+
+    test('it should return no errors for valid password in sign in form', () => {
+        //when
+        const errorMessage = ValidationService.validateSignInPassword(validPassword);
+        //then
+        expect(errorMessage).toBeUndefined();
     })
 })
