@@ -4,6 +4,7 @@
     text-align: center;
     color: white;
     font-family: 'Athiti', sans-serif;
+    min-height: 100vh;
 }
 
 .mainContainer {
