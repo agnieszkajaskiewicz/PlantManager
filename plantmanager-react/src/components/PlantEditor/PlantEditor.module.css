@@ -13,8 +13,6 @@ input:global(.form-control) {
 
 :global(.react-datepicker-wrapper) {
     display: inline;
-    color: red;
-    width: 200%;
 }
 
 :global(.react-datepicker__input-container) {
