@@ -9,6 +9,7 @@ import PlantService from "./services/PlantService/PlantService";
 
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard";
+import PlantEditor from "./components/PlantEditor/PlantEditor";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
                         <Route path="/login/:where" element={<Login/>}/>
                         <Route path="/forgotPassword" element={<ForgotPassword/>}/>
                         <Route path="/dashboard" element={<Dashboard/>}/>
+                        <Route path="/dashboard/add" element={<PlantEditor/>}/>
                     </Routes>
                 </div>
             </DependencyProvider>

@@ -1,0 +1,41 @@
+.PlantEditor {
+    height: 100vh;
+}
+
+input:global(.form-control) {
+    width: 40%;
+}
+
+.datepicker {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+
+:global(.react-datepicker-wrapper) {
+    display: inline;
+    color: red;
+    width: 200%;
+}
+
+:global(.react-datepicker__input-container) {
+    display: inline;
+}
+
+.plantImg {
+    display: block;
+    min-width: 150px;
+    max-width: 250px;
+    margin-top: 10px;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+div:global(.modal-footer) {
+    justify-content: flex-start;
+}
+
+button:hover:global(.btn.btn-light) {
+    border-color: #d0d0d0;
+    background-color: #d0d0d0;
+}
