@@ -59,6 +59,11 @@
     color: white;
 }
 
+.appButton:disabled, .appButton:disabled:hover {
+    color: rgba(255, 255, 255, 0.51);
+    background-color: rgba(21, 64, 48, 0.6);
+}
+
 .appButton:hover {
     background: #0b2d23;
 }
@@ -76,4 +81,21 @@ input[type="checkbox"] {
 
 input[type="checkbox"]:checked {
     background: #154030;
+}
+
+.errorMessage {
+    color: red;
+}
+
+button:hover.btn.btn-light {
+    border-color: #d0d0d0;
+    background-color: #d0d0d0;
+}
+
+div.react-datepicker-wrapper {
+    display: inline;
+}
+
+div.react-datepicker__input-container {
+    display: inline;
 }

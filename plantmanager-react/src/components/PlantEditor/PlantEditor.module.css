@@ -1,0 +1,27 @@
+.PlantEditor {
+    height: 100vh;
+}
+
+input.userInput {
+    width: 40%;
+}
+
+.datepicker {
+    display: inline;
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+
+.plantImg {
+    display: block;
+    min-width: 150px;
+    max-width: 250px;
+    margin-top: 10px;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+div.footer {
+    justify-content: flex-start;
+}
