@@ -76,3 +76,16 @@ input[type="checkbox"] {
 input[type="checkbox"]:checked {
     background: #154030;
 }
+
+button:hover.btn.btn-light {
+    border-color: #d0d0d0;
+    background-color: #d0d0d0;
+}
+
+div.react-datepicker-wrapper {
+    display: inline;
+}
+
+div.react-datepicker__input-container {
+    display: inline;
+}

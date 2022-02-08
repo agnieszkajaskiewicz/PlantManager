@@ -35,14 +35,14 @@ const PlantEditor = () => {
                 <Form className="formContainer">
                     <Form.Group controlId="plantBasics">
                         <Form.Label>Plant name</Form.Label>
-                        <Form.Control className={styles.formControl} type="text" placeholder="Enter plant name"/>
+                        <Form.Control className={styles.userInput} type="text" placeholder="Enter plant name"/>
                         <Form.Text>
                             Get your name right, but don't worry, you can always edit it later
                         </Form.Text>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Room</Form.Label>
-                        <Form.Control type="text" placeholder="Enter plant room"/>
+                        <Form.Control className={styles.userInput} type="text" placeholder="Enter plant room"/>
                         <Form.Text>
                             Enter the room, in which you take care of your lovely plant
                         </Form.Text>
@@ -60,10 +60,9 @@ const PlantEditor = () => {
                         </Form.Text>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label>Last watered </Form.Label> <div><DatePicker className={styles.datepicker}
+                        <Form.Label>Last watered </Form.Label> <DatePicker className={styles.datepicker}
                                                                            selected={startDate}
                                                                            onChange={(date) => setStartDate(date)}/>
-                    </div>
                         <br/>
                         <Form.Text>
                             When was the last time you watered the plant
@@ -76,7 +75,7 @@ const PlantEditor = () => {
                         <img src={addIcon} alt="Add Plant" className={styles.plantImg}/>
                     </Form.Group>
                     <br/>
-                    <Modal.Footer>
+                    <Modal.Footer className={styles.footer}>
                         <Button variant="light" onClick={() => {}}>
                             SAVE CHANGES
                         </Button>

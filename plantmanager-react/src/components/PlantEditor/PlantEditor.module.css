@@ -2,21 +2,14 @@
     height: 100vh;
 }
 
-input:global(.form-control) {
+input.userInput {
     width: 40%;
 }
 
 .datepicker {
+    display: inline;
     border-radius: 0.25rem;
     border: 1px solid #ced4da;
-}
-
-:global(.react-datepicker-wrapper) {
-    display: inline;
-}
-
-:global(.react-datepicker__input-container) {
-    display: inline;
 }
 
 .plantImg {
@@ -29,11 +22,6 @@ input:global(.form-control) {
     border-right: 1px solid #ccc;
 }
 
-div:global(.modal-footer) {
+div.footer {
     justify-content: flex-start;
-}
-
-button:hover:global(.btn.btn-light) {
-    border-color: #d0d0d0;
-    background-color: #d0d0d0;
 }
