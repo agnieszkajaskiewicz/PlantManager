@@ -11,6 +11,7 @@
     "react-bootstrap": "^2.0.1",
     "react-datepicker": "^4.6.0",
     "react-dom": "^17.0.2",
+    "react-email-validator": "^1.0.2",
     "react-router-dom": "^6.0.1",
     "react-scripts": "4.0.3",
     "typeface-athiti": "^1.1.13",
@@ -43,5 +44,8 @@
   },
   "devDependencies": {
     "react-test-renderer": "^17.0.2"
+  },
+  "jest": {
+    "transformIgnorePatterns": [ "/node_modules/(?!react-email-validator)" ]
   }
 }
