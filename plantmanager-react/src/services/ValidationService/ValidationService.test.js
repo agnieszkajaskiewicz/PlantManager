@@ -72,7 +72,7 @@ describe('Validation Service', () => {
         const errorMessage = ValidationService.validatePassword(validPassword);
         //then
         expect(errorMessage).toBeUndefined();
-    }),
+    })
 
     test('it should validate empty repeatPassword', () => {
         //when
@@ -81,7 +81,7 @@ describe('Validation Service', () => {
         expect(errorMessage).toBeTruthy();
         expect(errorMessage.field).toEqual('repeatPassword');
         expect(errorMessage.message).toEqual('This field is required.');
-    }),
+    })
 
     test('it should validate repeatPassword against password', () => {
         //when
@@ -90,14 +90,14 @@ describe('Validation Service', () => {
         expect(errorMessage).toBeTruthy();
         expect(errorMessage.field).toEqual('repeatPassword');
         expect(errorMessage.message).toEqual('Passwords don\'t match.');
-    }),
+    })
 
     test('it should return no errors when repeatPassword matches password', () => {
         //when
         const errorMessage = ValidationService.validateRepeatPassword(validPassword, "123456789");
         //then
         expect(errorMessage).toBeUndefined();
-    }),
+    })
 
     test('it should validate empty email', () => {
         //when
@@ -106,7 +106,7 @@ describe('Validation Service', () => {
         expect(errorMessage).toBeTruthy();
         expect(errorMessage.field).toEqual('email');
         expect(errorMessage.message).toEqual('This field is required.');
-    }),
+    })
 
     test('it should validate not valid email', () => {
         //when
@@ -115,14 +115,14 @@ describe('Validation Service', () => {
         expect(errorMessage).toBeTruthy();
         expect(errorMessage.field).toEqual('email');
         expect(errorMessage.message).toEqual('Enter a valid email.');
-    }),
+    })
 
     test('it should return no errors for valid email', () => {
         //when
         const errorMessage = ValidationService.validateEmail(validEmail);
         //then
         expect(errorMessage).toBeUndefined();
-    }),
+    })
 
     test('it should validate empty username in sign in form', () => {
         //when
@@ -131,14 +131,14 @@ describe('Validation Service', () => {
         expect(errorMessage).toBeTruthy();
         expect(errorMessage.field).toEqual('username');
         expect(errorMessage.message).toEqual('This field is required.');
-    }),
+    })
 
     test('it should return no errors for valid username in sign in form', () => {
         //when
         const errorMessage = ValidationService.validateSignInUsername(validUsername);
         //then
         expect(errorMessage).toBeUndefined();
-    }),
+    })
 
     test('it should validate empty password in sign in form', () => {
         //when
@@ -147,7 +147,7 @@ describe('Validation Service', () => {
         expect(errorMessage).toBeTruthy();
         expect(errorMessage.field).toEqual('password');
         expect(errorMessage.message).toEqual('This field is required.');
-    }),
+    })
 
     test('it should return no errors for valid password in sign in form', () => {
         //when

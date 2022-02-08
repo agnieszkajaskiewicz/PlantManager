@@ -9,7 +9,6 @@ describe('Registration Service', () => {
     const validUsername = "username";
     const validPassword = "123456789";
     const validEmail = "valid@email.com";
-    const successResponse = "User registered successfully";
     const OLD_ENV = process.env;
 
     const validUserData = {
