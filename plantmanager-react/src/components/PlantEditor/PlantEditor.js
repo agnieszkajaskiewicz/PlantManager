@@ -6,10 +6,15 @@ import styles from './PlantEditor.module.css';
 
 import {Button, Dropdown, Modal} from "react-bootstrap";
 import addIcon from "../../img/addIcon.png";
+import {useNavigate} from "react-router-dom";
 
 const PlantEditor = () => {
+        const [plantName, setPlantName] = useState('');
+        const [roomName, setRoomName] = useState('');
         const [startDate, setStartDate] = useState(new Date());
         const [wateringDays, setWateringDays] = useState(0);
+
+        const navigate = useNavigate();
 
         const generateRange = (size, startAt = 0) => {
             return [...Array(size).keys()].map(i => i + startAt);
@@ -17,9 +22,7 @@ const PlantEditor = () => {
 
         const wateringDaysDropdown = <Dropdown onSelect={(value) => {
             setWateringDays(parseInt(value));
-        }
-
-        } style={{display: "inline"}}>
+        }} style={{display: "inline"}}>
             <Dropdown.Toggle id="dropdown-basic" variant="light" className={styles.wateringDaysDropdown}>
                 {wateringDays}
             </Dropdown.Toggle>
@@ -76,10 +79,11 @@ const PlantEditor = () => {
                     </Form.Group>
                     <br/>
                     <Modal.Footer className={styles.footer}>
-                        <Button variant="light" onClick={() => {}}>
+                        <Button variant="light" onClick={() => {
+                        }}>
                             SAVE CHANGES
                         </Button>
-                        <Button variant="secondary" onClick={()=>{}}>
+                        <Button variant="secondary" onClick={() => navigate('/dashboard')}>
                             CANCEL
                         </Button>
                     </Modal.Footer>
