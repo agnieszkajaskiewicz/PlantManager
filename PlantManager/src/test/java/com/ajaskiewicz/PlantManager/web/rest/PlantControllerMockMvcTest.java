@@ -2,21 +2,24 @@ package com.ajaskiewicz.PlantManager.web.rest;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.model.PlantCardDTO;
+import com.ajaskiewicz.PlantManager.model.PlantCreationDTO;
 import com.ajaskiewicz.PlantManager.model.mapper.PlantMapper;
 import com.ajaskiewicz.PlantManager.service.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.util.Lists.newArrayList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class PlantControllerMockMvcTest {
@@ -86,5 +89,23 @@ class PlantControllerMockMvcTest {
         verify(securityService).isAuthenticated();
         verify(plantService).delete(plantId);
         verifyNoMoreInteractions(plantService, securityService);
+    }
+
+    @Test
+    void shouldCreatePlant() throws Exception {
+        //given
+        var plantCreationDTO = new PlantCreationDTO("plantName", "room", LocalDate.now().minusDays(2), 3);
+        var entityToSave = new Plant();
+        when(plantMapper.plantToPlantEntity(any())).thenReturn(entityToSave);
+        when(plantService.createOrUpdatePlant(entityToSave)).thenReturn(entityToSave);
+        //when && then
+        mockMvc.perform(post("/dashboard/addPlant/v2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                .content((new ObjectMapper()).writeValueAsString(plantCreationDTO)))
+                .andExpect(status().isCreated());
+        verify(plantMapper).plantToPlantEntity(any(PlantCreationDTO.class)); //todo use captor(?)
+        verify(plantService).createOrUpdatePlant(entityToSave);
+
+        verifyNoMoreInteractions(plantMapper, plantService);
     }
 }

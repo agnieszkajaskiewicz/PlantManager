@@ -2,6 +2,7 @@ package com.ajaskiewicz.PlantManager.web.rest;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.model.PlantCardDTO;
+import com.ajaskiewicz.PlantManager.model.PlantCreationDTO;
 import com.ajaskiewicz.PlantManager.model.mapper.PlantMapper;
 import com.ajaskiewicz.PlantManager.service.*;
 import com.ajaskiewicz.PlantManager.web.utils.FileDeleteUtil;
@@ -16,10 +17,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Controller
 @RequestMapping(value = "/dashboard")
@@ -111,6 +115,18 @@ public class PlantController {
         }
 
         return "redirect:/dashboard";
+    }
+
+    @PostMapping(path = "/addPlant/v2", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Plant> createPlant(@RequestBody @Valid PlantCreationDTO plantCreationDTO) { //todo p-podobnie inne DTO przy zwracaniu
+        var plantToSave = plantMapper.plantToPlantEntity(plantCreationDTO);
+
+        var savedPlant = plantService.createOrUpdatePlant(plantToSave);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .contentType(APPLICATION_JSON)
+                .body(savedPlant);
     }
 
     @RequestMapping(value = "/deletePlant/{id}")
