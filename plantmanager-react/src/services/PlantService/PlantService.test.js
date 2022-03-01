@@ -38,6 +38,25 @@ describe('Plant Service', () => {
         expect(axios.delete).toHaveBeenCalledWith("http://test_url/dashboard/deletePlant/v2/123", {withCredentials: true});
     });
 
+    test('it should call backend on plant creation with correct payload', () => {
+        //given
+        const plantName = 'plant';
+        const roomName = 'room';
+        const lastWateredDate = Date.now();
+        const wateringDays = 3;
+
+        //when
+        PlantService.createNewPlant(plantName, roomName, lastWateredDate, wateringDays);
+
+        //then
+        expect(axios.post).toHaveBeenCalledWith("http://test_url/dashboard/addPlant/v2/", {
+            plantName: plantName,
+            roomName: roomName,
+            lastWateringDate: lastWateredDate,
+            wateringDays: wateringDays
+        }, {withCredentials: true});
+    });
+
     afterAll(() => {
         process.env = OLD_ENV;
     });
