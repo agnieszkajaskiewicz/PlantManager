@@ -59,6 +59,7 @@ const Login = () => {
         registrationService.createUser(username, password, repeatPassword, email)
             .then(response => {
                 if (response.status === 200) {
+                    localStorage.setItem('username', username);
                     navigate('/dashboard');
                 }
             })
