@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styles from './AppHeader.module.css';
 import logo from '../../logoPlantManager.png';
 import {useLocation, useNavigate} from "react-router-dom";
@@ -9,6 +8,13 @@ const AppHeader = () => {
     const navigate = useNavigate();
     const { pathname } = useLocation();
     //todo think if trick with pathname is the best idea; however we have to take into consideration that from any other component, we wont have access to AppHeader css
+
+    const handleLogout = () => {
+        localStorage.removeItem('username');
+        navigate('/login/signIn');
+    }
+
+    var username = localStorage.getItem('username');
 
     const appHeader = <>
         <div>
@@ -23,10 +29,10 @@ const AppHeader = () => {
             </div>
             <div className={styles.userPanel}>
                 <div>
-                    <label className={styles.text}>Username: ajaskiewicz</label>
+                    <label className={styles.text}>Username: {username}</label>
                 </div>
                 <div>
-                    <label className={styles.text}>Logout</label>
+                    <span className={styles.text} onClick={() => handleLogout()}>Logout</span>
                 </div>
             </div>
         </div>
