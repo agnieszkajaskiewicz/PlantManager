@@ -61,7 +61,11 @@
     }
 }
 
-.text {
+.text, .linkElement {
     font-size: 1.2rem;
     text-transform: uppercase;
+}
+
+.linkElement:hover {
+    cursor: pointer;
 }
