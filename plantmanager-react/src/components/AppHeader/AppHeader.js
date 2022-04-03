@@ -32,7 +32,7 @@ const AppHeader = () => {
     const userHeader = <>
         <div className={styles.userHeader} data-testid="AppHeader">
             <div className={styles.logoPanel}>
-                <img id="logo" src={logo} className={styles.appLogoLeft} alt="logo" onClick={() => navigate('/')}/>
+                <img id="logo" src={logo} className={styles.appLogoLeft} alt="logo" onClick={() => navigate('/dashboard')}/>
             </div>
             <div className={styles.userPanel}>
                 <div>
