@@ -55,6 +55,23 @@ public class UserController {
         return ResponseEntity.ok("User registered successfully");
     }
 
+    @GetMapping("/sign-in") //ten endpoint jest wołany tylko na logout, prawdopodobnie go nie potrzebujemy
+    public String login(Model model, String error, String logout) {
+        if (securityService.isAuthenticated()) {
+            return "redirect:/dashboard";
+        }
+
+        if (error != null) {
+            model.addAttribute("error", "Your username and password is invalid.");
+        }
+
+        if (logout != null) {
+            model.addAttribute("error", "You have been logged out successfully.");
+        }
+
+        return "signInPage";
+    }
+
     @GetMapping("/")
     public String homePage() {
         return "homePage";

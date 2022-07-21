@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import styles from './Login.module.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../App.css';
 import Form from 'react-bootstrap/Form';
 import {useParams, useNavigate, useSearchParams} from "react-router-dom";

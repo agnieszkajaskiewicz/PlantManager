@@ -59,7 +59,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpStatus.OK.value()));
+                .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpStatus.OK.value()))
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
 
         http.csrf().disable();
         http.headers().frameOptions().disable();

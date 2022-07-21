@@ -21,7 +21,7 @@ const AppHeader = () => {
             })             
     }
 
-    var username = localStorage.getItem('username');
+    const username = localStorage.getItem('username');
 
     const appHeader = <>
         <div>
