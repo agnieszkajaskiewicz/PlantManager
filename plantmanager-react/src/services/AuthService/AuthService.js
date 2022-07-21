@@ -17,7 +17,17 @@ const AuthService = {
 
                 return axios.post("http://" + backendServerURL + "/sign-in", formData, config);
             }
-        }
-};
+        },
+
+    logoutUser: () => {
+        const backendServerURL = process.env.REACT_APP_SERVER_URL;
+    
+        const config = {
+            withCredentials: true
+            }
+
+        return axios.post("http://" + backendServerURL + "/logout", config);
+        }    
+}
 
 export default AuthService;

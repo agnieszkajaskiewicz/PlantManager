@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import styles from './Login.module.css';
 import '../../App.css';
 import Form from 'react-bootstrap/Form';
-import {useParams, useNavigate} from "react-router-dom";
+import {useParams, useNavigate, useSearchParams} from "react-router-dom";
 import {useDependencies} from '../../DependencyContext';
 
 
@@ -31,6 +31,7 @@ const Login = () => {
     const [passwordError, setPasswordError] = useState('');
     const [repeatPasswordError, setRepeatPasswordError] = useState('');
     const [emailError, setEmailError] = useState('');
+    const [searchParams] = useSearchParams();
 
     const signIn = 'signIn';
     const signUp = 'signUp';
@@ -44,6 +45,7 @@ const Login = () => {
         authService.authUser(username, password)
             .then(response => {
                 if (response.status === 200) {
+                    localStorage.setItem('username', response.headers.username);
                     navigate('/dashboard');
                 }
             })             
@@ -58,6 +60,7 @@ const Login = () => {
         registrationService.createUser(username, password, repeatPassword, email)
             .then(response => {
                 if (response.status === 200) {
+                    localStorage.setItem('username', username);
                     navigate('/dashboard');
                 }
             })
@@ -133,31 +136,33 @@ const Login = () => {
 
     const invalidSignInData = !username || !password || usernameError || passwordError;
 
+    const logoutInfo = "User logged out successfully.";
+
     const signUpForm = <>
         <label htmlFor="username" className="formLabel">Username</label>
         <input id="username" type="text" value={username} className="formInput"
                       onChange={event => processUsernameInput(event)} required/>
         {
-            usernameError ? <span className="errorMessage">{usernameError}</span> : ''
+            usernameError ? <span className="text-danger">{usernameError}</span> : ''
         }               
         <label htmlFor="password" className="formLabel">Password</label>
         <input id="password" type="password" value={password} className="formInput" 
                       onChange={event => processPasswordInput(event)} required/>
         {
-            passwordError ? <span className="errorMessage">{passwordError}</span> : ''
+            passwordError ? <span className="text-danger">{passwordError}</span> : ''
         }               
         <label htmlFor="repeatPassword" className="formLabel">Repeat password</label>
         <input id="repeatPassword" type="password" value={repeatPassword}
                       className="formInput"
                       onChange={event => processRepeatPasswordInput(event)} required/>
         {
-            repeatPasswordError ? <span className="errorMessage">{repeatPasswordError}</span> : ''
+            repeatPasswordError ? <span className="text-danger">{repeatPasswordError}</span> : ''
         }               
         <label htmlFor="email" className="formLabel">Email address</label>
         <input id="email" type="email" value={email} className="formInput"
                       onChange={event => processEmailInput(event)} required/>
         {
-            emailError ? <span className="errorMessage">{emailError}</span> : ''
+            emailError ? <span className="text-danger">{emailError}</span> : ''
         }
         <button type="submit" className="appButton" disabled={invalidSignUpData} onClick={() => registerUser(username, password, repeatPassword, email)}>Sign Up</button>
     </>;
@@ -167,13 +172,16 @@ const Login = () => {
         <input id="username" type="text" value={username} className="formInput"
                       onChange={event => processSignInUsernameInput(event)}/>
         {
-            usernameError ? <span className="errorMessage">{usernameError}</span> : ''
+            usernameError ? <span className="text-danger">{usernameError}</span> : ''
         }               
         <label htmlFor="password" className="formLabel">Password</label>
         <input id="password" type="password" value={password} className="formInput"
                       onChange={event => processSignInPasswordInput(event)}/>
         {
-            passwordError ? <span className="errorMessage">{passwordError}</span> : ''
+            passwordError ? <span className="text-danger">{passwordError}</span> : ''
+        }  
+        {
+            searchParams.get("logout") != null ? <span className="text-warning">{logoutInfo}</span> : ''
         }  
         <Form.Check id="keepSignedIn">
             <Form.Check.Input type="checkbox" defaultChecked={true}/>

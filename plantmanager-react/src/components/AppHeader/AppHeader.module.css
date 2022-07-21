@@ -1,26 +1,71 @@
+.userHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
 @media screen and (min-width: 641px) {
-    .AppLogo {
-          height: 200px;
-          width: auto;
+    .appLogo {
+        height: 200px;
+        width: auto;
         margin: 40px auto;
         cursor: pointer;
     }
-}
 
-.AppLogoLeft {
-    position: relative;
-    left: -35%;
-    width: 20%;
-    margin: 20px auto 40px 20px;
+    .appLogoLeft {
+        height: 200px;
+        width: auto;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .logoPanel {
+        width: 200px;
+        height: 200px;
+        margin: 20px;
+    }
+    
+    .userPanel {
+        width: 450px;
+        height: 200px;
+        margin: 20px;
+        text-align: right;
+    }
 }
 
 @media screen and (max-width: 640px) {
-    .AppLogo {
+    .appLogo {
           height: 120px;
           width: auto;
           margin-bottom: 20px;
           margin-top: 20px;
           cursor: pointer;
     }
+
+    .appLogoLeft {
+        height: 120px;
+        width: auto;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .logoPanel {
+        width: 120px;
+        height: 120px;
+        margin: 20px;
+    }
+    
+    .userPanel {
+        width: 200px;
+        height: 120px;
+        margin: 20px;
+    }
 }
 
+.text, .linkElement {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.linkElement:hover {
+    cursor: pointer;
+}
