@@ -4,6 +4,7 @@
     text-align: center;
     color: white;
     font-family: 'Athiti', sans-serif;
+    min-height: 100vh;
 }
 
 .mainContainer {
@@ -80,10 +81,6 @@ input[type="checkbox"] {
 
 input[type="checkbox"]:checked {
     background: #154030;
-}
-
-.errorMessage {
-    color: red;
 }
 
 button:hover.btn.btn-light {

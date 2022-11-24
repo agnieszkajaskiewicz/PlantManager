@@ -51,13 +51,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/sign-in")
-                .successHandler((req, res, auth) -> res.setStatus(HttpStatus.OK.value()))
+                .successHandler((req, res, auth) -> {
+                    res.setStatus(HttpStatus.OK.value());
+                    res.setHeader("username", auth.getName());
+                })
                 .failureHandler(new SimpleUrlAuthenticationFailureHandler())
-                //.defaultSuccessUrl("/dashboard", true)
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll();
+                .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpStatus.OK.value()))
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
 
         http.csrf().disable();
         http.headers().frameOptions().disable();
@@ -69,6 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST"));
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setExposedHeaders(List.of("username"));
         configuration.setAllowCredentials(true);
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

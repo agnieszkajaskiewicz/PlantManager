@@ -12,23 +12,17 @@ class ForgotPassword extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
         this.setState({[event.target.id]: event.target.value});
     }
 
-    handleSubmit(event) {
-            alert('Podano następujące dane: ' + this.state.email);
-            event.preventDefault();
-        }
-
     render() {
         return (
             <div className="mainContainer" data-testid="ForgotPassword">
                     <div>
-                        <Form onSubmit={this.handleSubmit}>
+                        <Form>
                             <div className="formContainer">
                                 <label className={styles.title}>Forgot your password?</label>
                                 <label className={styles.text}>Please insert your email in the input below and we will send you the link to reset your password.</label>
