@@ -4,7 +4,11 @@ import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.model.PlantCardDTO;
 import com.ajaskiewicz.PlantManager.model.PlantCreationDTO;
 import com.ajaskiewicz.PlantManager.model.mapper.PlantMapper;
-import com.ajaskiewicz.PlantManager.service.*;
+import com.ajaskiewicz.PlantManager.service.PlantService;
+import com.ajaskiewicz.PlantManager.service.RoomService;
+import com.ajaskiewicz.PlantManager.service.WateringScheduleService;
+import com.ajaskiewicz.PlantManager.service.UserService;
+import com.ajaskiewicz.PlantManager.service.SecurityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +21,18 @@ import java.time.LocalDate;
 import static org.assertj.core.util.Lists.newArrayList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class PlantControllerMockMvcTest {
 
