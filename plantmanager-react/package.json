@@ -6,14 +6,14 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "axios": "^0.24.0",
+    "axios": "^1.7.7",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.1",
     "react-datepicker": "^4.6.0",
     "react-dom": "^17.0.2",
     "react-email-validator": "^1.0.2",
     "react-router-dom": "^6.0.1",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.1",
     "typeface-athiti": "^1.1.13",
     "web-vitals": "^1.1.2"
   },
@@ -46,6 +46,8 @@
     "react-test-renderer": "^17.0.2"
   },
   "jest": {
-    "transformIgnorePatterns": [ "/node_modules/(?!react-email-validator)" ]
+    "transformIgnorePatterns": [
+      "/node_modules/(?!react-email-validator)"
+    ]
   }
 }

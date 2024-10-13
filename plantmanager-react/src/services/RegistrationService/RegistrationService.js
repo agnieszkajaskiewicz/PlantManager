@@ -15,7 +15,14 @@ const RegistrationService = {
                 email: email
             }
 
-            return axios.post("http://" + backendServerURL + "/sign-up/v2", userData, config);
+            return axios.post("http://" + backendServerURL + "/sign-up/v2", userData, config)
+                .then(response => {
+                    const token = response.headers['authorization'];
+                    if (token) {
+                        localStorage.setItem('token', token);
+                    }
+                    return response;
+            });
         }
     }
 };

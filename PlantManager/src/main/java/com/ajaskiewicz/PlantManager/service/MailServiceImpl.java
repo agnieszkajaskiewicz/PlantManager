@@ -7,9 +7,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 import java.util.Map;
 
 @Service
@@ -18,7 +18,9 @@ public class MailServiceImpl implements MailService {
     @Value("classpath:/static/logoPlantManager.png")
     private Resource resourceFile;
 
-    private SpringTemplateEngine thymeleafTemplateEngine;
+    @Autowired
+    SpringTemplateEngine thymeleafTemplateEngine;
+
     private JavaMailSender mailSender;
 
     @Autowired
@@ -29,6 +31,7 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public void sendMessageUsingThymeleafTemplate(String to, String subject, Map<String, Object> templateModel) throws MessagingException {
+        SpringTemplateEngine thymeleafTemplateEngine = new SpringTemplateEngine();
         var thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
         var htmlBody = thymeleafTemplateEngine.process("reminderTemplate.html", thymeleafContext);
