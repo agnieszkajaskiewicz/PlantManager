@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/sign-in/v2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> login(@Valid @RequestParam("username") String username, @Valid @RequestParam("password") String password) {
+    public ResponseEntity<?> login(@RequestParam("username") String username, @RequestParam("password") String password) {
         try {
             String jwtToken = securityService.login(username, password);
             return ResponseEntity.ok().header("Authorization", "Bearer " + jwtToken).header("username", username).build();

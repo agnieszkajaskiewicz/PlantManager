@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,7 +27,9 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,12 +39,14 @@ class UserControllerTest {
     private static final String EMAIL = "grazyna@grazka.pl";
     private static final String PASSWORD = "janusz";
     private static final String REPEAT_PASSWORD = "janusz";
+    private static final String TOKEN = "1234";
 
     private MockMvc mockMvc;
     private UserValidator userValidator;
     private UserService userService;
     private SecurityService securityService;
     private UserController userController;
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
@@ -65,15 +70,17 @@ class UserControllerTest {
         var errorsValueCapture = ArgumentCaptor.forClass(Errors.class);
         doNothing().when(userValidator).validate(userValueCapture.capture(), errorsValueCapture.capture());
         doNothing().when(userService).save(userValueCapture.capture());
+        when(securityService.login(USERNAME, PASSWORD)).thenReturn(TOKEN);
 
         //when && then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sign-up/v2")
-                        .content(new ObjectMapper().writeValueAsString(userEntity))
+                        .content(mapper.writeValueAsString(userEntity))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("User registered successfully"));
+                .andExpect(header().string("Authorization", "Bearer " + TOKEN))
+                .andExpect(header().string("username", USERNAME));
 
         verify(userValidator).validate(userValueCapture.getValue(), errorsValueCapture.getValue());
         verify(userService).save(userValueCapture.getValue());
@@ -101,14 +108,14 @@ class UserControllerTest {
         //when && then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sign-up/v2")
-                        .content(new ObjectMapper().writeValueAsString(userEntity))
+                        .content(mapper.writeValueAsString(userEntity))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$..defaultMessage", is(expectedErrorMessage)));
 
         verify(userValidator).validate(userValueCapture.getValue(), errorsValueCapture.getValue());
-        assertThat(errorsValueCapture.getAllValues().get(0).getErrorCount()).isEqualTo(1);
+        assertThat(errorsValueCapture.getAllValues().getFirst().getErrorCount()).isEqualTo(1);
         verifyNoMoreInteractions(userValidator, userService, securityService);
     }
 
@@ -146,7 +153,7 @@ class UserControllerTest {
         //when && then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sign-up/v2")
-                        .content(new ObjectMapper().writeValueAsString(userEntity))
+                        .content(mapper.writeValueAsString(userEntity))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -155,7 +162,7 @@ class UserControllerTest {
 
         var errorDefaultMessagesList = errorsValueCapture
                 .getAllValues()
-                .get(0)
+                .getFirst()
                 .getAllErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -185,7 +192,7 @@ class UserControllerTest {
         //when && then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sign-up/v2")
-                        .content(new ObjectMapper().writeValueAsString(userEntity))
+                        .content(mapper.writeValueAsString(userEntity))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -194,7 +201,7 @@ class UserControllerTest {
 
         var errorDefaultMessagesList = errorsValueCapture
                 .getAllValues()
-                .get(0)
+                .getFirst()
                 .getAllErrors()
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -202,5 +209,45 @@ class UserControllerTest {
         assertThat(errorDefaultMessagesList).contains(expectedErrorMessage);
 
         verifyNoMoreInteractions(userValidator, userService, securityService);
+    }
+
+    @Test
+    void shouldLoginUser() throws Exception {
+        when(securityService.login(USERNAME, PASSWORD)).thenReturn(TOKEN);
+
+        //when && then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .multipart("/sign-in/v2")
+                        .param("username", USERNAME)
+                        .param("password", PASSWORD)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Authorization", "Bearer " + TOKEN))
+                .andExpect(header().string("username", USERNAME));
+
+        verify(securityService).login(USERNAME, PASSWORD);
+        verifyNoMoreInteractions(securityService);
+    }
+
+    @Test
+    void shouldReturn401ForInvalidUserCredentials() throws Exception {
+        var errorMessage = "Invalid username or password";
+        when(securityService.login(USERNAME, PASSWORD)).thenThrow(new BadCredentialsException(errorMessage));
+
+        //when && then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .multipart("/sign-in/v2")
+                        .param("username", USERNAME)
+                        .param("password", PASSWORD)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                        .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string(errorMessage))
+                .andExpect(header().doesNotExist("Authorization"))
+                .andExpect(header().doesNotExist("username"));
+
+        verify(securityService).login(USERNAME, PASSWORD);
+        verifyNoMoreInteractions(securityService);
     }
 }
