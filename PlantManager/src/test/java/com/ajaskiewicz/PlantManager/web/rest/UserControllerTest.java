@@ -72,7 +72,7 @@ class UserControllerTest {
 
         verify(userValidator).validate(userValueCapture.getValue(), errorsValueCapture.getValue());
         verify(userService).save(userValueCapture.getValue());
-        verify(securityService).autoLogin(userEntity.getUsername(), userEntity.getRepeatPassword());
+        verify(securityService).login(userEntity.getUsername(), userEntity.getRepeatPassword());
         verifyNoMoreInteractions(userValidator, userService, securityService);
     }
 

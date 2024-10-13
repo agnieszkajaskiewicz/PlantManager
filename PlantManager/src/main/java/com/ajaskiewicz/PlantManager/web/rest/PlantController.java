@@ -17,7 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -48,16 +48,7 @@ public class PlantController {
         this.plantMapper = plantMapper;
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> test() { //todo remove when no longer needed
-        if (!securityService.isAuthenticated()) {
-            return ResponseEntity.ok(" Nie udało się");
-        }
-
-        return ResponseEntity.ok("Udało się");
-    }
-
-    @RequestMapping
+    @RequestMapping // old endpoint, to be removed
     public String showDashboard(Model model) {
         if (!securityService.isAuthenticated()) {
             return "redirect:/";
@@ -69,9 +60,6 @@ public class PlantController {
 
     @GetMapping(value = "/v2", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PlantCardDTO>> getPlantsForLoggedUser() {
-        if (!securityService.isAuthenticated()) { //todo to powinno być załatwione z automatu spring security
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         var plants = plantService.findAllByUserId(userService.findIdOfLoggedUser());
         var plantDtos = plants.stream()
                 .map(plantEntity -> plantMapper.plantToPlantCardDto(plantEntity))
@@ -80,7 +68,7 @@ public class PlantController {
         return ResponseEntity.ok(plantDtos);
     }
 
-    @RequestMapping(path = {"/editPlant", "/editPlant/{id}"})
+    @RequestMapping(path = {"/editPlant", "/editPlant/{id}"}) // old endpoint, to be removed
     public String editPlantById(Model model, @PathVariable("id") Optional<Integer> id) throws NotFoundException {
         if (!securityService.isAuthenticated()) {
             return "redirect:/";
@@ -96,7 +84,7 @@ public class PlantController {
         return "editPage";
     }
 
-    @RequestMapping(path = "/addPlant", method = RequestMethod.POST)
+    @RequestMapping(path = "/addPlant", method = RequestMethod.POST) // old endpoint, to be removed
     public String createOrUpdatePlant(Plant plant, @RequestParam("image") MultipartFile multipartFile) throws IOException {
         if (!securityService.isAuthenticated()) {
             return "redirect:/";
@@ -129,7 +117,7 @@ public class PlantController {
                 .body(savedPlant);
     }
 
-    @RequestMapping(value = "/deletePlant/{id}")
+    @RequestMapping(value = "/deletePlant/{id}") // old endpoint, to be removed
     public String deletePlantById(@PathVariable("id") Integer id) throws NotFoundException, IOException {
         if (!securityService.isAuthenticated()) {
             return "redirect:/";
@@ -149,13 +137,8 @@ public class PlantController {
 
     @DeleteMapping(value = "/deletePlant/v2/{id}")
     public ResponseEntity<?> deletePlantByIdV2(@PathVariable("id") Integer id) throws IOException, NotFoundException {
-        if (!securityService.isAuthenticated()) { //todo to powinno być załatwione z automatu spring security
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         deletePlantImage(id);
         plantService.delete(id);
-
         return ResponseEntity.ok().build();
     }
 }

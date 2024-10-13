@@ -1,7 +1,11 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
-import com.ajaskiewicz.PlantManager.service.*;
+import com.ajaskiewicz.PlantManager.service.PlantService;
+import com.ajaskiewicz.PlantManager.service.RoomService;
+import com.ajaskiewicz.PlantManager.service.WateringScheduleService;
+import com.ajaskiewicz.PlantManager.service.UserService;
+import com.ajaskiewicz.PlantManager.service.SecurityService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

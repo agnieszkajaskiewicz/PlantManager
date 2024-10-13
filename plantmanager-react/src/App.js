@@ -13,6 +13,8 @@ import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard";
 import PlantEditor from "./components/PlantEditor/PlantEditor";
 
+import axios from 'axios';
+
 
 function App() {
     return (
@@ -35,5 +37,18 @@ function App() {
         </Router>
     );
 }
+
+axios.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers['Authorization'] = token; 
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
 
 export default App;
