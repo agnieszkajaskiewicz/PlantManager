@@ -9,17 +9,17 @@ public interface PlantService {
 
         List<Plant> findAll();
 
-        Plant find(Integer id) throws NotFoundException;
+        Plant find(Long id) throws NotFoundException;
 
-        List<Plant> findAllByUserId(Integer id);
+        List<Plant> findAllByUserId(Long userId);
 
         Plant save(Plant plant);
 
         Plant createOrUpdatePlant(Plant plant);
 
-        void delete(Integer id) throws NotFoundException;
+        void delete(Long id) throws NotFoundException;
 
-        List<Plant> findPlantsToBeWateredSoon(Integer id);
+        List<Plant> findPlantsToBeWateredSoon(Long userId);
 
         Plant updateLastWateredDate(Plant plant) throws NotFoundException;
 }

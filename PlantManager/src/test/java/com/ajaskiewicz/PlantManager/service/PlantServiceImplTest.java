@@ -5,7 +5,6 @@ import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.model.WateringSchedule;
 import com.ajaskiewicz.PlantManager.repository.PlantRepository;
 import com.ajaskiewicz.PlantManager.repository.UserRepository;
-import com.ajaskiewicz.PlantManager.repository.WateringScheduleRepository;
 import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,8 +30,8 @@ import static org.mockito.Mockito.when;
 
 public class PlantServiceImplTest {
 
-    private static final Integer USER_ID = 1;
-    private static final Integer PLANT_ID = 2;
+    private static final Long USER_ID = 1L;
+    private static final Long PLANT_ID = 2L;
     private static final String USERNAME = "username";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final int DEFAULT_INTERVAL = 3;
@@ -40,7 +39,6 @@ public class PlantServiceImplTest {
     private PlantService plantService;
 
     private PlantRepository plantRepository;
-    private WateringScheduleRepository wateringScheduleRepository;
     private UserRepository userRepository;
     private Authentication authentication;
     private SecurityContext securityContext;
@@ -48,13 +46,12 @@ public class PlantServiceImplTest {
     @BeforeEach
     void setUp() {
         plantRepository = mock(PlantRepository.class);
-        wateringScheduleRepository = mock(WateringScheduleRepository.class);
         userRepository = mock(UserRepository.class);
         authentication = mock(Authentication.class);
         securityContext = mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
 
-        plantService = new PlantServiceImpl(plantRepository, wateringScheduleRepository, userRepository);
+        plantService = new PlantServiceImpl(plantRepository, userRepository);
     }
 
     @Test
@@ -108,7 +105,7 @@ public class PlantServiceImplTest {
         //when && then
         NotFoundException exception = assertThrows(NotFoundException.class, () -> plantService.find(PLANT_ID));
 
-        assertEquals("Plant record does not exist for given ID " + PLANT_ID, exception.getMessage());
+        assertEquals("Plant with ID " + PLANT_ID + " not found", exception.getMessage());
         verify(plantRepository, times(1)).findById(PLANT_ID);
     }
 
@@ -136,7 +133,7 @@ public class PlantServiceImplTest {
         user.setUsername(USERNAME);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn(USERNAME);
-        when(userRepository.findByUsername(USERNAME)).thenReturn(user);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
         when(plantRepository.save(plant)).thenReturn(plant);
 
         //when
@@ -180,7 +177,7 @@ public class PlantServiceImplTest {
     @Test
     public void shouldCalculateCorrectNegativeDifferenceInDays() {
         //given
-        var plantToBeWateredTwoDaysAgo = preparePlantThatShouldBeWatered(1, -2);
+        var plantToBeWateredTwoDaysAgo = preparePlantThatShouldBeWatered(1L, -2);
         when(plantRepository.findAllByUserId(USER_ID)).thenReturn(newArrayList(plantToBeWateredTwoDaysAgo));
 
         //when
@@ -194,7 +191,7 @@ public class PlantServiceImplTest {
     @Test
     public void shouldCalculateCorrectPositiveDifferenceInDays() {
         //given
-        var plantToBeWateredTomorrow = preparePlantThatShouldBeWatered(1, 1);
+        var plantToBeWateredTomorrow = preparePlantThatShouldBeWatered(1L, 1);
         when(plantRepository.findAllByUserId(USER_ID)).thenReturn(newArrayList(plantToBeWateredTomorrow));
 
         //when
@@ -208,8 +205,8 @@ public class PlantServiceImplTest {
     @Test
     public void shouldSortPlantFromTheOldestWateredToTheMostRecentlyWatered() {
         //given
-        var plantToBeWateredTomorrow = preparePlantThatShouldBeWatered(1, 1);
-        var plantToBeWateredTwoDaysAgo = preparePlantThatShouldBeWatered(2, -2);
+        var plantToBeWateredTomorrow = preparePlantThatShouldBeWatered(1L, 1);
+        var plantToBeWateredTwoDaysAgo = preparePlantThatShouldBeWatered(2L, -2);
         when(plantRepository.findAllByUserId(USER_ID)).thenReturn(newArrayList(plantToBeWateredTomorrow, plantToBeWateredTwoDaysAgo));
 
         //when
@@ -224,10 +221,10 @@ public class PlantServiceImplTest {
     @Test
     public void shouldFilterOutPlantThatShouldBeWateredInMoreThanThreeDaysInTheFuture() {
         //given
-        var plantToBeWateredTomorrow = preparePlantThatShouldBeWatered(1, 1);
-        var plantToBeWateredTwoDaysAgo = preparePlantThatShouldBeWatered(2, -2);
+        var plantToBeWateredTomorrow = preparePlantThatShouldBeWatered(1L, 1);
+        var plantToBeWateredTwoDaysAgo = preparePlantThatShouldBeWatered(2L, -2);
         var plantThatShouldNotBeWatered = new Plant();
-        plantThatShouldNotBeWatered.setId(3);
+        plantThatShouldNotBeWatered.setId(3L);
         var wateringScheduleThatShouldNotBeWatered = new WateringSchedule();
         wateringScheduleThatShouldNotBeWatered.setLastWateredDate(LocalDate.now().format(FORMATTER));
         wateringScheduleThatShouldNotBeWatered.setWateringInterval(4);
@@ -258,7 +255,7 @@ public class PlantServiceImplTest {
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn(USERNAME);
-        when(userRepository.findByUsername(USERNAME)).thenReturn(user);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
         when(plantRepository.save(plant)).thenReturn(plant);
 
         //when
@@ -270,7 +267,7 @@ public class PlantServiceImplTest {
         verify(plantRepository, times(1)).save(plant);
     }
 
-    private Plant preparePlantThatShouldBeWatered(int id, int wateringDifferenceInDays) {
+    private Plant preparePlantThatShouldBeWatered(Long id, int wateringDifferenceInDays) {
         var plantThatShouldBeWatered = new Plant();
         plantThatShouldBeWatered.setId(id);
         var wateringScheduleThatShouldBeWatered = new WateringSchedule();
@@ -283,13 +280,13 @@ public class PlantServiceImplTest {
 
     private List<Plant> preparePlants() {
         var plant1 = new Plant();
-        plant1.setId(1);
+        plant1.setId(1L);
 
         var plant2 = new Plant();
-        plant2.setId(2);
+        plant2.setId(2L);
 
         var plant3 = new Plant();
-        plant3.setId(3);
+        plant3.setId(3L);
 
         return List.of(plant1, plant2, plant3);
     }

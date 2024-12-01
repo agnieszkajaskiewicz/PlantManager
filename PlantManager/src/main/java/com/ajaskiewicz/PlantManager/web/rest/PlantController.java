@@ -5,12 +5,11 @@ import com.ajaskiewicz.PlantManager.model.PlantCardDTO;
 import com.ajaskiewicz.PlantManager.model.PlantCreationDTO;
 import com.ajaskiewicz.PlantManager.model.mapper.PlantMapper;
 import com.ajaskiewicz.PlantManager.service.PlantService;
-import com.ajaskiewicz.PlantManager.service.RoomService;
-import com.ajaskiewicz.PlantManager.service.WateringScheduleService;
-import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.service.SecurityService;
+import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.web.utils.FileDeleteUtil;
 import com.ajaskiewicz.PlantManager.web.utils.FileUploadUtil;
+import jakarta.validation.Valid;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,18 +17,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -43,18 +40,14 @@ public class PlantController {
 
     private static final String UPLOADED_IMAGES_PATH = "uploadedImages/";
 
-    private PlantService plantService;
-    private RoomService roomService;
-    private WateringScheduleService wateringScheduleService;
-    private UserService userService;
-    private SecurityService securityService;
-    private PlantMapper plantMapper;
+    private final PlantService plantService;
+    private final UserService userService;
+    private final SecurityService securityService;
+    private final PlantMapper plantMapper;
 
     @Autowired
-    public PlantController(PlantService plantService, RoomService roomService, WateringScheduleService wateringScheduleService, UserService userService, SecurityService securityService, PlantMapper plantMapper) {
+    public PlantController(PlantService plantService, UserService userService, SecurityService securityService, PlantMapper plantMapper) {
         this.plantService = plantService;
-        this.roomService = roomService;
-        this.wateringScheduleService = wateringScheduleService;
         this.userService = userService;
         this.securityService = securityService;
         this.plantMapper = plantMapper;
@@ -74,14 +67,14 @@ public class PlantController {
     public ResponseEntity<List<PlantCardDTO>> getPlantsForLoggedUser() {
         var plants = plantService.findAllByUserId(userService.findIdOfLoggedUser());
         var plantDtos = plants.stream()
-                .map(plantEntity -> plantMapper.plantToPlantCardDto(plantEntity))
+                .map(plantMapper::plantToPlantCardDto)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(plantDtos);
     }
 
     @RequestMapping(path = {"/editPlant", "/editPlant/{id}"}) // old endpoint, to be removed
-    public String editPlantById(Model model, @PathVariable("id") Optional<Integer> id) throws NotFoundException {
+    public String editPlantById(Model model, @PathVariable("id") Optional<Long> id) throws NotFoundException {
         if (!securityService.isAuthenticated()) {
             return "redirect:/";
         }
@@ -130,7 +123,7 @@ public class PlantController {
     }
 
     @RequestMapping(value = "/deletePlant/{id}") // old endpoint, to be removed
-    public String deletePlantById(@PathVariable("id") Integer id) throws NotFoundException, IOException {
+    public String deletePlantById(@PathVariable("id") Long id) throws NotFoundException, IOException {
         if (!securityService.isAuthenticated()) {
             return "redirect:/";
         }
@@ -142,13 +135,13 @@ public class PlantController {
         return "redirect:/dashboard";
     }
 
-    private void deletePlantImage(Integer id) throws IOException {
+    private void deletePlantImage(Long id) throws IOException {
         var deleteDirectory = UPLOADED_IMAGES_PATH + id;
         FileDeleteUtil.deleteFile(deleteDirectory);
     }
 
     @DeleteMapping(value = "/deletePlant/v2/{id}")
-    public ResponseEntity<?> deletePlantByIdV2(@PathVariable("id") Integer id) throws IOException, NotFoundException {
+    public ResponseEntity<?> deletePlantByIdV2(@PathVariable("id") Long id) throws IOException, NotFoundException {
         deletePlantImage(id);
         plantService.delete(id);
         return ResponseEntity.ok().build();

@@ -1,7 +1,10 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
+import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.web.utils.WebUtil;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -13,15 +16,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 
 @Controller
 public class ForgotPasswordController {
 
-    private JavaMailSender mailSender;
-    private UserService userService;
+    private final JavaMailSender mailSender;
+    private final UserService userService;
 
     @Autowired
     public ForgotPasswordController(JavaMailSender mailSender, UserService userService) {
@@ -78,7 +79,7 @@ public class ForgotPasswordController {
 
     @GetMapping("/resetPassword")
     public String showResetPasswordForm(@Param(value = "token") String token, Model model) {
-        var user = userService.getByResetPasswordToken(token);
+        User user = userService.findByResetPasswordToken(token);
         model.addAttribute("token", token);
 
         if (user == null) {
@@ -90,10 +91,10 @@ public class ForgotPasswordController {
 
     @PostMapping("/resetPassword")
     public String processResetPassword(HttpServletRequest request, Model model) {
-        var token = request.getParameter("token");
-        var password = request.getParameter("password");
+        String token = request.getParameter("token");
+        String password = request.getParameter("password");
 
-        var user = userService.getByResetPasswordToken(token);
+        User user = userService.findByResetPasswordToken(token);
 
         if (user == null) {
             model.addAttribute("message", "Invalid token");

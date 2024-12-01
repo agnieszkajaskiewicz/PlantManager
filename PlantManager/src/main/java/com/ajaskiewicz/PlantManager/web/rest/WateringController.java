@@ -2,10 +2,8 @@ package com.ajaskiewicz.PlantManager.web.rest;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.service.PlantService;
-import com.ajaskiewicz.PlantManager.service.RoomService;
-import com.ajaskiewicz.PlantManager.service.WateringScheduleService;
-import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.service.SecurityService;
+import com.ajaskiewicz.PlantManager.service.UserService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,17 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping(value = "/toBeWateredSoon")
 public class WateringController {
 
-    private PlantService plantService;
-    private RoomService roomService;
-    private WateringScheduleService wateringScheduleService;
-    private UserService userService;
-    private SecurityService securityService;
+    private final PlantService plantService;
+    private final UserService userService;
+    private final SecurityService securityService;
 
     @Autowired
-    public WateringController(PlantService plantService, RoomService roomService, WateringScheduleService wateringScheduleService, UserService userService, SecurityService securityService) {
+    public WateringController(PlantService plantService, UserService userService, SecurityService securityService) {
         this.plantService = plantService;
-        this.roomService = roomService;
-        this.wateringScheduleService = wateringScheduleService;
         this.userService = userService;
         this.securityService = securityService;
     }
@@ -43,7 +37,7 @@ public class WateringController {
     }
 
     @RequestMapping("/confirm/{id}")
-    public String showConfirmWateringView(@PathVariable("id") Integer id, Model model) throws NotFoundException {
+    public String showConfirmWateringView(@PathVariable("id") Long id, Model model) throws NotFoundException {
         if (!securityService.isAuthenticated()) { return "redirect:/"; }
 
         var plant = plantService.find(id);

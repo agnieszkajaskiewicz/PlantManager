@@ -1,9 +1,9 @@
 package com.ajaskiewicz.PlantManager.service;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
+import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.repository.PlantRepository;
 import com.ajaskiewicz.PlantManager.repository.UserRepository;
-import com.ajaskiewicz.PlantManager.repository.WateringScheduleRepository;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service("plantService")
 @Slf4j
@@ -26,13 +27,11 @@ public class PlantServiceImpl implements PlantService {
     private static final int SAFE_AMOUNT_OF_DAYS_IN_THE_FUTURE = 3;
 
     private final PlantRepository plantRepository;
-    private final WateringScheduleRepository wateringScheduleRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public PlantServiceImpl(PlantRepository plantRepository, WateringScheduleRepository wateringScheduleRepository, UserRepository userRepository) {
+    public PlantServiceImpl(PlantRepository plantRepository, UserRepository userRepository) {
         this.plantRepository = plantRepository;
-        this.wateringScheduleRepository = wateringScheduleRepository;
         this.userRepository = userRepository;
     }
 
@@ -42,21 +41,16 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public List<Plant> findAllByUserId(Integer id) {
+    public List<Plant> findAllByUserId(Long id) {
         log.info("Looking for all plants that belong to user with ID " + id);
         var result = plantRepository.findAllByUserId(id);
         log.info(result.size() + " plants found");
         return result;
     }
 
-    @Override
-    public Plant find(Integer id) throws NotFoundException {
-        var plant = plantRepository.findById(id);
-        if (plant.isPresent()) {
-            return plant.get();
-        } else {
-            throw new NotFoundException("Plant record does not exist for given ID " + id);
-        }
+    public Plant find(Long id) throws NotFoundException {
+        Optional<Plant> plant = plantRepository.findById(id);
+        return plant.orElseThrow(() -> new NotFoundException("Plant with ID " + id + " not found"));
     }
 
     @Override
@@ -70,15 +64,14 @@ public class PlantServiceImpl implements PlantService {
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var username = authentication.getName();
-        var queriedUser = userRepository.findByUsername(username);
-        plant.setUser(queriedUser);
+        Optional<User> queriedUser = userRepository.findByUsername(username);
+        queriedUser.ifPresent(plant::setUser);
 
         plantRepository.save(plant);
         return plant;
     }
 
-    @Override
-    public void delete(Integer id) throws NotFoundException {
+    public void delete(Long id) throws NotFoundException {
         var optionalPlant = plantRepository.findById(id);
         optionalPlant.orElseThrow(() -> new NotFoundException(String.format("Plant for ID %d not found", id)));
 
@@ -88,7 +81,7 @@ public class PlantServiceImpl implements PlantService {
 
 
     @Override
-    public List<Plant> findPlantsToBeWateredSoon(Integer userId) {
+    public List<Plant> findPlantsToBeWateredSoon(Long userId) {
         var allPlants = plantRepository.findAllByUserId(userId);
         var plantsToBeWatered = new ArrayList<Plant>();
 
@@ -133,8 +126,8 @@ public class PlantServiceImpl implements PlantService {
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var username = authentication.getName();
-        var queriedUser = userRepository.findByUsername(username);
-        plant.setUser(queriedUser);
+        Optional<User> queriedUser = userRepository.findByUsername(username);
+        queriedUser.ifPresent(plant::setUser);
 
         plantRepository.save(plant);
 

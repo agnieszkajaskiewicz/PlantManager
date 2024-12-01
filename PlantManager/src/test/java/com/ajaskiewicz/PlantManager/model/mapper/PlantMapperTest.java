@@ -27,7 +27,7 @@ class PlantMapperTest {
     @Test
     void shouldMapPlantEntityToPlantCardDto() {
         //given
-        var id = 1;
+        var id = 1L;
         var entity = new Plant(id, PLANT_NAME, null, null, null);
         //when
         var result = plantMapper.plantToPlantCardDto(entity);

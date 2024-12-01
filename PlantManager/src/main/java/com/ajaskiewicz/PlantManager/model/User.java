@@ -26,7 +26,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @NotEmpty(message = "This field is required.")
     @Size(min = 6, max = 32, message = "Please use between 6 and 32 characters.")
