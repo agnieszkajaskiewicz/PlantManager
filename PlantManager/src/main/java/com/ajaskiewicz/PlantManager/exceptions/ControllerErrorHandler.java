@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @ControllerAdvice
 public class ControllerErrorHandler extends ResponseEntityExceptionHandler {
@@ -18,9 +19,9 @@ public class ControllerErrorHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
-        final var fieldErrorResponse = new FieldErrorResponse();
+        final FieldErrorResponse fieldErrorResponse = new FieldErrorResponse();
 
-        final var fieldErrors = new ArrayList<CustomFieldError>();
+        final List<CustomFieldError> fieldErrors = new ArrayList<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             CustomFieldError fieldError = new CustomFieldError();
             fieldError.setField(((FieldError) error).getField());

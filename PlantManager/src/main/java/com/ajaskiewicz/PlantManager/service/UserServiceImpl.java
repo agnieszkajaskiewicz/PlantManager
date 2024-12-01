@@ -5,6 +5,7 @@ import com.ajaskiewicz.PlantManager.repository.RoleRepository;
 import com.ajaskiewicz.PlantManager.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -65,8 +66,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long findIdOfLoggedUser() {
         log.info("Checking ID of logged user");
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var username = authentication.getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         Optional<User> queriedUser = userRepository.findByUsername(username);
 
         if (queriedUser.isPresent()) {
@@ -89,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateResetPasswordToken(String token, String email) {
-        var user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             user.get().setResetPasswordToken(token);
             userRepository.save(user.get());
@@ -100,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePassword(User user, String newPassword) {
-        var encodedPassword = bCryptPasswordEncoder.encode(newPassword);
+        String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
 
         user.setResetPasswordToken(null);
