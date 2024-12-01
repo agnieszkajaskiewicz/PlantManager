@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SecurityServiceImpl implements SecurityService {
 
-    private AuthenticationManager authenticationManager;
-    private UserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -28,7 +29,7 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     public boolean isAuthenticated() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || AnonymousAuthenticationToken.class.isAssignableFrom(authentication.getClass())) {
             return false;
@@ -38,8 +39,8 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public String login(String username, String password) {
-        var userDetails = userDetailsService.loadUserByUsername(username);
-        var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 

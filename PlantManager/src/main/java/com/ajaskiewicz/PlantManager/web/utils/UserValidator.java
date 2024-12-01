@@ -11,7 +11,7 @@ import org.springframework.validation.Validator;
 @Component
 public class UserValidator implements Validator {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserValidator(UserService userService) {
@@ -25,7 +25,7 @@ public class UserValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        var user = (User) o;
+        User user = (User) o;
 
         if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate", "Duplicate.userForm.username");

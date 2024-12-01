@@ -65,8 +65,8 @@ public class PlantController {
 
     @GetMapping(value = "/v2", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PlantCardDTO>> getPlantsForLoggedUser() {
-        var plants = plantService.findAllByUserId(userService.findIdOfLoggedUser());
-        var plantDtos = plants.stream()
+        List<Plant> plants = plantService.findAllByUserId(userService.findIdOfLoggedUser());
+        List<PlantCardDTO> plantDtos = plants.stream()
                 .map(plantMapper::plantToPlantCardDto)
                 .collect(Collectors.toList());
 
@@ -80,7 +80,7 @@ public class PlantController {
         }
 
         if (id.isPresent()) {
-            var plant = plantService.find(id.get());
+            Plant plant = plantService.find(id.get());
             model.addAttribute("plant", plant);
         } else {
             model.addAttribute("plant", new Plant());
@@ -95,15 +95,15 @@ public class PlantController {
             return "redirect:/";
         }
 
-        var filename = multipartFile.getOriginalFilename();
+        String filename = multipartFile.getOriginalFilename();
 
         if (multipartFile.isEmpty()) {
             plantService.createOrUpdatePlant(plant);
         } else {
             plant.setImageName(filename);
-            var savedPlant = plantService.createOrUpdatePlant(plant);
+            Plant savedPlant = plantService.createOrUpdatePlant(plant);
 
-            var uploadDirectory = UPLOADED_IMAGES_PATH + savedPlant.getId();
+            String uploadDirectory = UPLOADED_IMAGES_PATH + savedPlant.getId();
             FileUploadUtil.saveFile(uploadDirectory, filename, multipartFile);
         }
 
@@ -112,9 +112,9 @@ public class PlantController {
 
     @PostMapping(path = "/addPlant/v2", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Plant> createPlant(@RequestBody @Valid PlantCreationDTO plantCreationDTO) { //todo p-podobnie inne DTO przy zwracaniu
-        var plantToSave = plantMapper.plantToPlantEntity(plantCreationDTO);
+        Plant plantToSave = plantMapper.plantToPlantEntity(plantCreationDTO);
 
-        var savedPlant = plantService.createOrUpdatePlant(plantToSave);
+        Plant savedPlant = plantService.createOrUpdatePlant(plantToSave);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -136,7 +136,7 @@ public class PlantController {
     }
 
     private void deletePlantImage(Long id) throws IOException {
-        var deleteDirectory = UPLOADED_IMAGES_PATH + id;
+        String deleteDirectory = UPLOADED_IMAGES_PATH + id;
         FileDeleteUtil.deleteFile(deleteDirectory);
     }
 

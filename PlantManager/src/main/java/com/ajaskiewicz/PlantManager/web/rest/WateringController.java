@@ -40,7 +40,7 @@ public class WateringController {
     public String showConfirmWateringView(@PathVariable("id") Long id, Model model) throws NotFoundException {
         if (!securityService.isAuthenticated()) { return "redirect:/"; }
 
-        var plant = plantService.find(id);
+        Plant plant = plantService.find(id);
         model.addAttribute("plant", plant);
 
         return "wateringConfirmationPage";

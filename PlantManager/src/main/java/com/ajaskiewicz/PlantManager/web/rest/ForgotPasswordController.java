@@ -4,6 +4,7 @@ import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.web.utils.WebUtil;
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,12 @@ public class ForgotPasswordController {
 
     @PostMapping("/forgotPassword")
     public String processForgotPassword(HttpServletRequest request, Model model) {
-        var email = request.getParameter("email");
-        var token = RandomStringUtils.randomAlphabetic(30);
+        String email = request.getParameter("email");
+        String token = RandomStringUtils.randomAlphabetic(30);
 
         try {
             userService.updateResetPasswordToken(token, email);
-            var resetPasswordLink = WebUtil.getSiteURL(request) + "/resetPassword?token=" + token;
+            String resetPasswordLink = WebUtil.getSiteURL(request) + "/resetPassword?token=" + token;
             sendEmail(email, resetPasswordLink);
             model.addAttribute("message", "We have sent a reset password link to your email. Please, check your emailbox.");
         } catch (UsernameNotFoundException ex) {
@@ -55,8 +56,8 @@ public class ForgotPasswordController {
     }
 
     public void sendEmail(String recipientEmail, String link) throws UnsupportedEncodingException, MessagingException {
-        var message = mailSender.createMimeMessage();
-        var helper = new MimeMessageHelper(message);
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
 
         helper.setFrom("contact@plantmanager.com", "Plant Manager Support");
         helper.setTo(recipientEmail);

@@ -7,6 +7,7 @@ import com.ajaskiewicz.PlantManager.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +45,7 @@ public class PlantServiceImpl implements PlantService {
     @Override
     public List<Plant> findAllByUserId(Long id) {
         log.info("Looking for all plants that belong to user with ID " + id);
-        var result = plantRepository.findAllByUserId(id);
+        List<Plant> result = plantRepository.findAllByUserId(id);
         log.info(result.size() + " plants found");
         return result;
     }
@@ -62,8 +64,8 @@ public class PlantServiceImpl implements PlantService {
     public Plant createOrUpdatePlant(Plant plant) {
         log.info("Create/update request received for: " + plant.toString());
 
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var username = authentication.getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         Optional<User> queriedUser = userRepository.findByUsername(username);
         queriedUser.ifPresent(plant::setUser);
 
@@ -72,7 +74,7 @@ public class PlantServiceImpl implements PlantService {
     }
 
     public void delete(Long id) throws NotFoundException {
-        var optionalPlant = plantRepository.findById(id);
+        Optional<Plant> optionalPlant = plantRepository.findById(id);
         optionalPlant.orElseThrow(() -> new NotFoundException(String.format("Plant for ID %d not found", id)));
 
         log.info("Deleting plant with ID " + id);
@@ -82,12 +84,12 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<Plant> findPlantsToBeWateredSoon(Long userId) {
-        var allPlants = plantRepository.findAllByUserId(userId);
-        var plantsToBeWatered = new ArrayList<Plant>();
+        List<Plant> allPlants = plantRepository.findAllByUserId(userId);
+        List<Plant> plantsToBeWatered = new ArrayList<>();
 
         log.info("Looking for plants that should be watered soon for userId: {}", userId);
         for (Plant plant : allPlants) {
-            var lastTimeWateredInDays = findWateringDifferenceInDays(plant.getWateringSchedule().getLastWateredDate(), plant.getWateringSchedule().getWateringInterval());
+            Integer lastTimeWateredInDays = findWateringDifferenceInDays(plant.getWateringSchedule().getLastWateredDate(), plant.getWateringSchedule().getWateringInterval());
 
             if (lastTimeWateredInDays <= SAFE_AMOUNT_OF_DAYS_IN_THE_FUTURE) {
                 plant.setWateringDifferenceInDays(lastTimeWateredInDays);
@@ -102,15 +104,15 @@ public class PlantServiceImpl implements PlantService {
     }
 
     private Integer findWateringDifferenceInDays(String lastWateredDate, Integer wateringInterval) {
-        var today = LocalDate.now();
-        var lwd = LocalDate.parse(lastWateredDate);
+        LocalDate today = LocalDate.now();
+        LocalDate lwd = LocalDate.parse(lastWateredDate);
 
         log.info("Today: " + today);
         log.info("Last watered date: " + lastWateredDate);
         log.info("Watering interval: " + wateringInterval);
 
         log.info("Counting days that remain to the closest watering");
-        var differenceInDays = (int) ChronoUnit.DAYS.between(today, lwd.plusDays(wateringInterval));
+        Integer differenceInDays = (int) ChronoUnit.DAYS.between(today, lwd.plusDays(wateringInterval));
 
         log.info("Difference is: " + differenceInDays + " days");
         return differenceInDays;
@@ -118,14 +120,14 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public Plant updateLastWateredDate(Plant plant) {
-        var date = Calendar.getInstance().getTime();
-        var today = DATE_FORMAT.format(date);
+        Date date = Calendar.getInstance().getTime();
+        String today = DATE_FORMAT.format(date);
 
         log.info("Setting last watered date to today");
         plant.getWateringSchedule().setLastWateredDate(today);
 
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var username = authentication.getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         Optional<User> queriedUser = userRepository.findByUsername(username);
         queriedUser.ifPresent(plant::setUser);
 

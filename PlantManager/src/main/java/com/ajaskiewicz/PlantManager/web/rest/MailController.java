@@ -1,5 +1,6 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
+import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.MailService;
 import com.ajaskiewicz.PlantManager.service.PlantService;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -32,7 +34,7 @@ public class MailController {
     public void sendReminder() throws MessagingException {
         Map<String, Object> props = new HashMap<>();
 
-        var usersList = userService.findAll();
+        List<User> usersList = userService.findAll();
 
         for (User value : usersList) {
             User user = userService.findById(value.getId());
@@ -41,7 +43,7 @@ public class MailController {
             String username = user.getUsername();
             String email = user.getEmail();
 
-            var plantsToBeWateredSoon = plantService.findPlantsToBeWateredSoon(userId);
+            List<Plant> plantsToBeWateredSoon = plantService.findPlantsToBeWateredSoon(userId);
 
             if (plantsToBeWateredSoon.isEmpty()) {
                 log.info("Nothing to be watered soon for user " + username + ". Reminder not sent.");
