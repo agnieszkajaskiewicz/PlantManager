@@ -1,14 +1,15 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
+import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.service.MailService;
 import com.ajaskiewicz.PlantManager.service.PlantService;
 import com.ajaskiewicz.PlantManager.service.UserService;
+import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
-import jakarta.mail.MessagingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,19 +34,24 @@ public class MailController {
 
         var usersList = userService.findAll();
 
-        for (var i = 0; i < usersList.size(); i++) {
+        for (User value : usersList) {
+            User user = userService.findById(value.getId());
 
-            var plantsToBeWateredSoon = plantService.findPlantsToBeWateredSoon(usersList.get(i).getId());
+            Long userId = user.getId();
+            String username = user.getUsername();
+            String email = user.getEmail();
+
+            var plantsToBeWateredSoon = plantService.findPlantsToBeWateredSoon(userId);
 
             if (plantsToBeWateredSoon.isEmpty()) {
-                log.info("Nothing to be watered soon for user: " + usersList.get(i).getUsername() + " Reminder not sent.");
+                log.info("Nothing to be watered soon for user " + username + ". Reminder not sent.");
             }
 
-            props.put("name", userService.findById(usersList.get(i).getId()).getUsername());
+            props.put("name", username);
             props.put("plants", plantsToBeWateredSoon);
 
-            mailService.sendMessageUsingThymeleafTemplate(userService.findById(usersList.get(i).getId()).getEmail(), "Plant Manager reminder", props);
-            log.info("Email reminder sent to username: " + usersList.get(i).getUsername());
+            mailService.sendMessageUsingThymeleafTemplate(email, "Plant Manager reminder", props);
+            log.info("Email reminder sent to user " + username);
         }
     }
 }

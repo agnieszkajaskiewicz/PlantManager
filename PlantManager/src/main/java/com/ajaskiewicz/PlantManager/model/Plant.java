@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Plant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String plantName;
 
@@ -50,7 +50,7 @@ public class Plant {
         this.wateringSchedule = new WateringSchedule(wateringInterval, lastWateredDate);
     }
 
-    public Plant(Integer id, String plantName, String roomName, Integer wateringInterval, String lastWateredDate) {
+    public Plant(Long id, String plantName, String roomName, Integer wateringInterval, String lastWateredDate) {
         this.id = id;
         this.plantName = plantName;
         this.room = new Room(roomName);

@@ -5,10 +5,8 @@ import com.ajaskiewicz.PlantManager.model.PlantCardDTO;
 import com.ajaskiewicz.PlantManager.model.PlantCreationDTO;
 import com.ajaskiewicz.PlantManager.model.mapper.PlantMapper;
 import com.ajaskiewicz.PlantManager.service.PlantService;
-import com.ajaskiewicz.PlantManager.service.RoomService;
-import com.ajaskiewicz.PlantManager.service.WateringScheduleService;
-import com.ajaskiewicz.PlantManager.service.UserService;
 import com.ajaskiewicz.PlantManager.service.SecurityService;
+import com.ajaskiewicz.PlantManager.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,8 +37,6 @@ class PlantControllerTest {
     private MockMvc mockMvc;
 
     private PlantService plantService;
-    private RoomService roomService;
-    private WateringScheduleService wateringScheduleService;
     private UserService userService;
     private SecurityService securityService;
     private PlantMapper plantMapper;
@@ -50,21 +46,19 @@ class PlantControllerTest {
     @BeforeEach
     void setUp() {
         plantService = mock(PlantService.class);
-        roomService = mock(RoomService.class);
-        wateringScheduleService = mock(WateringScheduleService.class);
         userService = mock(UserService.class);
         securityService = mock(SecurityService.class);
         plantMapper = mock(PlantMapper.class);
         openMocks(this);
-        plantController = new PlantController(plantService, roomService, wateringScheduleService, userService, securityService, plantMapper);
+        plantController = new PlantController(plantService, userService, securityService, plantMapper);
         mockMvc = MockMvcBuilders.standaloneSetup(plantController).build();
     }
 
     @Test
     void shouldGetPlantsForLoggedUser() throws Exception {
         //given
-        var loggedUserId = 52;
-        var id = 11;
+        var loggedUserId = 52L;
+        var id = 11L;
         var plantName = "Zdzisław";
         var plantEntity = new Plant();
         plantEntity.setId(id);
@@ -81,7 +75,7 @@ class PlantControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(id)))
+                .andExpect(jsonPath("$[0].id", is((int) id)))
                 .andExpect(jsonPath("$[0].plantName", is(plantName)));
         verify(userService).findIdOfLoggedUser();
         verify(plantService).findAllByUserId(loggedUserId);
@@ -92,7 +86,7 @@ class PlantControllerTest {
     @Test
     void shouldDeletePlantById() throws Exception {
         //given
-        var plantId = 12;
+        var plantId = 12L;
         //when && then
         mockMvc.perform(delete("/dashboard/deletePlant/v2/12"))
                 .andExpect(status().isOk());

@@ -12,13 +12,13 @@ public interface UserService {
 
     User findByUsername(String username);
 
-    User findById(Integer id);
+    User findById(Long id);
 
-    Integer findIdOfLoggedUser();
+    Long findIdOfLoggedUser();
 
     void updateResetPasswordToken(String token, String email);
 
-    User getByResetPasswordToken(String token);
+    User findByResetPasswordToken(String token);
 
     void updatePassword(User user, String newPassword);
 

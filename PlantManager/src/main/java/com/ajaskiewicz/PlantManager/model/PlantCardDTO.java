@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class PlantCardDTO {
-    private Integer id;
+    private Long id;
     private String plantName;
 }
