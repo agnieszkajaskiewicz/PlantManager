@@ -2,15 +2,17 @@ package com.ajaskiewicz.PlantManager.service;
 
 import com.ajaskiewicz.PlantManager.model.WateringSchedule;
 import com.ajaskiewicz.PlantManager.repository.WateringScheduleRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("wateringScheduleService")
 public class WateringScheduleServiceImpl implements WateringScheduleService {
 
-    private WateringScheduleRepository wateringScheduleRepository;
+    private final WateringScheduleRepository wateringScheduleRepository;
 
     @Autowired
     public WateringScheduleServiceImpl(WateringScheduleRepository wateringScheduleRepository) {
@@ -23,8 +25,9 @@ public class WateringScheduleServiceImpl implements WateringScheduleService {
     }
 
     @Override
-    public WateringSchedule find(Integer id) {
-        return wateringScheduleRepository.findById(id).get();
+    public WateringSchedule find(Integer id) throws NotFoundException {
+        Optional<WateringSchedule> wateringSchedule = wateringScheduleRepository.findById(id);
+        return wateringSchedule.orElseThrow(() -> new NotFoundException("Watering schedule with ID " + id + " not found"));
     }
 
     @Override
