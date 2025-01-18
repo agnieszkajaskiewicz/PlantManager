@@ -42,4 +42,10 @@ public class WateringSchedule {
         this.lastWateredDate = lastWateredDate;
     }
 
+    public WateringSchedule(Integer id, Integer wateringInterval, String lastWateredDate) {
+        this.id = id;
+        this.wateringInterval = wateringInterval;
+        this.lastWateredDate = lastWateredDate;
+    }
+
 }
