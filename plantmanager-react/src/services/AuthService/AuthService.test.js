@@ -1,15 +1,18 @@
+import { vi } from "vitest";
 import AuthService from "./AuthService";
 import axios from 'axios';
+import * as env from '../../config/env';
 
-jest.mock('axios');
+vi.mock('axios');
+vi.spyOn(env, 'getServerUrl').mockReturnValue('test_url');
 
 const localStorageMock = (() => {
     let store = {};
     return {
-        getItem: jest.fn((key) => store[key] || null),
-        setItem: jest.fn((key, value) => { store[key] = value.toString(); }),
-        removeItem: jest.fn((key) => { delete store[key]; }),
-        clear: jest.fn(() => { store = {}; })
+        getItem: vi.fn((key) => store[key] || null),
+        setItem: vi.fn((key, value) => { store[key] = value.toString(); }),
+        removeItem: vi.fn((key) => { delete store[key]; }),
+        clear: vi.fn(() => { store = {}; })
     };
 })();
 
@@ -24,8 +27,7 @@ describe('Auth Service', () => {
     const OLD_ENV = process.env;
 
     beforeEach(() => {
-        jest.clearAllMocks();
-        process.env = { REACT_APP_SERVER_URL: 'test_url'};
+        vi.clearAllMocks();
     });
 
     test('it should call backend on authenticate user operation', () => {

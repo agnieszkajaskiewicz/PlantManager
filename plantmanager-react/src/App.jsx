@@ -3,13 +3,13 @@ import Login from './components/Login/Login';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import Homepage from './components/Homepage/Homepage';
 import AppHeader from './components/AppHeader/AppHeader';
-import {DependencyProvider} from "./DependencyContext";
+import { DependencyProvider } from "./DependencyContext";
 import AuthService from "./services/AuthService/AuthService";
 import PlantService from "./services/PlantService/PlantService";
 import RegistrationService from "./services/RegistrationService/RegistrationService";
 import ValidationService from "./services/ValidationService/ValidationService";
 
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard";
 import PlantEditor from "./components/PlantEditor/PlantEditor";
 

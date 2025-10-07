@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import styles from './PlantCard.module.css';
 import {Card} from "react-bootstrap";
 import addIcon from "../../img/addIcon.png";

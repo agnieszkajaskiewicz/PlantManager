@@ -199,18 +199,20 @@ const Login = () => {
         <div className="mainContainer" data-testid="Login">
             <div>
                 <div className="formContainer">
-                    <Form.Check hidden={true} style={{display: 'none'}} inline id={signIn} name="choice"
-                                type="radio"
-                                defaultChecked={whichSelected === signIn} onChange={event => goToSubpage(event)}/>
-                    <label htmlFor={signIn}
-                                style={whichSelected === signIn ? selectedBorderStyle : unselectedBorderStyle}
-                                className={styles.choice}>Sign In</label>
-                    <Form.Check hidden={true} inline id={signUp} name="choice" type="radio"
-                                defaultChecked={whichSelected === signUp} onChange={event => goToSubpage(event)}/>
-                    <label htmlFor={signUp}
+                    <div className={styles.choicesContainer}>
+                        <Form.Check hidden={true} style={{display: 'none'}} inline id={signIn} name="choice"
+                                    type="radio"
+                                    defaultChecked={whichSelected === signIn} onChange={event => goToSubpage(event)}/>
+                        <label htmlFor={signIn}
+                                    style={whichSelected === signIn ? selectedBorderStyle : unselectedBorderStyle}
+                                    className={styles.choice}>Sign In</label>
+                        <Form.Check hidden={true} inline id={signUp} name="choice" type="radio"
+                                    defaultChecked={whichSelected === signUp} onChange={event => goToSubpage(event)}/>
+                        <label htmlFor={signUp}
                                 style={whichSelected === signUp ? selectedBorderStyle : unselectedBorderStyle}
                                 className={styles.choice}>Sign Up</label>
-                        {whichSelected === signIn ? signInForm : signUpForm}
+                                </div>
+                        {whichSelected === signIn ? signInForm : signUpForm}  
                 </div>
             </div>
         </div>

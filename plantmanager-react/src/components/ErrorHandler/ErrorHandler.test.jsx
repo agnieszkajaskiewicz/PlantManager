@@ -1,12 +1,14 @@
-import React from 'react';
 import {render, screen} from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import ErrorHandler from './ErrorHandler';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('<ErrorHandler />', () => {
   test('it should mount', () => {
-    render(<ErrorHandler />);
-    
+    render(<MemoryRouter>
+            <ErrorHandler />
+          </MemoryRouter>);
+  
     const errorHandler = screen.getByTestId('ErrorHandler');
 
     expect(errorHandler).toBeInTheDocument();

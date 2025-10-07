@@ -1,13 +1,12 @@
-import React from 'react';
 import {render, screen} from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import AppHeader from './AppHeader';
 
-const mockedUsedNavigate = jest.fn();
-const mockedUsedLocation = jest.fn();
+const mockedUsedNavigate = vi.fn();
+const mockedUsedLocation = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
+vi.mock('react-router-dom', () => ({
+    ...vi.importActual('react-router-dom'),
     useNavigate: () => mockedUsedNavigate,
     useLocation: () => mockedUsedLocation
 }));

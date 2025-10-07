@@ -1,8 +1,9 @@
-import axios from "axios"
+import axios from "axios";
+import { getServerUrl } from '../../config/env';
 
 const RegistrationService = {
     createUser: (username, password, repeatPassword, email) => {
-        const backendServerURL = process.env.REACT_APP_SERVER_URL;
+        const backendServerURL = `${getServerUrl()}`;
 
         if (username && password && repeatPassword && email) {
             const config = {

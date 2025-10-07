@@ -1,11 +1,13 @@
-import React from 'react';
 import {render, screen} from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import PlantEditor from './PlantEditor';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('<PlantEditor />', () => {
   test('it should mount', () => {
-    render(<PlantEditor />);
+    render(<MemoryRouter>
+            <PlantEditor />
+          </MemoryRouter>);
     
     const plantEditor = screen.getByTestId('PlantEditor');
 

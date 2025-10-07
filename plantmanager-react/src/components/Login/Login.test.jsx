@@ -1,19 +1,25 @@
-import React from 'react';
 import {render, screen} from '@testing-library/react';
-import renderer from 'react-test-renderer';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import Login from './Login';
+import { MemoryRouter } from 'react-router-dom';
+import { vi } from 'vitest';
 
-const mockedUsedNavigate = jest.fn();
+const mockedUsedNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: () => mockedUsedNavigate
-}));
+vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom');
+    return {
+        ...actual,
+        useNavigate: () => mockedUsedNavigate,
+    }
+});
+
 
 describe('<Login />', () => {
     test('it should mount', () => {
-        render(<Login/>);
+        render(<MemoryRouter>
+                <Login />
+            </MemoryRouter>);
 
         const login = screen.getByTestId('Login');
 
@@ -22,7 +28,9 @@ describe('<Login />', () => {
 
     test('it should open \'sing up\' panel on \'sing up\' label click', () => {
             //given
-            render(<Login/>);
+            render(<MemoryRouter>
+                <Login />
+            </MemoryRouter>);
             const signUpLabel = screen.getByText('Sign Up', {selector: 'label'});
             //when
             signUpLabel.click();

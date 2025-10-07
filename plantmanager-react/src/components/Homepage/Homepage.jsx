@@ -1,5 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styles from './Homepage.module.css';
 import {useNavigate} from "react-router-dom";
 import '../../App.css';

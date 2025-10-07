@@ -1,7 +1,13 @@
+.choicesContainer {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
 .choice {
     font-size: 22px;
     padding-bottom: 5px;
-    margin: 0 15px 10px 0;
+    margin: 0 7.5px 10px 7.5px;
     display: inline-block;
     text-transform: uppercase;
 }

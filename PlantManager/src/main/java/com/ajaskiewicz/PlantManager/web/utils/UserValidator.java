@@ -1,21 +1,26 @@
 package com.ajaskiewicz.PlantManager.web.utils;
 
-import com.ajaskiewicz.PlantManager.model.User;
-import com.ajaskiewicz.PlantManager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import com.ajaskiewicz.PlantManager.model.User;
+import com.ajaskiewicz.PlantManager.service.UserService;
+
 @Component
 public class UserValidator implements Validator {
 
     private final UserService userService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public UserValidator(UserService userService) {
+    public UserValidator(UserService userService, MessageSource messageSource) {
         this.userService = userService;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -27,18 +32,22 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 
-        if (userService.findByUsername(user.getUsername()) != null) {
-            errors.rejectValue("username", "Duplicate", "Duplicate.userForm.username");
+        if (userService.existsByUsername(user.getUsername())) {
+            errors.rejectValue("username", "Duplicate.userForm.username", getMessage("Duplicate.userForm.username"));
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "repeatPassword", "NotEmpty");
         if (!user.getRepeatPassword().equals(user.getPassword())) {
-            errors.rejectValue("repeatPassword", "Not matched", "Diff.userForm.repeatPassword");
+            errors.rejectValue("repeatPassword", "Diff.userForm.repeatPassword", getMessage("Diff.userForm.repeatPassword"));
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty");
-        if (userService.findByEmail(user.getEmail()) != null) {
-            errors.rejectValue("email", "Duplicate", "Duplicate.userForm.email");
+        if (userService.existsByEmail(user.getEmail())) {
+            errors.rejectValue("email", "Duplicate.userForm.email", getMessage("Duplicate.userForm.email"));
         }
+    }
+
+    private String getMessage(String code) {
+        return messageSource.getMessage(code, null, code, LocaleContextHolder.getLocale());
     }
 }
