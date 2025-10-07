@@ -1,9 +1,5 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
-import com.ajaskiewicz.PlantManager.model.User;
-import com.ajaskiewicz.PlantManager.service.SecurityService;
-import com.ajaskiewicz.PlantManager.service.UserService;
-import com.ajaskiewicz.PlantManager.web.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,16 +11,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.ajaskiewicz.PlantManager.model.User;
+import com.ajaskiewicz.PlantManager.service.SecurityService;
+import com.ajaskiewicz.PlantManager.service.UserService;
+import com.ajaskiewicz.PlantManager.web.utils.UserValidator;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
 
-    private UserService userService;
-    private SecurityService securityService;
-    private UserValidator userValidator;
+    private final UserService userService;
+    private final SecurityService securityService;
+    private final UserValidator userValidator;
 
     @Autowired
     public UserController(UserService userService, SecurityService securityService, UserValidator userValidator) {

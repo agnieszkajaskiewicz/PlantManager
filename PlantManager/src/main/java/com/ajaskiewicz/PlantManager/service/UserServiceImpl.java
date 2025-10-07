@@ -1,9 +1,9 @@
 package com.ajaskiewicz.PlantManager.service;
 
-import com.ajaskiewicz.PlantManager.model.User;
-import com.ajaskiewicz.PlantManager.repository.RoleRepository;
-import com.ajaskiewicz.PlantManager.repository.UserRepository;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,9 +11,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import com.ajaskiewicz.PlantManager.model.User;
+import com.ajaskiewicz.PlantManager.repository.RoleRepository;
+import com.ajaskiewicz.PlantManager.repository.UserRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -106,5 +108,15 @@ public class UserServiceImpl implements UserService {
 
         user.setResetPasswordToken(null);
         userRepository.save(user);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 }

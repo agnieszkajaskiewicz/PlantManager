@@ -1,8 +1,8 @@
 package com.ajaskiewicz.PlantManager.service;
 
-import com.ajaskiewicz.PlantManager.model.User;
-
 import java.util.List;
+
+import com.ajaskiewicz.PlantManager.model.User;
 
 public interface UserService {
 
@@ -23,4 +23,8 @@ public interface UserService {
     void updatePassword(User user, String newPassword);
 
     User findByEmail(String email);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }

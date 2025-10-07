@@ -1,13 +1,13 @@
-import React from 'react';
 import {render, screen, within} from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import PlantCard from './PlantCard';
+import { vi } from 'vitest';
 
 const mockedPlantService = {
-  deletePlantById: (plantId) => new Promise((resolve => jest.fn()))
+  deletePlantById: (plantId) => new Promise((resolve => vi.fn()))
 };
 
-jest.mock('../../DependencyContext', () => ({
+vi.mock('../../DependencyContext', () => ({
   useDependencies: () => ({
     plantService: mockedPlantService
   })
@@ -69,7 +69,7 @@ describe('<PlantCard />', () => {
     }
     render(<PlantCard plantData={plantData} />)
     const removeButton = screen.getByTestId('trashbin');
-    jest.spyOn(mockedPlantService, 'deletePlantById');
+    vi.spyOn(mockedPlantService, 'deletePlantById');
     //when
     removeButton.click();
     //then

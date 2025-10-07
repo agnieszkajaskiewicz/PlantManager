@@ -1,16 +1,17 @@
+import { vi } from "vitest";
 import PlantService from "./PlantService";
 import axios from 'axios';
+import * as env from '../../config/env';
 
-
-jest.mock('axios');
+vi.mock('axios');
+vi.spyOn(env, 'getServerUrl').mockReturnValue('test_url');
 
 describe('Plant Service', () => {
     const OLD_ENV = process.env;
 
     beforeEach(() => {
-        jest.resetModules();
-        jest.resetAllMocks();
-        process.env = {REACT_APP_SERVER_URL: 'test_url'};
+        vi.resetModules();
+        vi.clearAllMocks();
     });
 
     test('it should call backend on plant fetch operation', () => {

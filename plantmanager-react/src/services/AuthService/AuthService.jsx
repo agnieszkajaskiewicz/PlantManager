@@ -1,8 +1,9 @@
-import axios from "axios"
+import axios from "axios";
+import { getServerUrl } from '../../config/env';
 
 const AuthService = {
     authUser: (username, password) => {
-        const backendServerURL = process.env.REACT_APP_SERVER_URL;
+        const backendServerURL = `${getServerUrl()}`;
 
         if (username && password) {
                 const config = {
@@ -27,7 +28,7 @@ const AuthService = {
         },
 
     logoutUser: () => {
-        const backendServerURL = process.env.REACT_APP_SERVER_URL;
+        const backendServerURL = `${getServerUrl()}`;
     
         const config = {
             withCredentials: true

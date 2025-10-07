@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styles from './ForgotPassword.module.css';
 import '../../App.css';
 import Form from 'react-bootstrap/Form';

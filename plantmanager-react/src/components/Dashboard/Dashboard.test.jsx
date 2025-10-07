@@ -1,13 +1,15 @@
-import React from 'react';
 import {render, screen} from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import Dashboard from './Dashboard';
+import { MemoryRouter } from 'react-router-dom';
 
 //todo dodać mockowanie strzału po rośliny do backendu
 
 describe('<Dashboard />', () => {
   test('it should mount', () => {
-    render(<Dashboard />);
+    render(<MemoryRouter>
+            <Dashboard />
+          </MemoryRouter>);
     
     const dashboard = screen.getByTestId('Dashboard');
 

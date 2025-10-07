@@ -1,7 +1,5 @@
 package com.ajaskiewicz.PlantManager.service;
 
-import com.ajaskiewicz.PlantManager.web.JwtTokenProvider;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +9,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import com.ajaskiewicz.PlantManager.web.JwtTokenProvider;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
