@@ -1,11 +1,14 @@
 package com.ajaskiewicz.PlantManager.exceptions;
 
+import javassist.NotFoundException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -32,5 +35,10 @@ public class ControllerErrorHandler extends ResponseEntityExceptionHandler {
         fieldErrorResponse.setFieldErrors(fieldErrors);
         fieldErrorResponse.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(fieldErrorResponse, status);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Object> handleNotFoundException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

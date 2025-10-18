@@ -1,16 +1,9 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
-import com.ajaskiewicz.PlantManager.model.Plant;
-import com.ajaskiewicz.PlantManager.model.PlantCardDTO;
-import com.ajaskiewicz.PlantManager.model.PlantCreationDTO;
-import com.ajaskiewicz.PlantManager.model.mapper.PlantMapper;
-import com.ajaskiewicz.PlantManager.service.PlantService;
-import com.ajaskiewicz.PlantManager.service.SecurityService;
-import com.ajaskiewicz.PlantManager.service.UserService;
-import com.ajaskiewicz.PlantManager.web.utils.FileDeleteUtil;
-import com.ajaskiewicz.PlantManager.web.utils.FileUploadUtil;
-import jakarta.validation.Valid;
-import javassist.NotFoundException;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,18 +14,25 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.ajaskiewicz.PlantManager.model.Plant;
+import com.ajaskiewicz.PlantManager.model.PlantCardDTO;
+import com.ajaskiewicz.PlantManager.model.PlantCreationDTO;
+import com.ajaskiewicz.PlantManager.model.mapper.PlantMapper;
+import com.ajaskiewicz.PlantManager.service.PlantService;
+import com.ajaskiewicz.PlantManager.service.SecurityService;
+import com.ajaskiewicz.PlantManager.service.UserService;
+import com.ajaskiewicz.PlantManager.web.utils.FileDeleteUtil;
+import com.ajaskiewicz.PlantManager.web.utils.FileUploadUtil;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
+import jakarta.validation.Valid;
+import javassist.NotFoundException;
 
 @Controller
 @RequestMapping(value = "/dashboard")
@@ -68,9 +68,20 @@ public class PlantController {
         List<Plant> plants = plantService.findAllByUserId(userService.findIdOfLoggedUser());
         List<PlantCardDTO> plantDtos = plants.stream()
                 .map(plantMapper::plantToPlantCardDto)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(plantDtos);
+    }
+
+    @GetMapping(value = "/v2/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PlantCardDTO> getPlantByIdForLoggedUser(@PathVariable("id") Long id) throws NotFoundException {
+        Plant plant = plantService.find(id);
+        if (!plant.getUser().getId().equals(userService.findIdOfLoggedUser())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        PlantCardDTO plantDto = plantMapper.plantToPlantCardDto(plant);
+        return ResponseEntity.ok(plantDto);
     }
 
     @RequestMapping(path = {"/editPlant", "/editPlant/{id}"}) // old endpoint, to be removed
@@ -87,6 +98,22 @@ public class PlantController {
         }
 
         return "editPage";
+    }
+
+    @PutMapping(path = "/updatePlant/v2/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PlantCardDTO> updatePlantByIdV2(@PathVariable("id") Long id, @RequestBody @Valid PlantCreationDTO plantCreationDTO) throws NotFoundException {
+        Plant existingPlant = plantService.find(id);
+
+        if (!existingPlant.getUser().getId().equals(userService.findIdOfLoggedUser())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        plantMapper.updatePlantFromDto(plantCreationDTO, existingPlant);
+
+        Plant savedPlant = plantService.createOrUpdatePlant(existingPlant);
+        PlantCardDTO plantDto = plantMapper.plantToPlantCardDto(savedPlant);
+
+        return ResponseEntity.ok(plantDto);
     }
 
     @RequestMapping(path = "/addPlant", method = RequestMethod.POST) // old endpoint, to be removed
@@ -110,16 +137,15 @@ public class PlantController {
         return "redirect:/dashboard";
     }
 
-    @PostMapping(path = "/addPlant/v2", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Plant> createPlant(@RequestBody @Valid PlantCreationDTO plantCreationDTO) { //todo p-podobnie inne DTO przy zwracaniu
+    @PostMapping(path = "/addPlant/v2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PlantCardDTO> createPlant(@RequestBody @Valid PlantCreationDTO plantCreationDTO) {
         Plant plantToSave = plantMapper.plantToPlantEntity(plantCreationDTO);
-
         Plant savedPlant = plantService.createOrUpdatePlant(plantToSave);
-
+        PlantCardDTO plantDto = plantMapper.plantToPlantCardDto(savedPlant);
+        
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .contentType(APPLICATION_JSON)
-                .body(savedPlant);
+                .body(plantDto);
     }
 
     @RequestMapping(value = "/deletePlant/{id}") // old endpoint, to be removed
@@ -142,6 +168,10 @@ public class PlantController {
 
     @DeleteMapping(value = "/deletePlant/v2/{id}")
     public ResponseEntity<?> deletePlantByIdV2(@PathVariable("id") Long id) throws IOException, NotFoundException {
+        Plant plant = plantService.find(id);
+        if (!plant.getUser().getId().equals(userService.findIdOfLoggedUser())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         deletePlantImage(id);
         plantService.delete(id);
         return ResponseEntity.ok().build();
