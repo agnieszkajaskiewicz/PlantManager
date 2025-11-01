@@ -7,8 +7,13 @@ import ErrorHandler from "../ErrorHandler/ErrorHandler";
 import {useDependencies} from '../../DependencyContext';
 
 const Dashboard = () => {
-    const [open, setOpen] = useState(true);
+    const [openYourPlants, setOpenYourPlants] = useState(true);
+    const [openToBeWatered, setOpenToBeWatered] = useState(true);
     const [data, setData] = useState({
+        plants: [],
+        isFetching: false
+    });
+    const [plantsToBeWatered, setPlantsToBeWatered] = useState({
         plants: [],
         isFetching: false
     });
@@ -26,32 +31,58 @@ const Dashboard = () => {
                 //todo obsługa błędów
             }
         };
+        
+        const fetchPlantsToBeWatered = async () => {
+            try {
+                setPlantsToBeWatered({plants: plantsToBeWatered.plants, isFetching: true});
+                const response = await plantService.fetchPlantsToBeWateredSoon();
+                setPlantsToBeWatered({plants: response.data, isFetching: false});
+            } catch (exception) {
+                console.log(exception);
+                //todo obsługa błędów
+            }
+        };
+        
         fetchPlantsForLoggedUser();
+        fetchPlantsToBeWatered();
     }, []);
 
     const plantCards = data.plants.map((plant, index) => <PlantCard key={index} plantData={plant}
                                                                     setApiError={setApiError}/>);
+    
+    const plantsToBeWateredCards = plantsToBeWatered.plants.map((plant, index) => 
+        <PlantCard key={index} plantData={plant} setApiError={setApiError}/>);
 
     return (
         <div className={styles.Dashboard} data-testid="Dashboard">
             {apiError !== '' && <ErrorHandler message={apiError} />}
-            <div className={styles.toBeWatered}>
-                <span>See plants that should be watered in next 3 days</span>
+            
+            <div className={styles.toBeWatered} data-toggle="collapse" data-target="#plantsToBeWatered">
+                <input id="collapseCheckToBeWatered" className={styles.toggle} hidden={true} type="checkbox"
+                       defaultChecked={true}/>
+                <label htmlFor="collapseCheckToBeWatered" className={styles.lblToggle} 
+                       onClick={() => setOpenToBeWatered(!openToBeWatered)}>
+                    Plants to be watered soon (next 3 days):
+                </label>
             </div>
+            <Collapse in={openToBeWatered}>
+                <div className={styles.container} id="plantsToBeWatered">
+                    {plantsToBeWateredCards.length > 0 ? plantsToBeWateredCards : 
+                        <div className={styles.emptyMessage}>No plants need watering in the next 3 days</div>}
+                </div>
+            </Collapse>
+            
             <br/>
             <div className={styles.toBeWatered} data-toggle="collapse" data-target="#plants">
                 <input id="collapseCheck" className={styles.toggle} hidden={true} type="checkbox"
-                       defaultChecked={false}/>
-                <label htmlFor="collapseCheck" className={styles.lblToggle} onClick={() => setOpen(!open)}>Your
-                    plants:</label>
+                       defaultChecked={true}/>
+                <label htmlFor="collapseCheck" className={styles.lblToggle} 
+                       onClick={() => setOpenYourPlants(!openYourPlants)}>Your plants:</label>
             </div>
-            <Collapse in={open}>
+            <Collapse in={openYourPlants}>
                 <div className={styles.container} id="plants">
                     {plantCards}
-                    <PlantCard plantData={{
-                        plantName: 'Pejotl'
-                    }} setApiError={setApiError} />
-                    <PlantCard plantData={null}/>
+                    <PlantCard plantData={null} setApiError={setApiError}/>
                 </div>
             </Collapse>
 

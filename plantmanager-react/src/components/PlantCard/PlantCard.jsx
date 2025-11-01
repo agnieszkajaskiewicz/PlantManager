@@ -4,12 +4,14 @@ import {Card} from "react-bootstrap";
 import addIcon from "../../img/addIcon.png";
 import bin from "../../img/bin.png";
 import {useDependencies} from '../../DependencyContext';
+import {useNavigate} from 'react-router-dom';
 //todo responsywny rozmiar czcionki
 //todo responsywna szerokość, wysokość przy nadmiernym skurczeniu
 
 const PlantCard = (props) => {
     const [isDeleted, setIsDeleted] = useState(false);
     const {plantService} = useDependencies();
+    const navigate = useNavigate();
 
     const deletePlant = (plantId) => {
         plantService.deletePlantById(plantId)
@@ -20,9 +22,18 @@ const PlantCard = (props) => {
                 setIsDeleted(true);
             })
             .catch(error => {
-                const message = error.response.data.message === ''  ? 'Something went wrong :(' : error.response.data.message;
+                console.error('Error deleting plant:', error);
+                const message = error.response?.data?.message || 'Something went wrong :(';
                 props.setApiError(message);
             });
+    }
+
+    const handleEditOrAdd = () => {
+        if (props.plantData) {
+            navigate(`/dashboard/edit/${props.plantData.id}`);
+        } else {
+            navigate('/dashboard/add');
+        }
     }
 
     const containerStyle = {
@@ -35,7 +46,8 @@ const PlantCard = (props) => {
             <Card.Body className={styles.plantCard}>
                 <Card.Title data-testid="PlantName">{props.plantData ? props.plantData.plantName : 'Your new plant'}</Card.Title>
                 <button className="appButton"
-                        style={{width: 'auto', display: 'inline'}}>{props.plantData ? 'EDIT' : 'ADD'}</button>
+                        style={{width: 'auto', display: 'inline'}}
+                        onClick={handleEditOrAdd}>{props.plantData ? 'EDIT' : 'ADD'}</button>
                 {(props.plantData) &&
                     <img src={bin} alt="Remove plant" className={styles.removeImg}
                          onClick={() => deletePlant(props.plantData.id)} data-testid="trashbin"/>

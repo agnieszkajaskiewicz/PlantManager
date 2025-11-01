@@ -7,10 +7,16 @@ import org.mapstruct.MappingTarget;
 import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.model.PlantCardDTO;
 import com.ajaskiewicz.PlantManager.model.PlantCreationDTO;
+import com.ajaskiewicz.PlantManager.model.PlantDetailDTO;
 
 @Mapper(componentModel = "spring")
 public interface PlantMapper {
     PlantCardDTO plantToPlantCardDto(Plant plant);
+
+    @Mapping(source = "room.roomName", target = "roomName")
+    @Mapping(source = "wateringSchedule.wateringInterval", target = "wateringDays")
+    @Mapping(source = "wateringSchedule.lastWateredDate", target = "lastWateringDate")
+    PlantDetailDTO plantToPlantDetailDto(Plant plant);
 
     @Mapping(target = "imageName", ignore = true)
     @Mapping(target = "id", ignore = true)

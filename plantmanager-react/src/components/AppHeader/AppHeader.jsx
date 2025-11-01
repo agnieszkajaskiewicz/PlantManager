@@ -22,17 +22,24 @@ const AppHeader = () => {
     }
 
     const username = localStorage.getItem('username');
+    const isLoggedIn = !!username;
+
+    const handleLogoClick = () => {
+        if (isLoggedIn) {
+            navigate('/dashboard');
+        } else {
+            navigate('/');
+        }
+    }
 
     const appHeader = <>
-        <div>
-            <img id="logo" src={logo} className={styles.appLogo} alt="logo" onClick={() => navigate('/')}/>
-        </div>
+        <img id="logo" src={logo} className={styles.appLogo} alt="logo" onClick={handleLogoClick}/>
     </>
 
     const userHeader = <>
         <div className={styles.userHeader} data-testid="AppHeader">
             <div className={styles.logoPanel}>
-                <img id="logo" src={logo} className={styles.appLogoLeft} alt="logo" onClick={() => navigate('/dashboard')}/>
+                <img id="logo" src={logo} className={styles.appLogoDashboard} alt="logo" onClick={handleLogoClick}/>
             </div>
             <div className={styles.userPanel}>
                 <div>
@@ -46,7 +53,7 @@ const AppHeader = () => {
     </>
 
     return (
-        <div data-testid="AppHeader">
+        <div className={styles.appHeaderWrapper} data-testid="AppHeader">
             {pathname === '/dashboard' ? userHeader : appHeader}
         </div>
     )
