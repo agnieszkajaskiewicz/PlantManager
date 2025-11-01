@@ -1,6 +1,7 @@
 import './App.css';
 import Login from './components/Login/Login';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
+import ResetPassword from './components/ResetPassword/ResetPassword';
 import Homepage from './components/Homepage/Homepage';
 import AppHeader from './components/AppHeader/AppHeader';
 import { DependencyProvider } from "./DependencyContext";
@@ -29,6 +30,7 @@ function App() {
                         <Route path="/" element={<Homepage/>}/>
                         <Route path="/login/:where" element={<Login/>}/>
                         <Route path="/forgotPassword" element={<ForgotPassword/>}/>
+                        <Route path="/resetPassword" element={<ResetPassword/>}/>
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/dashboard/add" element={<PlantEditor/>}/>
                     </Routes>
