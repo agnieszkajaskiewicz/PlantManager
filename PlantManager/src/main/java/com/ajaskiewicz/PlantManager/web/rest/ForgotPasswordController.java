@@ -205,11 +205,10 @@ public class ForgotPasswordController {
         }
     }
 
+    @Setter
+    @Getter
     public static class TokenValidationResponse {
         private boolean valid;
-
-        @Setter
-        @Getter
         private String message;
 
         public TokenValidationResponse(boolean valid, String message) {
