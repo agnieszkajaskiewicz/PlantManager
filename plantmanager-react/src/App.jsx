@@ -33,6 +33,7 @@ function App() {
                         <Route path="/resetPassword" element={<ResetPassword/>}/>
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/dashboard/add" element={<PlantEditor/>}/>
+                        <Route path="/dashboard/edit/:id" element={<PlantEditor/>}/>
                     </Routes>
                 </div>
             </DependencyProvider>

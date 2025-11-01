@@ -1,63 +1,74 @@
+.appHeaderWrapper {
+    margin: 0;
+    padding: 20px;
+}
+
 .userHeader {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
 @media screen and (min-width: 641px) {
     .appLogo {
         height: 200px;
         width: auto;
-        margin: 40px auto;
+        margin: 0 auto;
+        display: block;
         cursor: pointer;
     }
 
-    .appLogoLeft {
+    .appLogoDashboard {
         height: 200px;
         width: auto;
-        position: relative;
         cursor: pointer;
     }
 
     .logoPanel {
-        width: 200px;
-        height: 200px;
-        margin: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
     }
     
     .userPanel {
+        position: absolute;
+        right: 0;
         width: 450px;
         height: 200px;
-        margin: 20px;
         text-align: right;
     }
 }
 
 @media screen and (max-width: 640px) {
     .appLogo {
-          height: 120px;
-          width: auto;
-          margin-bottom: 20px;
-          margin-top: 20px;
-          cursor: pointer;
-    }
-
-    .appLogoLeft {
         height: 120px;
         width: auto;
-        position: relative;
+        margin: 0 auto;
+        display: block;
+        cursor: pointer;
+    }
+
+    .appLogoDashboard {
+        height: 120px;
+        width: auto;
         cursor: pointer;
     }
 
     .logoPanel {
-        width: 120px;
-        height: 120px;
-        margin: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
     }
     
     .userPanel {
+        position: absolute;
+        right: 0;
         width: 200px;
         height: 120px;
-        margin: 20px;
+        text-align: right;
     }
 }
 

@@ -1,16 +1,5 @@
 package com.ajaskiewicz.PlantManager.service;
 
-import com.ajaskiewicz.PlantManager.model.Plant;
-import com.ajaskiewicz.PlantManager.model.User;
-import com.ajaskiewicz.PlantManager.repository.PlantRepository;
-import com.ajaskiewicz.PlantManager.repository.UserRepository;
-import javassist.NotFoundException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -20,6 +9,20 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ajaskiewicz.PlantManager.model.Plant;
+import com.ajaskiewicz.PlantManager.model.User;
+import com.ajaskiewicz.PlantManager.repository.PlantRepository;
+import com.ajaskiewicz.PlantManager.repository.UserRepository;
+
+import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 @Service("plantService")
 @Slf4j
@@ -73,6 +76,7 @@ public class PlantServiceImpl implements PlantService {
         return plant;
     }
 
+    @Transactional
     public void delete(Long id) throws NotFoundException {
         Optional<Plant> optionalPlant = plantRepository.findById(id);
         optionalPlant.orElseThrow(() -> new NotFoundException(String.format("Plant for ID %d not found", id)));

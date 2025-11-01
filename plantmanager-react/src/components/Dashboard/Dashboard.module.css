@@ -23,6 +23,14 @@
     padding: .5rem 1rem;
 }
 
+.emptyMessage {
+    width: 100%;
+    text-align: center;
+    padding: 2rem;
+    color: rgba(255,255,255,0.7);
+    font-style: italic;
+}
+
 .lblToggle {
     display: block;
     font-size: 1.2rem;

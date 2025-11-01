@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.model.PlantCardDTO;
 import com.ajaskiewicz.PlantManager.model.PlantCreationDTO;
+import com.ajaskiewicz.PlantManager.model.PlantDetailDTO;
 import com.ajaskiewicz.PlantManager.model.mapper.PlantMapper;
 import com.ajaskiewicz.PlantManager.service.PlantService;
 import com.ajaskiewicz.PlantManager.service.SecurityService;
@@ -64,6 +66,7 @@ public class PlantController {
     }
 
     @GetMapping(value = "/v2", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<List<PlantCardDTO>> getPlantsForLoggedUser() {
         List<Plant> plants = plantService.findAllByUserId(userService.findIdOfLoggedUser());
         List<PlantCardDTO> plantDtos = plants.stream()
@@ -74,14 +77,25 @@ public class PlantController {
     }
 
     @GetMapping(value = "/v2/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PlantCardDTO> getPlantByIdForLoggedUser(@PathVariable("id") Long id) throws NotFoundException {
+    @ResponseBody
+    public ResponseEntity<PlantDetailDTO> getPlantByIdForLoggedUser(@PathVariable("id") Long id) throws NotFoundException {
         Plant plant = plantService.find(id);
         if (!plant.getUser().getId().equals(userService.findIdOfLoggedUser())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        PlantCardDTO plantDto = plantMapper.plantToPlantCardDto(plant);
+        PlantDetailDTO plantDto = plantMapper.plantToPlantDetailDto(plant);
         return ResponseEntity.ok(plantDto);
+    }
+
+    @GetMapping(value = "/v2/toBeWateredSoon", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<List<PlantCardDTO>> getPlantsToBeWateredSoonForLoggedUser() {
+        List<Plant> plants = plantService.findPlantsToBeWateredSoon(userService.findIdOfLoggedUser());
+        List<PlantCardDTO> plantDtos = plants.stream()
+                .map(plantMapper::plantToPlantCardDto)
+                .toList();
+        return ResponseEntity.ok(plantDtos);
     }
 
     @RequestMapping(path = {"/editPlant", "/editPlant/{id}"}) // old endpoint, to be removed
@@ -101,6 +115,7 @@ public class PlantController {
     }
 
     @PutMapping(path = "/updatePlant/v2/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<PlantCardDTO> updatePlantByIdV2(@PathVariable("id") Long id, @RequestBody @Valid PlantCreationDTO plantCreationDTO) throws NotFoundException {
         Plant existingPlant = plantService.find(id);
 
@@ -138,6 +153,7 @@ public class PlantController {
     }
 
     @PostMapping(path = "/addPlant/v2", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<PlantCardDTO> createPlant(@RequestBody @Valid PlantCreationDTO plantCreationDTO) {
         Plant plantToSave = plantMapper.plantToPlantEntity(plantCreationDTO);
         Plant savedPlant = plantService.createOrUpdatePlant(plantToSave);
@@ -167,6 +183,7 @@ public class PlantController {
     }
 
     @DeleteMapping(value = "/deletePlant/v2/{id}")
+    @ResponseBody
     public ResponseEntity<?> deletePlantByIdV2(@PathVariable("id") Long id) throws IOException, NotFoundException {
         Plant plant = plantService.find(id);
         if (!plant.getUser().getId().equals(userService.findIdOfLoggedUser())) {

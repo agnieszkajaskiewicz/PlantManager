@@ -1,20 +1,72 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Form from 'react-bootstrap/Form';
 import styles from './PlantEditor.module.css';
 
-import {Button, Dropdown, Modal} from "react-bootstrap";
+import {Dropdown} from "react-bootstrap";
 import addIcon from "../../img/addIcon.png";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {useDependencies} from '../../DependencyContext';
 
 const PlantEditor = () => {
         const [plantName, setPlantName] = useState('');
         const [roomName, setRoomName] = useState('');
         const [startDate, setStartDate] = useState(new Date());
         const [wateringDays, setWateringDays] = useState(0);
+        const [isLoading, setIsLoading] = useState(false);
+        const [error, setError] = useState('');
 
         const navigate = useNavigate();
+        const {id} = useParams();
+        const {plantService} = useDependencies();
+        const isEditMode = !!id;
+
+        useEffect(() => {
+            if (isEditMode) {
+                const fetchPlantData = async () => {
+                    try {
+                        setIsLoading(true);
+                        const response = await plantService.fetchPlantById(id);
+                        const plant = response.data;
+                        setPlantName(plant.plantName || '');
+                        setRoomName(plant.roomName || '');
+                        setWateringDays(plant.wateringDays || 0);
+                        if (plant.lastWateringDate) {
+                            setStartDate(new Date(plant.lastWateringDate));
+                        }
+                        setIsLoading(false);
+                    } catch (exception) {
+                        console.error('Error fetching plant:', exception);
+                        setError('Failed to load plant data');
+                        setIsLoading(false);
+                    }
+                };
+                fetchPlantData();
+            }
+        }, [id, isEditMode]);
+
+        const handleSubmit = async () => {
+            try {
+                setIsLoading(true);
+                setError('');
+                
+                const lastWateringDate = startDate.toISOString().split('T')[0];
+                
+                if (isEditMode) {
+                    await plantService.updatePlant(id, plantName, roomName, lastWateringDate, wateringDays);
+                } else {
+                    await plantService.createNewPlant(plantName, roomName, lastWateringDate, wateringDays);
+                }
+                
+                setIsLoading(false);
+                navigate('/dashboard');
+            } catch (exception) {
+                console.error('Error saving plant:', exception);
+                setError('Failed to save plant');
+                setIsLoading(false);
+            }
+        };
 
         const generateRange = (size, startAt = 0) => {
             return [...Array(size).keys()].map(i => i + startAt);
@@ -34,60 +86,67 @@ const PlantEditor = () => {
         </Dropdown>;
 
         return (
-            <div className={styles.PlantEditor} data-testid="PlantEditor">
-                <Form className="formContainer">
-                    <Form.Group controlId="plantBasics">
-                        <Form.Label>Plant name</Form.Label>
-                        <Form.Control className={styles.userInput} type="text" placeholder="Enter plant name"/>
-                        <Form.Text>
-                            Get your name right, but don't worry, you can always edit it later
-                        </Form.Text>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Room</Form.Label>
-                        <Form.Control className={styles.userInput} type="text" placeholder="Enter plant room"/>
-                        <Form.Text>
-                            Enter the room, in which you take care of your lovely plant
-                        </Form.Text>
-                    </Form.Group>
-                    <br/>
-                    <Form.Label>
-                        Care schedule
-                    </Form.Label>
-                    <Form.Group>
-                        <Form.Label style={{marginBottom: '0'}}>Water every {wateringDaysDropdown} days
+            <div className="mainContainer" data-testid="PlantEditor">
+                <div>
+                    <div className={`formContainer ${styles.formContainerTall}`}>
+                        {error && <div className="alert alert-danger">{error}</div>}
+                        <Form.Group controlId="plantBasics">
+                            <Form.Label className="formLabel">Plant name</Form.Label>
+                            <Form.Control 
+                                className="formInput" 
+                                type="text" 
+                                placeholder="Enter plant name"
+                                value={plantName}
+                                onChange={(e) => setPlantName(e.target.value)}
+                                disabled={isLoading}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label className="formLabel">Room</Form.Label>
+                            <Form.Control 
+                                className="formInput" 
+                                type="text" 
+                                placeholder="Enter plant room"
+                                value={roomName}
+                                onChange={(e) => setRoomName(e.target.value)}
+                                disabled={isLoading}
+                            />
+                        </Form.Group>
+                        
+                        <Form.Label className="formLabel" style={{marginTop: '2em'}}>
+                            Care schedule
                         </Form.Label>
-                        <br/>
-                        <Form.Text>
-                            How often should you water your lovely plant
-                        </Form.Text>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Last watered </Form.Label> <DatePicker className={styles.datepicker}
-                                                                           selected={startDate}
-                                                                           onChange={(date) => setStartDate(date)}/>
-                        <br/>
-                        <Form.Text>
-                            When was the last time you watered the plant
-                        </Form.Text>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Picture </Form.Label>
-                        <br/>
-                        <Button variant="light">UPLOAD IMAGE</Button>
-                        <img src={addIcon} alt="Add Plant" className={styles.plantImg}/>
-                    </Form.Group>
-                    <br/>
-                    <Modal.Footer className={styles.footer}>
-                        <Button variant="light" onClick={() => {
-                        }}>
-                            SAVE CHANGES
-                        </Button>
-                        <Button variant="secondary" onClick={() => navigate('/dashboard')}>
-                            CANCEL
-                        </Button>
-                    </Modal.Footer>
-                </Form>
+                        <Form.Group className={styles.wateringScheduleGroup}>
+                            <Form.Label style={{marginBottom: '0.5em', marginTop: '0.5em'}}>Water every {wateringDaysDropdown} days
+                            </Form.Label>
+                        </Form.Group>
+                        <Form.Group className={styles.wateringScheduleGroup}>
+                            <Form.Label style={{marginBottom: '0.5em', display: 'inline'}}>Last watered</Form.Label>
+                            <DatePicker className={styles.datepicker}
+                                        selected={startDate}
+                                        onChange={(date) => setStartDate(date)}
+                                        disabled={isLoading}/>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label className="formLabel">Picture</Form.Label>
+                            <button className="appButton" disabled={isLoading}>UPLOAD IMAGE</button>
+                            <img src={addIcon} alt="Add Plant" className={styles.plantImg}/>
+                        </Form.Group>
+                        
+                        <div className={styles.footer}>
+                            <button 
+                                className="appButton"
+                                onClick={handleSubmit}
+                                disabled={isLoading || !plantName || !roomName || wateringDays === 0}
+                            >
+                                {isLoading ? 'SAVING...' : (isEditMode ? 'UPDATE PLANT' : 'SAVE CHANGES')}
+                            </button>
+                            <button className="appButton" onClick={() => navigate('/dashboard')} disabled={isLoading}>
+                                CANCEL
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
