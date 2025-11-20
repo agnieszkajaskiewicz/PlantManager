@@ -74,7 +74,7 @@ const PlantEditor = () => {
 
         const wateringDaysDropdown = <Dropdown onSelect={(value) => {
             setWateringDays(parseInt(value));
-        }} style={{display: "inline"}}>
+        }} style={{display: "inline", marginLeft: "5px", marginRight: "5px"}}>
             <Dropdown.Toggle id="dropdown-basic" variant="light" className={styles.wateringDaysDropdown}>
                 {wateringDays}
             </Dropdown.Toggle>
@@ -121,7 +121,7 @@ const PlantEditor = () => {
                             </Form.Label>
                         </Form.Group>
                         <Form.Group className={styles.wateringScheduleGroup}>
-                            <Form.Label style={{marginBottom: '0.5em', display: 'inline'}}>Last watered</Form.Label>
+                            <Form.Label style={{marginBottom: '0.5em', marginRight: '0.5em'}}>Last watered</Form.Label>
                             <DatePicker className={styles.datepicker}
                                         selected={startDate}
                                         onChange={(date) => setStartDate(date)}

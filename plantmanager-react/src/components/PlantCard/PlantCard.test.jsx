@@ -7,7 +7,8 @@ import userEvent from '@testing-library/user-event';
 
 const mockNavigate = vi.fn();
 const mockedPlantService = {
-  deletePlantById: vi.fn(() => Promise.resolve({ status: 200 }))
+  deletePlantById: vi.fn(() => Promise.resolve({ status: 200 })),
+  confirmWatering: vi.fn(() => Promise.resolve({ status: 200 }))
 };
 
 vi.mock('../../DependencyContext', () => ({
@@ -57,7 +58,7 @@ describe('<PlantCard />', () => {
     expect(plantName.innerHTML).toBe(plantData.plantName);
   });
 
-  test('it should render EDIT button card when plant data is provided', () => {
+  test('it should render edit icon button when plant data is provided', () => {
     //given
     const plantData = {
       id: 1,
@@ -69,13 +70,13 @@ describe('<PlantCard />', () => {
         <PlantCard plantData={plantData} setApiError={vi.fn()} />
       </MemoryRouter>
     );
-    const plantCard = screen.getByTestId('PlantCard');
-    const button = within(plantCard).getByRole('button');
+    const editButton = screen.getByTestId('edit-button');
     //then
-    expect(button.innerHTML).toBe('EDIT');
+    expect(editButton).toBeInTheDocument();
+    expect(editButton.querySelector('i.bi-pencil')).toBeInTheDocument();
   });
 
-  test('it should render ADD button card when no plant data', () => {
+  test('it should render add icon button when no plant data', () => {
     //given
 
     //when
@@ -84,10 +85,10 @@ describe('<PlantCard />', () => {
         <PlantCard setApiError={vi.fn()} />
       </MemoryRouter>
     );
-    const plantCard = screen.getByTestId('PlantCard');
-    const button = within(plantCard).getByRole('button');
+    const addButton = screen.getByTestId('add-button');
     //then
-    expect(button.innerHTML).toBe('ADD');
+    expect(addButton).toBeInTheDocument();
+    expect(addButton.querySelector('i.bi-plus-circle')).toBeInTheDocument();
   });
 
   test('it should delete plant on trash click', async () => {
@@ -112,7 +113,7 @@ describe('<PlantCard />', () => {
     expect(mockedPlantService.deletePlantById).toHaveBeenCalledWith(plantData.id);
   });
 
-  test('it should navigate to edit page when EDIT button is clicked', async () => {
+  test('it should navigate to edit page when edit button is clicked', async () => {
     //given
     const user = userEvent.setup();
     const plantData = {
@@ -126,7 +127,7 @@ describe('<PlantCard />', () => {
       </MemoryRouter>
     );
     
-    const editButton = screen.getByRole('button', { name: /edit/i });
+    const editButton = screen.getByTestId('edit-button');
     
     //when
     await user.click(editButton);
@@ -135,7 +136,7 @@ describe('<PlantCard />', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/dashboard/edit/123');
   });
 
-  test('it should navigate to add page when ADD button is clicked', async () => {
+  test('it should navigate to add page when add button is clicked', async () => {
     //given
     const user = userEvent.setup();
     
@@ -145,7 +146,7 @@ describe('<PlantCard />', () => {
       </MemoryRouter>
     );
     
-    const addButton = screen.getByRole('button', { name: /add/i });
+    const addButton = screen.getByTestId('add-button');
     
     //when
     await user.click(addButton);
@@ -287,6 +288,288 @@ describe('<PlantCard />', () => {
     
     //when
     removeButton.click();
+    
+    //then
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(setApiError).toHaveBeenCalledWith('');
+  });
+
+  test('it should show water button for plant cards with data', () => {
+    //given
+    const plantData = {
+      id: 1,
+      plantName: 'Monstera'
+    };
+    
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={plantData} setApiError={vi.fn()} />
+      </MemoryRouter>
+    );
+    
+    //then
+    const waterButton = screen.getByTestId('water-button');
+    expect(waterButton).toBeInTheDocument();
+    expect(waterButton.querySelector('i.bi-droplet')).toBeInTheDocument();
+  });
+
+  test('it should NOT show water button for ADD card', () => {
+    //given
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={null} setApiError={vi.fn()} />
+      </MemoryRouter>
+    );
+    
+    //then
+    expect(screen.queryByTestId('water-button')).not.toBeInTheDocument();
+  });
+
+  test('it should show watering modal when water button is clicked', async () => {
+    //given
+    const user = userEvent.setup();
+    const plantData = {
+      id: 1,
+      plantName: 'Cactus'
+    };
+    
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={plantData} setApiError={vi.fn()} />
+      </MemoryRouter>
+    );
+    
+    const waterButton = screen.getByTestId('water-button');
+    
+    //when
+    await user.click(waterButton);
+    
+    //then
+    expect(screen.getByText('Confirm watering')).toBeInTheDocument();
+    expect(screen.getByText(/Have you watered Cactus today/i)).toBeInTheDocument();
+  });
+
+  test('it should hide watering modal when cancel button is clicked', async () => {
+    //given
+    const user = userEvent.setup();
+    const plantData = {
+      id: 1,
+      plantName: 'Fern'
+    };
+    
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={plantData} setApiError={vi.fn()} />
+      </MemoryRouter>
+    );
+    
+    const waterButton = screen.getByTestId('water-button');
+    await user.click(waterButton);
+    
+    //when
+    const cancelButton = screen.getByRole('button', { name: /cancel/i });
+    await user.click(cancelButton);
+    
+    //then
+    expect(screen.queryByText('Confirm watering')).not.toBeInTheDocument();
+  });
+
+  test('it should display plant name in watering confirmation modal', async () => {
+    //given
+    const user = userEvent.setup();
+    const plantData = {
+      id: 1,
+      plantName: 'Succulent Plant'
+    };
+    
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={plantData} setApiError={vi.fn()} />
+      </MemoryRouter>
+    );
+    
+    const waterButton = screen.getByTestId('water-button');
+    
+    //when
+    await user.click(waterButton);
+    
+    //then
+    expect(screen.getByText(/Have you watered Succulent Plant today/i)).toBeInTheDocument();
+  });
+
+  test('it should call plantService.confirmWatering with correct plant ID', async () => {
+    //given
+    const user = userEvent.setup();
+    const plantData = {
+      id: 42,
+      plantName: 'Orchid'
+    };
+    
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={plantData} setApiError={vi.fn()} />
+      </MemoryRouter>
+    );
+    
+    const waterButton = screen.getByTestId('water-button');
+    await user.click(waterButton);
+    
+    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    
+    //when
+    await user.click(confirmButton);
+    
+    //then
+    expect(mockedPlantService.confirmWatering).toHaveBeenCalledWith(42);
+  });
+
+  test('it should close modal on successful watering confirmation', async () => {
+    //given
+    const user = userEvent.setup();
+    const plantData = {
+      id: 1,
+      plantName: 'Aloe'
+    };
+    
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={plantData} setApiError={vi.fn()} />
+      </MemoryRouter>
+    );
+    
+    const waterButton = screen.getByTestId('water-button');
+    await user.click(waterButton);
+    
+    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    
+    //when
+    await user.click(confirmButton);
+    
+    //then
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(screen.queryByText('Confirm watering')).not.toBeInTheDocument();
+  });
+
+  test('it should call onWateringConfirmed callback after successful confirmation', async () => {
+    //given
+    const user = userEvent.setup();
+    const plantData = {
+      id: 1,
+      plantName: 'Snake Plant'
+    };
+    const onWateringConfirmed = vi.fn();
+    
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={plantData} setApiError={vi.fn()} onWateringConfirmed={onWateringConfirmed} />
+      </MemoryRouter>
+    );
+    
+    const waterButton = screen.getByTestId('water-button');
+    await user.click(waterButton);
+    
+    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    
+    //when
+    await user.click(confirmButton);
+    
+    //then
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(onWateringConfirmed).toHaveBeenCalled();
+  });
+
+  test('it should handle errors from watering confirmation API', async () => {
+    //given
+    const user = userEvent.setup();
+    const plantData = {
+      id: 1,
+      plantName: 'Plant'
+    };
+    const setApiError = vi.fn();
+    const errorMessage = 'Watering confirmation failed';
+    
+    mockedPlantService.confirmWatering.mockRejectedValueOnce({
+      response: {
+        data: {
+          message: errorMessage
+        }
+      }
+    });
+    
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={plantData} setApiError={setApiError} />
+      </MemoryRouter>
+    );
+    
+    const waterButton = screen.getByTestId('water-button');
+    await user.click(waterButton);
+    
+    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    
+    //when
+    await user.click(confirmButton);
+    
+    //then
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(setApiError).toHaveBeenCalledWith(errorMessage);
+    expect(screen.queryByText('Confirm watering')).not.toBeInTheDocument();
+  });
+
+  test('it should display default error message when backend does not return message on watering error', async () => {
+    //given
+    const user = userEvent.setup();
+    const plantData = {
+      id: 1,
+      plantName: 'Plant'
+    };
+    const setApiError = vi.fn();
+    
+    mockedPlantService.confirmWatering.mockRejectedValueOnce({
+      response: {}
+    });
+    
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={plantData} setApiError={setApiError} />
+      </MemoryRouter>
+    );
+    
+    const waterButton = screen.getByTestId('water-button');
+    await user.click(waterButton);
+    
+    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    
+    //when
+    await user.click(confirmButton);
+    
+    //then
+    await new Promise(resolve => setTimeout(resolve, 100));
+    expect(setApiError).toHaveBeenCalledWith('Something went wrong :(');
+  });
+
+  test('it should clear error message on successful watering confirmation', async () => {
+    //given
+    const user = userEvent.setup();
+    const plantData = {
+      id: 1,
+      plantName: 'Plant'
+    };
+    const setApiError = vi.fn();
+    
+    render(
+      <MemoryRouter>
+        <PlantCard plantData={plantData} setApiError={setApiError} />
+      </MemoryRouter>
+    );
+    
+    const waterButton = screen.getByTestId('water-button');
+    await user.click(waterButton);
+    
+    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    
+    //when
+    await user.click(confirmButton);
     
     //then
     await new Promise(resolve => setTimeout(resolve, 100));

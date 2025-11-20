@@ -42,6 +42,11 @@ const PlantService = {
             lastWateringDate: lastWateringDate,
             wateringDays: wateringDays
         }, {withCredentials: true});
+    },
+    confirmWatering: (plantId) => {
+        const backendServerURL = `${getServerUrl()}`;
+
+        return axios.post("http://" + backendServerURL + "/toBeWateredSoon/confirmWatering/v2/" + plantId, {}, {withCredentials: true});
     }
 };
 
