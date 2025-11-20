@@ -20,38 +20,44 @@ const Dashboard = () => {
     const [apiError, setApiError] = useState('');
     const {plantService} = useDependencies();
 
+    const fetchPlantsForLoggedUser = async () => {
+        try {
+            setData({plants: data.plants, isFetching: true});
+            const response = await plantService.fetchPlantsForLoggedUser();
+            setData({plants: response.data, isFetching: false});
+        } catch (exception) {
+            console.log(exception);
+            //todo obsługa błędów
+        }
+    };
+    
+    const fetchPlantsToBeWatered = async () => {
+        try {
+            setPlantsToBeWatered({plants: plantsToBeWatered.plants, isFetching: true});
+            const response = await plantService.fetchPlantsToBeWateredSoon();
+            setPlantsToBeWatered({plants: response.data, isFetching: false});
+        } catch (exception) {
+            console.log(exception);
+            //todo obsługa błędów
+        }
+    };
+
+    const handleWateringConfirmed = () => {
+        fetchPlantsForLoggedUser();
+        fetchPlantsToBeWatered();
+    };
+
     useEffect(() => {
-        const fetchPlantsForLoggedUser = async () => {
-            try {
-                setData({plants: data.plants, isFetching: true});
-                const response = await plantService.fetchPlantsForLoggedUser();
-                setData({plants: response.data, isFetching: false});
-            } catch (exception) {
-                console.log(exception);
-                //todo obsługa błędów
-            }
-        };
-        
-        const fetchPlantsToBeWatered = async () => {
-            try {
-                setPlantsToBeWatered({plants: plantsToBeWatered.plants, isFetching: true});
-                const response = await plantService.fetchPlantsToBeWateredSoon();
-                setPlantsToBeWatered({plants: response.data, isFetching: false});
-            } catch (exception) {
-                console.log(exception);
-                //todo obsługa błędów
-            }
-        };
-        
         fetchPlantsForLoggedUser();
         fetchPlantsToBeWatered();
     }, []);
 
     const plantCards = data.plants.map((plant, index) => <PlantCard key={index} plantData={plant}
-                                                                    setApiError={setApiError}/>);
+                                                                    setApiError={setApiError}
+                                                                    onWateringConfirmed={handleWateringConfirmed}/>);
     
     const plantsToBeWateredCards = plantsToBeWatered.plants.map((plant, index) => 
-        <PlantCard key={index} plantData={plant} setApiError={setApiError}/>);
+        <PlantCard key={index} plantData={plant} setApiError={setApiError} onWateringConfirmed={handleWateringConfirmed}/>);
 
     return (
         <div className={styles.Dashboard} data-testid="Dashboard">

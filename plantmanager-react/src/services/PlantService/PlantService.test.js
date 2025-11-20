@@ -157,6 +157,61 @@ describe('Plant Service', () => {
         await expect(PlantService.updatePlant(1, 'Name', 'Room', '2024-01-20', 5)).rejects.toThrow('Update failed');
     });
 
+    test('it should call backend on watering confirmation with correct plant id', () => {
+        //given
+        const plantId = 123;
+        //when
+        PlantService.confirmWatering(plantId);
+        //then
+        expect(axios.post).toHaveBeenCalledWith("http://test_url/toBeWateredSoon/confirmWatering/v2/123", {}, {withCredentials: true});
+    });
+
+    test('it should use POST method for watering confirmation', () => {
+        //given
+        const plantId = 456;
+        //when
+        PlantService.confirmWatering(plantId);
+        //then
+        expect(axios.post).toHaveBeenCalled();
+    });
+
+    test('it should include credentials in watering confirmation request', () => {
+        //given
+        const plantId = 789;
+        //when
+        PlantService.confirmWatering(plantId);
+        //then
+        expect(axios.post).toHaveBeenCalledWith(
+            expect.any(String), 
+            expect.any(Object), 
+            expect.objectContaining({withCredentials: true})
+        );
+    });
+
+    test('it should return success response from watering confirmation', async () => {
+        //given
+        const mockResponse = {
+            status: 200,
+            data: {
+                id: 1,
+                plantName: 'Watered Plant'
+            }
+        };
+        axios.post.mockResolvedValueOnce(mockResponse);
+        //when
+        const response = await PlantService.confirmWatering(1);
+        //then
+        expect(response).toEqual(mockResponse);
+    });
+
+    test('it should handle errors when watering confirmation fails', async () => {
+        //given
+        axios.post.mockRejectedValueOnce(new Error('Watering confirmation failed'));
+        
+        //when & then
+        await expect(PlantService.confirmWatering(1)).rejects.toThrow('Watering confirmation failed');
+    });
+
     afterAll(() => {
         process.env = OLD_ENV;
     });

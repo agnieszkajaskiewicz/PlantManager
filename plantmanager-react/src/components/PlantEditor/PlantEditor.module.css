@@ -7,17 +7,25 @@
     border-radius: 0.25rem;
     border: 1px solid #ced4da;
     padding: 5px 10px;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
 .plantImg {
     display: block;
-    min-width: 150px;
-    max-width: 250px;
-    margin: 10px auto 0 auto;
+    width: 250px !important;
+    max-width: 250px !important;
+    min-width: 250px !important;
+    height: auto !important;
+    margin: 10px auto 0 auto !important;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
+}
+
+:global(.form-group) .plantImg {
+    width: 250px !important;
+    max-width: 250px !important;
+    min-width: 250px !important;
 }
 
 div.footer {
@@ -29,4 +37,25 @@ div.footer {
 
 .wateringScheduleGroup {
     margin-bottom: 1em;
+}
+
+.wateringScheduleGroup label {
+    margin-right: 0.5em;
+}
+
+:global(.formInput.form-control:focus) {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow: none;
+}
+
+:global(.formInput.form-control) {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+}
+
+:global(.formInput.form-control::placeholder) {
+    color: rgba(255, 255, 255, 0.5);
 }
