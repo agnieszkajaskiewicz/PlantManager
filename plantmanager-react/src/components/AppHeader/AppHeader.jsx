@@ -37,7 +37,7 @@ const AppHeader = () => {
     </>
 
     const userHeader = <>
-        <div className={styles.userHeader} data-testid="AppHeader">
+        <div className={styles.userHeader}>
             <div className={styles.logoPanel}>
                 <img id="logo" src={logo} className={styles.appLogoDashboard} alt="logo" onClick={handleLogoClick}/>
             </div>
@@ -46,7 +46,7 @@ const AppHeader = () => {
                     <label className={styles.text}>Username: {username}</label>
                 </div>
                 <div>
-                    <span className={styles.linkElement} onClick={() => handleLogout()}>Logout</span>
+                    <span className={styles.linkElement} onClick={() => handleLogout()} data-testid="logout">Logout</span>
                 </div>
             </div>
         </div>

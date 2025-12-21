@@ -414,7 +414,7 @@ describe('<PlantCard />', () => {
     const waterButton = screen.getByTestId('water-button');
     await user.click(waterButton);
     
-    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    const confirmButton = screen.getByTestId('confirm-watering-button');
     
     //when
     await user.click(confirmButton);
@@ -440,7 +440,7 @@ describe('<PlantCard />', () => {
     const waterButton = screen.getByTestId('water-button');
     await user.click(waterButton);
     
-    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    const confirmButton = screen.getByTestId('confirm-watering-button');
     
     //when
     await user.click(confirmButton);
@@ -468,7 +468,7 @@ describe('<PlantCard />', () => {
     const waterButton = screen.getByTestId('water-button');
     await user.click(waterButton);
     
-    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    const confirmButton = screen.getByTestId('confirm-watering-button');
     
     //when
     await user.click(confirmButton);
@@ -505,7 +505,7 @@ describe('<PlantCard />', () => {
     const waterButton = screen.getByTestId('water-button');
     await user.click(waterButton);
     
-    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    const confirmButton = screen.getByTestId('confirm-watering-button');
     
     //when
     await user.click(confirmButton);
@@ -538,7 +538,7 @@ describe('<PlantCard />', () => {
     const waterButton = screen.getByTestId('water-button');
     await user.click(waterButton);
     
-    const confirmButton = screen.getByRole('button', { name: /confirm/i });
+    const confirmButton = screen.getByTestId('confirm-watering-button');
     
     //when
     await user.click(confirmButton);
@@ -565,9 +565,9 @@ describe('<PlantCard />', () => {
     
     const waterButton = screen.getByTestId('water-button');
     await user.click(waterButton);
-    
-    const confirmButton = screen.getByRole('button', { name: /confirm/i });
-    
+
+    const confirmButton = screen.getByTestId('confirm-watering-button');
+
     //when
     await user.click(confirmButton);
     

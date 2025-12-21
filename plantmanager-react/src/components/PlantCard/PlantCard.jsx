@@ -124,10 +124,10 @@ const PlantCard = (props) => {
                         Have you watered {props.plantData.plantName} today?
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button className={styles.cancelButton} onClick={handleCloseModal}>
+                        <Button data-testid="cancel-button" className={styles.cancelButton} onClick={handleCloseModal}>
                             Cancel
                         </Button>
-                        <Button className={styles.confirmButton} onClick={handleConfirmWatering}>
+                        <Button data-testid="confirm-watering-button" className={styles.confirmButton} onClick={handleConfirmWatering}>
                             Confirm
                         </Button>
                     </Modal.Footer>
