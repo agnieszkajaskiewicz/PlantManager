@@ -13,7 +13,7 @@ const mockAuthService = {
 vi.mock('react-router-dom', () => ({
     ...vi.importActual('react-router-dom'),
     useNavigate: () => mockedUsedNavigate,
-    useLocation: () => mockedUsedLocation
+    useLocation: () => mockedUsedLocation()
 }));
 
 vi.mock('../../DependencyContext', () => ({
@@ -76,7 +76,7 @@ describe('<AppHeader />', () => {
         
         render(<AppHeader/>);
         
-        expect(screen.getByText(/logout/i)).toBeInTheDocument();
+        expect(screen.getByTestId('logout')).toBeInTheDocument();
     });
 
     test('it should call logout service when logout clicked', async () => {
@@ -87,7 +87,7 @@ describe('<AppHeader />', () => {
         
         render(<AppHeader/>);
         
-        const logoutLink = screen.getByText(/logout/i);
+        const logoutLink = screen.getByTestId('logout');
         await user.click(logoutLink);
         
         await waitFor(() => {
@@ -103,7 +103,7 @@ describe('<AppHeader />', () => {
         
         render(<AppHeader/>);
         
-        const logoutLink = screen.getByText(/logout/i);
+        const logoutLink = screen.getByTestId('logout');
         await user.click(logoutLink);
         
         await waitFor(() => {

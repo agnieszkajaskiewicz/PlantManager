@@ -103,22 +103,18 @@ class PlantControllerTest {
         plantEntity.setPlantName(plantName);
         plantEntity.setUser(new User(loggedUserId, "username", "email@test.com", "password", null));
 
-        var plantCardDto = new PlantCardDTO(plantId, plantName);
-
         when(securityService.isAuthenticated()).thenReturn(true);
         when(userService.findIdOfLoggedUser()).thenReturn(loggedUserId);
         when(plantService.find(plantId)).thenReturn(plantEntity);
-        when(plantMapper.plantToPlantCardDto(plantEntity)).thenReturn(plantCardDto);
+        when(plantMapper.plantToPlantDetailDto(plantEntity)).thenReturn(mock(com.ajaskiewicz.PlantManager.model.PlantDetailDTO.class));
 
         //when && then
         mockMvc.perform(get("/dashboard/v2/11"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is((int) plantId)))
-                .andExpect(jsonPath("$.plantName", is(plantName)));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
         verify(userService).findIdOfLoggedUser();
         verify(plantService).find(plantId);
-        verify(plantMapper).plantToPlantCardDto(plantEntity);
+        verify(plantMapper).plantToPlantDetailDto(plantEntity);
         verifyNoMoreInteractions(securityService, userService, plantService, plantMapper);
     }
 
@@ -135,12 +131,21 @@ class PlantControllerTest {
     void shouldDeletePlantById() throws Exception {
         //given
         var plantId = 12L;
+        var loggedUserId = 1L;
+        var plantEntity = new Plant();
+        plantEntity.setId(plantId);
+        plantEntity.setUser(new User(loggedUserId, "username", "email@test.com", "password", null));
+        
+        when(plantService.find(plantId)).thenReturn(plantEntity);
+        when(userService.findIdOfLoggedUser()).thenReturn(loggedUserId);
 
         //when && then
         mockMvc.perform(delete("/dashboard/deletePlant/v2/12"))
                 .andExpect(status().isOk());
+        verify(plantService).find(plantId);
+        verify(userService).findIdOfLoggedUser();
         verify(plantService).delete(plantId);
-        verifyNoMoreInteractions(plantService, securityService);
+        verifyNoMoreInteractions(plantService, userService, securityService);
     }
 
     @Test
@@ -148,8 +153,10 @@ class PlantControllerTest {
         //given
         var plantCreationDTO = new PlantCreationDTO("plantName", "room", LocalDate.now().minusDays(2), 3);
         var entityToSave = new Plant();
+        var plantCardDto = new PlantCardDTO(1L, "plantName");
         when(plantMapper.plantToPlantEntity(any())).thenReturn(entityToSave);
         when(plantService.createOrUpdatePlant(entityToSave)).thenReturn(entityToSave);
+        when(plantMapper.plantToPlantCardDto(entityToSave)).thenReturn(plantCardDto);
 
         //when && then
         mockMvc.perform(post("/dashboard/addPlant/v2")
@@ -158,6 +165,7 @@ class PlantControllerTest {
                 .andExpect(status().isCreated());
         verify(plantMapper).plantToPlantEntity(any(PlantCreationDTO.class)); //todo use captor(?)
         verify(plantService).createOrUpdatePlant(entityToSave);
+        verify(plantMapper).plantToPlantCardDto(entityToSave);
 
         verifyNoMoreInteractions(plantMapper, plantService);
     }

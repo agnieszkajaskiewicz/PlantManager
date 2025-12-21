@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     public User findByResetPasswordToken(String token) {
         Optional<User> user = userRepository.findByResetPasswordToken(token);
 
-        return user.orElse(null);
+        return user.orElseThrow(() -> new UsernameNotFoundException("Could not find user with token: " + token));
     }
 
     @Override

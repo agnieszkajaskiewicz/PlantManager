@@ -91,9 +91,10 @@ const PlantEditor = () => {
                     <div className={`formContainer ${styles.formContainerTall}`}>
                         {error && <div className="alert alert-danger">{error}</div>}
                         <Form.Group controlId="plantBasics">
-                            <Form.Label className="formLabel">Plant name</Form.Label>
+                            <Form.Label htmlFor="plantName" className="formLabel">Plant name</Form.Label>
                             <Form.Control 
                                 className="formInput" 
+                                id="plantName"
                                 type="text" 
                                 placeholder="Enter plant name"
                                 value={plantName}
@@ -102,9 +103,10 @@ const PlantEditor = () => {
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label className="formLabel">Room</Form.Label>
+                            <Form.Label htmlFor="roomName" className="formLabel">Room</Form.Label>
                             <Form.Control 
                                 className="formInput" 
+                                id="roomName"
                                 type="text" 
                                 placeholder="Enter plant room"
                                 value={roomName}
