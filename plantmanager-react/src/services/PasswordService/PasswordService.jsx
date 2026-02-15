@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { getServerUrl } from '../../config/env';
 
-const API_URL = 'http://localhost:8080';
+const API_URL = getServerUrl();
 
 class PasswordService {
     async requestPasswordReset(email) {
