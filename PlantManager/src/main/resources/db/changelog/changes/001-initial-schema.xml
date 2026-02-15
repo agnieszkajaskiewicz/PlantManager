@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="001-create-user-table" author="ajaskiewicz">
+        <createTable tableName="user">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reset_password_token" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-create-role-table" author="ajaskiewicz">
+        <createTable tableName="role">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-create-user-roles-join-table" author="ajaskiewicz">
+        <createTable tableName="user_roles">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addPrimaryKey tableName="user_roles" 
+                       columnNames="user_id,role_id"/>
+        
+        <addForeignKeyConstraint baseTableName="user_roles"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_user_roles_user"/>
+        
+        <addForeignKeyConstraint baseTableName="user_roles"
+                                 baseColumnNames="role_id"
+                                 referencedTableName="role"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_user_roles_role"/>
+    </changeSet>
+
+    <changeSet id="001-create-room-table" author="ajaskiewicz">
+        <createTable tableName="room">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="room_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-create-watering-schedule-table" author="ajaskiewicz">
+        <createTable tableName="watering_schedule">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="watering_interval" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_watered_date" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-create-plant-table" author="ajaskiewicz">
+        <createTable tableName="plant">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="plant_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_name" type="VARCHAR(255)"/>
+            <column name="room_id" type="INT"/>
+            <column name="watering_schedule_id" type="INT"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+        
+        <addForeignKeyConstraint baseTableName="plant"
+                                 baseColumnNames="room_id"
+                                 referencedTableName="room"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_plant_room"/>
+        
+        <addForeignKeyConstraint baseTableName="plant"
+                                 baseColumnNames="watering_schedule_id"
+                                 referencedTableName="watering_schedule"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_plant_watering_schedule"/>
+        
+        <addForeignKeyConstraint baseTableName="plant"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_plant_user"/>
+    </changeSet>
+
+    <changeSet id="001-add-indexes" author="ajaskiewicz">
+        <createIndex indexName="idx_user_email" tableName="user">
+            <column name="email"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_user_username" tableName="user">
+            <column name="username"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_plant_user" tableName="plant">
+            <column name="user_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_plant_room" tableName="plant">
+            <column name="room_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
