@@ -1,5 +1,15 @@
 package com.ajaskiewicz.PlantManager.service;
 
+import com.ajaskiewicz.PlantManager.model.Plant;
+import com.ajaskiewicz.PlantManager.repository.PlantRepository;
+import com.ajaskiewicz.PlantManager.repository.UserRepository;
+import com.ajaskiewicz.PlantManager.repository.WateringScheduleRepository;
+import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -87,15 +97,15 @@ public class PlantServiceImpl implements PlantService {
 
 
     @Override
-    public List<Plant> findPlantsToBeWateredSoon(Long userId) {
-        List<Plant> allPlants = plantRepository.findAllByUserId(userId);
-        List<Plant> plantsToBeWatered = new ArrayList<>();
+    public List<Plant> findPlantsToBeWateredSoon(Integer userId) {
+        var allPlants = plantRepository.findAllByUserId(userId);
+        var plantsToBeWatered = new ArrayList<Plant>();
 
         log.info("Looking for plants that should be watered soon for userId: {}", userId);
         for (Plant plant : allPlants) {
-            Integer lastTimeWateredInDays = findWateringDifferenceInDays(plant.getWateringSchedule().getLastWateredDate(), plant.getWateringSchedule().getWateringInterval());
+            var lastTimeWateredInDays = findWateringDifferenceInDays(plant.getWateringSchedule().getLastWateredDate(), plant.getWateringSchedule().getWateringInterval());
 
-            if (lastTimeWateredInDays <= SAFE_AMOUNT_OF_DAYS_IN_THE_FUTURE) {
+            if (lastTimeWateredInDays <= SAFE_AMOUNT_OF_DAYS_IN_THE_FUTURE) { //todo być może to mogła by być wartość personalizowana użytkownika - "chcę aby informować mnie o podlaniu nadchodzącym w przeciągu X dni" (?)
                 plant.setWateringDifferenceInDays(lastTimeWateredInDays);
                 plantsToBeWatered.add(plant);
             }
@@ -108,15 +118,15 @@ public class PlantServiceImpl implements PlantService {
     }
 
     private Integer findWateringDifferenceInDays(String lastWateredDate, Integer wateringInterval) {
-        LocalDate today = LocalDate.now();
-        LocalDate lwd = LocalDate.parse(lastWateredDate);
+        var today = LocalDate.now();
+        var lwd = LocalDate.parse(lastWateredDate);
 
         log.info("Today: " + today);
         log.info("Last watered date: " + lastWateredDate);
         log.info("Watering interval: " + wateringInterval);
 
         log.info("Counting days that remain to the closest watering");
-        Integer differenceInDays = (int) ChronoUnit.DAYS.between(today, lwd.plusDays(wateringInterval));
+        var differenceInDays = (int) ChronoUnit.DAYS.between(today, lwd.plusDays(wateringInterval));
 
         log.info("Difference is: " + differenceInDays + " days");
         return differenceInDays;
