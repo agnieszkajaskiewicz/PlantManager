@@ -86,9 +86,9 @@
                     <div class="group">
                         <label for="pass3" class="label">Repeat Password</label>
                         <input id="pass3" type="password" class="input" data-type="password"
-                               th:field="*{passwordConfirm}">
-                        <span class="text-danger" th:if="${#fields.hasErrors('passwordConfirm')}"
-                              th:errors="*{passwordConfirm}"></span>
+                               th:field="*{repeatPassword}">
+                        <span class="text-danger" th:if="${#fields.hasErrors('repeatPassword')}"
+                              th:errors="*{repeatPassword}"></span>
                     </div>
 
                     <div class="group">

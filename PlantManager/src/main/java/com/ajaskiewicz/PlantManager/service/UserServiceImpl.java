@@ -1,25 +1,29 @@
 package com.ajaskiewicz.PlantManager.service;
 
-import com.ajaskiewicz.PlantManager.model.User;
-import com.ajaskiewicz.PlantManager.repository.RoleRepository;
-import com.ajaskiewicz.PlantManager.repository.UserRepository;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
+import com.ajaskiewicz.PlantManager.model.User;
+import com.ajaskiewicz.PlantManager.repository.RoleRepository;
+import com.ajaskiewicz.PlantManager.repository.UserRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
@@ -30,8 +34,51 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        var result = userRepository.findAll();
-        return result;
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+
+        return user.orElseThrow(() -> new UsernameNotFoundException("Could not find user with username: " + username));
+    }
+
+    @Override
+    public User findById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+
+        return user.orElseThrow(() -> new UsernameNotFoundException("Could not find user with ID: " + id));
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+
+        return user.orElseThrow(() -> new UsernameNotFoundException("Could not find user with email: " + email));
+    }
+
+    @Override
+    public User findByResetPasswordToken(String token) {
+        Optional<User> user = userRepository.findByResetPasswordToken(token);
+
+        return user.orElseThrow(() -> new UsernameNotFoundException("Could not find user with token: " + token));
+    }
+
+    @Override
+    public Long findIdOfLoggedUser() {
+        log.info("Checking ID of logged user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> queriedUser = userRepository.findByUsername(username);
+
+        if (queriedUser.isPresent()) {
+            Long userId = queriedUser.get().getId();
+            log.info("ID of logged user: " + userId);
+            return userId;
+        } else {
+            throw new UsernameNotFoundException("Could not find user with username: " + username);
+        }
     }
 
     @Override
@@ -44,42 +91,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    @Override
-    public User findById(Integer id) { return userRepository.findById(id); }
-
-    @Override
-    public Integer findIdOfLoggedUser() {
-        log.info("Checking ID of logged user");
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var username = authentication.getName();
-        var queriedUser = userRepository.findByUsername(username);
-        log.info("ID of logged user: " + queriedUser.getId());
-        return queriedUser.getId();
-    }
-
-    @Override
     public void updateResetPasswordToken(String token, String email) {
-        var user = userRepository.findByEmail(email);
-        if (user != null) {
-            user.setResetPasswordToken(token);
-            userRepository.save(user);
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            user.get().setResetPasswordToken(token);
+            userRepository.save(user.get());
         } else {
             throw new UsernameNotFoundException("Could not find any user with the email: " + email);
         }
     }
 
     @Override
-    public User getByResetPasswordToken(String token) {
-        return userRepository.findByResetPasswordToken(token);
-    }
-
-    @Override
     public void updatePassword(User user, String newPassword) {
-        var encodedPassword = bCryptPasswordEncoder.encode(newPassword);
+        String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
 
         user.setResetPasswordToken(null);
@@ -87,7 +111,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public boolean existsByUsername(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 }

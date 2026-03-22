@@ -1,0 +1,11 @@
+.ErrorHandler {
+    margin: 0 auto;
+    border-radius: 10px;
+    width: fit-content;
+    padding: 0.8rem;
+    color: red;
+    text-shadow: 1px 1px #000000;
+    font-weight: bold;
+    font-size: larger;
+    background: rgba(121, 135, 121, 0.3);
+}

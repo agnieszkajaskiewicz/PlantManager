@@ -1,8 +1,8 @@
 package com.ajaskiewicz.PlantManager.service;
 
-import com.ajaskiewicz.PlantManager.model.User;
-
 import java.util.List;
+
+import com.ajaskiewicz.PlantManager.model.User;
 
 public interface UserService {
 
@@ -12,15 +12,19 @@ public interface UserService {
 
     User findByUsername(String username);
 
-    User findById(Integer id);
+    User findById(Long id);
 
-    Integer findIdOfLoggedUser();
+    Long findIdOfLoggedUser();
 
     void updateResetPasswordToken(String token, String email);
 
-    User getByResetPasswordToken(String token);
+    User findByResetPasswordToken(String token);
 
     void updatePassword(User user, String newPassword);
 
     User findByEmail(String email);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }

@@ -1,23 +1,31 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
-import com.ajaskiewicz.PlantManager.model.User;
-import com.ajaskiewicz.PlantManager.service.SecurityService;
-import com.ajaskiewicz.PlantManager.service.UserService;
-import com.ajaskiewicz.PlantManager.web.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.ajaskiewicz.PlantManager.model.User;
+import com.ajaskiewicz.PlantManager.service.SecurityService;
+import com.ajaskiewicz.PlantManager.service.UserService;
+import com.ajaskiewicz.PlantManager.web.utils.UserValidator;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class UserController {
 
-    private UserService userService;
-    private SecurityService securityService;
-    private UserValidator userValidator;
+    private final UserService userService;
+    private final SecurityService securityService;
+    private final UserValidator userValidator;
 
     @Autowired
     public UserController(UserService userService, SecurityService securityService, UserValidator userValidator) {
@@ -26,7 +34,7 @@ public class UserController {
         this.userValidator = userValidator;
     }
 
-    @GetMapping("/sign-up")
+    @GetMapping("/sign-up") // old endpoint, to be removed
     public String registration(Model model) {
         if (securityService.isAuthenticated()) {
             return "redirect:/dashboard";
@@ -37,21 +45,31 @@ public class UserController {
         return "signUpPage";
     }
 
-    @PostMapping("/sign-up")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
-        userValidator.validate(userForm, bindingResult);
+    @PostMapping("/sign-up/v2")
+    public ResponseEntity<?> registration(@Valid @RequestBody User user, BindingResult bindingResult) {
+        userValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "signUpPage";
+            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
         }
 
-        userService.save(userForm);
-        securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
+        userService.save(user);
+        String jwtToken = securityService.login(user.getUsername(), user.getRepeatPassword());
 
-        return "redirect:/dashboard";
+        return ResponseEntity.ok().header("Authorization", "Bearer " + jwtToken).header("username", user.getUsername()).build();
     }
 
-    @GetMapping("/sign-in")
+    @PostMapping(path = "/sign-in/v2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> login(@RequestParam("username") String username, @RequestParam("password") String password) {
+        try {
+            String jwtToken = securityService.login(username, password);
+            return ResponseEntity.ok().header("Authorization", "Bearer " + jwtToken).header("username", username).build();
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/sign-in") // old endpoint, to be removed
     public String login(Model model, String error, String logout) {
         if (securityService.isAuthenticated()) {
             return "redirect:/dashboard";
@@ -68,9 +86,8 @@ public class UserController {
         return "signInPage";
     }
 
-    @GetMapping("/")
+    @GetMapping("/") // old endpoint, to be removed
     public String homePage() {
         return "homePage";
     }
-
 }

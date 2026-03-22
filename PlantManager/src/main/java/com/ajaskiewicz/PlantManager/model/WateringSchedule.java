@@ -1,10 +1,20 @@
 package com.ajaskiewicz.PlantManager.model;
 
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.Positive;
 
 @Getter
 @Setter
@@ -28,6 +38,12 @@ public class WateringSchedule {
     private Plant plant;
 
     public WateringSchedule(Integer wateringInterval, String lastWateredDate) {
+        this.wateringInterval = wateringInterval;
+        this.lastWateredDate = lastWateredDate;
+    }
+
+    public WateringSchedule(Integer id, Integer wateringInterval, String lastWateredDate) {
+        this.id = id;
         this.wateringInterval = wateringInterval;
         this.lastWateredDate = lastWateredDate;
     }

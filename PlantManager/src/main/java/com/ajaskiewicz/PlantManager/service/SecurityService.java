@@ -3,5 +3,6 @@ package com.ajaskiewicz.PlantManager.service;
 public interface SecurityService {
 
     boolean isAuthenticated();
-    void autoLogin(String username, String password);
+    String login(String username, String password);
+
 }

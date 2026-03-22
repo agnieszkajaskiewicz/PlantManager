@@ -11,7 +11,7 @@ import java.nio.file.Path;
 public class FileDeleteUtil {
 
     public static void deleteFile(String deleteDir) throws IOException {
-        var directory = new File(deleteDir);
+        File directory = new File(deleteDir);
 
         if (!directory.exists()) {
            log.info("No file to delete");
@@ -19,7 +19,7 @@ public class FileDeleteUtil {
 
         else {
             var files = directory.listFiles();
-            for (var file : files) {
+            for (File file : files) {
                 file.delete();
                 log.info("Deleted file: " + file.getName());
             }

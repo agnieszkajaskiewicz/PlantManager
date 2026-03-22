@@ -16,7 +16,23 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ajaskiewicz.PlantManager.model.Plant;
+import com.ajaskiewicz.PlantManager.model.User;
+import com.ajaskiewicz.PlantManager.repository.PlantRepository;
+import com.ajaskiewicz.PlantManager.repository.UserRepository;
+
+import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 @Service("plantService")
 @Slf4j
@@ -25,39 +41,31 @@ public class PlantServiceImpl implements PlantService {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final int SAFE_AMOUNT_OF_DAYS_IN_THE_FUTURE = 3;
 
-    private PlantRepository plantRepository;
-    private WateringScheduleRepository wateringScheduleRepository;
-    private UserRepository userRepository;
+    private final PlantRepository plantRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PlantServiceImpl(PlantRepository plantRepository, WateringScheduleRepository wateringScheduleRepository, UserRepository userRepository) {
+    public PlantServiceImpl(PlantRepository plantRepository, UserRepository userRepository) {
         this.plantRepository = plantRepository;
-        this.wateringScheduleRepository = wateringScheduleRepository;
         this.userRepository = userRepository;
     }
 
     @Override
     public List<Plant> findAll() {
-        var result = plantRepository.findAll();
-        return result;
+        return plantRepository.findAll();
     }
 
     @Override
-    public List<Plant> findAllByUserId(Integer id) {
+    public List<Plant> findAllByUserId(Long id) {
         log.info("Looking for all plants that belong to user with ID " + id);
-        var result = plantRepository.findAllByUserId(id);
+        List<Plant> result = plantRepository.findAllByUserId(id);
         log.info(result.size() + " plants found");
         return result;
     }
 
-    @Override
-    public Plant find(Integer id) throws NotFoundException {
-        var plant = plantRepository.findById(id);
-        if (plant.isPresent()) {
-            return plant.get();
-        } else {
-            throw new NotFoundException("No plant record exist for given ID " + id);
-        }
+    public Plant find(Long id) throws NotFoundException {
+        Optional<Plant> plant = plantRepository.findById(id);
+        return plant.orElseThrow(() -> new NotFoundException("Plant with ID " + id + " not found"));
     }
 
     @Override
@@ -69,23 +77,24 @@ public class PlantServiceImpl implements PlantService {
     public Plant createOrUpdatePlant(Plant plant) {
         log.info("Create/update request received for: " + plant.toString());
 
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var username = authentication.getName();
-        var queriedUser = userRepository.findByUsername(username);
-        plant.setUser(queriedUser);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> queriedUser = userRepository.findByUsername(username);
+        queriedUser.ifPresent(plant::setUser);
 
         plantRepository.save(plant);
         return plant;
     }
 
-    @Override
-    public void delete(Integer id) throws NotFoundException {
-        var optionalPlant = plantRepository.findById(id);
-        optionalPlant.orElseThrow(() -> new NotFoundException(String.format("Plant for id %d not found", id)));
+    @Transactional
+    public void delete(Long id) throws NotFoundException {
+        Optional<Plant> optionalPlant = plantRepository.findById(id);
+        optionalPlant.orElseThrow(() -> new NotFoundException(String.format("Plant for ID %d not found", id)));
 
         log.info("Deleting plant with ID " + id);
         plantRepository.deleteById(id);
     }
+
 
     @Override
     public List<Plant> findPlantsToBeWateredSoon(Integer userId) {
@@ -103,7 +112,6 @@ public class PlantServiceImpl implements PlantService {
         }
 
         log.info(plantsToBeWatered.size() + " plants found");
-        log.info("Sorting plants that should be watered soon by watering difference in days");
         plantsToBeWatered.sort(Comparator.comparing(Plant::getWateringDifferenceInDays));
 
         return plantsToBeWatered;
@@ -126,16 +134,16 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public Plant updateLastWateredDate(Plant plant) {
-        var date = Calendar.getInstance().getTime();
-        var today = DATE_FORMAT.format(date);
+        Date date = Calendar.getInstance().getTime();
+        String today = DATE_FORMAT.format(date);
 
         log.info("Setting last watered date to today");
         plant.getWateringSchedule().setLastWateredDate(today);
 
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var username = authentication.getName();
-        var queriedUser = userRepository.findByUsername(username);
-        plant.setUser(queriedUser);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> queriedUser = userRepository.findByUsername(username);
+        queriedUser.ifPresent(plant::setUser);
 
         plantRepository.save(plant);
 

@@ -1,11 +1,19 @@
 package com.ajaskiewicz.PlantManager.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
 
 @Getter
 @Setter
@@ -15,7 +23,7 @@ import javax.persistence.*;
 public class Plant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String plantName;
 
@@ -42,7 +50,7 @@ public class Plant {
         this.wateringSchedule = new WateringSchedule(wateringInterval, lastWateredDate);
     }
 
-    public Plant(Integer id, String plantName, String roomName, Integer wateringInterval, String lastWateredDate) {
+    public Plant(Long id, String plantName, String roomName, Integer wateringInterval, String lastWateredDate) {
         this.id = id;
         this.plantName = plantName;
         this.room = new Room(roomName);

@@ -1,0 +1,82 @@
+.appHeaderWrapper {
+    margin: 0;
+    padding: 20px;
+}
+
+.userHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+@media screen and (min-width: 641px) {
+    .appLogo {
+        height: 200px;
+        width: auto;
+        margin: 0 auto;
+        display: block;
+        cursor: pointer;
+    }
+
+    .appLogoDashboard {
+        height: 200px;
+        width: auto;
+        cursor: pointer;
+    }
+
+    .logoPanel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+    }
+    
+    .userPanel {
+        position: absolute;
+        right: 0;
+        width: 450px;
+        height: 200px;
+        text-align: right;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .appLogo {
+        height: 120px;
+        width: auto;
+        margin: 0 auto;
+        display: block;
+        cursor: pointer;
+    }
+
+    .appLogoDashboard {
+        height: 120px;
+        width: auto;
+        cursor: pointer;
+    }
+
+    .logoPanel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+    }
+    
+    .userPanel {
+        position: absolute;
+        right: 0;
+        width: 200px;
+        height: 120px;
+        text-align: right;
+    }
+}
+
+.text, .linkElement {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.linkElement:hover {
+    cursor: pointer;
+}

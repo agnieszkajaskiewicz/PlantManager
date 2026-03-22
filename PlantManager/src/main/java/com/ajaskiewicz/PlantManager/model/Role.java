@@ -1,15 +1,22 @@
 package com.ajaskiewicz.PlantManager.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
 import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @ToString
 @Entity
 @Table
@@ -27,5 +34,9 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return null;
+    }
+
+    public Role(String name) {
+        this.name = name;
     }
 }

@@ -1,20 +1,28 @@
 package com.ajaskiewicz.PlantManager.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import com.ajaskiewicz.PlantManager.web.JwtTokenProvider;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class SecurityServiceImpl implements SecurityService {
 
-    private AuthenticationManager authenticationManager;
-    private UserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     public SecurityServiceImpl(AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
@@ -23,7 +31,7 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     public boolean isAuthenticated() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || AnonymousAuthenticationToken.class.isAssignableFrom(authentication.getClass())) {
             return false;
@@ -32,17 +40,15 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public void autoLogin(String username, String password) {
-        var userDetails = userDetailsService.loadUserByUsername(username);
-        var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+    public String login(String username, String password) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
-        authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        if (usernamePasswordAuthenticationToken.isAuthenticated()) {
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            log.debug(String.format("Auto login %s successfully!", username));
-        }
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        log.debug(String.format("%s logged in successfully.", username));
 
+        return jwtTokenProvider.generateToken(authentication);
     }
-
 }
