@@ -4,7 +4,6 @@ import com.ajaskiewicz.PlantManager.model.Plant;
 import com.ajaskiewicz.PlantManager.model.WateringSchedule;
 import com.ajaskiewicz.PlantManager.repository.PlantRepository;
 import com.ajaskiewicz.PlantManager.repository.UserRepository;
-import com.ajaskiewicz.PlantManager.repository.WateringScheduleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,23 +17,21 @@ import static org.mockito.Mockito.when;
 
 class PlantServiceImplTest {
 
-    private static final Integer USER_ID = 1;
+    private static final Long USER_ID = 1L;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final int DEFAULT_INTERVAL = 3;
 
     private PlantService plantService;
 
     private PlantRepository plantRepository;
-    private WateringScheduleRepository wateringScheduleRepository;
     private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
         plantRepository = mock(PlantRepository.class);
-        wateringScheduleRepository = mock(WateringScheduleRepository.class);
         userRepository = mock(UserRepository.class);
 
-        plantService = new PlantServiceImpl(plantRepository, wateringScheduleRepository, userRepository);
+        plantService = new PlantServiceImpl(plantRepository, userRepository);
     }
 
     @Test
@@ -81,7 +78,7 @@ class PlantServiceImplTest {
         var plantToBeWateredTomorrow = preparePlantThatShouldBeWatered(1, 1);
         var plantToBeWateredTwoDaysAgo = preparePlantThatShouldBeWatered(2, -2);
         var plantThatShouldNotBeWatered = new Plant();
-        plantThatShouldNotBeWatered.setId(3);
+        plantThatShouldNotBeWatered.setId(3L);
         var wateringScheduleThatShouldNotBeWatered = new WateringSchedule();
         wateringScheduleThatShouldNotBeWatered.setLastWateredDate(LocalDate.now().format(FORMATTER));
         wateringScheduleThatShouldNotBeWatered.setWateringInterval(4);
@@ -95,7 +92,7 @@ class PlantServiceImplTest {
         assertEquals(1, result.get(1).getId());
     }
 
-    private Plant preparePlantThatShouldBeWatered(int id, int wateringDifferenceInDays) {
+    private Plant preparePlantThatShouldBeWatered(long id, int wateringDifferenceInDays) {
         var plantThatShouldBeWatered = new Plant();
         plantThatShouldBeWatered.setId(id);
         var wateringScheduleThatShouldBeWatered = new WateringSchedule();
