@@ -6,8 +6,8 @@ User has possibility to create new plants, edit them, add photos, remove them or
 
 Backend: Java with Spring MVC, Rest, Hibernate
 
-Database: H2
+Database: MySQL
 
-Frontend: thymeleaf, html, css, java script, bootstrap
+Frontend: React
 
-Creation date: 2021
+Creation date: 2026
