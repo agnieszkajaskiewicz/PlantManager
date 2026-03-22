@@ -26,6 +26,7 @@ primary_region = 'fra'
   timeout = "5s"
   method = "GET"
   path = "/actuator/health/readiness"
+  disabled = true
 
 [http_service.concurrency]
   type = "requests"
