@@ -1,0 +1,36 @@
+# fly.toml app configuration file generated for plantmanager-backend on 2026-03-22T14:16:30+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'plantmanager-backend'
+primary_region = 'fra'
+
+[build]
+  dockerfile = './Dockerfile'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[http_service.checks]
+  grace_period = "10s"
+  interval = "30s"
+  timeout = "5s"
+  method = "GET"
+  path = "/actuator/health/readiness"
+
+[http_service.concurrency]
+  type = "requests"
+  hard_limit = 50
+  soft_limit = 25
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 1024

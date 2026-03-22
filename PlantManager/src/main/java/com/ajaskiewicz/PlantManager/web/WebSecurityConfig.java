@@ -57,7 +57,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
-                        .requestMatchers("/sign-up/v2", "/sign-in/v2", "/forgotPassword/v2", "/resetPassword/v2", "/resetPassword/v2/validate").permitAll()
+                        .requestMatchers("/sign-up/v2", "/sign-in/v2", "/forgotPassword/v2", "/resetPassword/v2", "/resetPassword/v2/validate", "/actuator/**").permitAll()
                         .requestMatchers("/adminH2/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint))
