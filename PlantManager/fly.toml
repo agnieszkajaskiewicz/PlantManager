@@ -9,6 +9,9 @@ primary_region = 'fra'
 [build]
   dockerfile = './Dockerfile'
 
+[env]
+  SPRING_PROFILES_ACTIVE = 'prod'
+
 [http_service]
   internal_port = 8080
   force_https = true
@@ -17,7 +20,7 @@ primary_region = 'fra'
   min_machines_running = 0
   processes = ['app']
 
-[http_service.checks]
+[[http_service.checks]]
   grace_period = "10s"
   interval = "30s"
   timeout = "5s"

@@ -31,4 +31,5 @@ EXPOSE 8080
 
 # Run the application
 ENV JAVA_TOOL_OPTIONS="-Xms256m -Xmx512m -XX:+UseContainerSupport"
+ENV SPRING_PROFILES_ACTIVE=prod
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
