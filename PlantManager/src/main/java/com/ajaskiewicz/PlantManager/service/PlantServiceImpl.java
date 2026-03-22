@@ -1,38 +1,21 @@
 package com.ajaskiewicz.PlantManager.service;
 
 import com.ajaskiewicz.PlantManager.model.Plant;
+import com.ajaskiewicz.PlantManager.model.User;
 import com.ajaskiewicz.PlantManager.repository.PlantRepository;
 import com.ajaskiewicz.PlantManager.repository.UserRepository;
-import com.ajaskiewicz.PlantManager.repository.WateringScheduleRepository;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ajaskiewicz.PlantManager.model.Plant;
-import com.ajaskiewicz.PlantManager.model.User;
-import com.ajaskiewicz.PlantManager.repository.PlantRepository;
-import com.ajaskiewicz.PlantManager.repository.UserRepository;
-
-import javassist.NotFoundException;
-import lombok.extern.slf4j.Slf4j;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @Service("plantService")
 @Slf4j
@@ -97,7 +80,7 @@ public class PlantServiceImpl implements PlantService {
 
 
     @Override
-    public List<Plant> findPlantsToBeWateredSoon(Integer userId) {
+    public List<Plant> findPlantsToBeWateredSoon(Long userId) {
         var allPlants = plantRepository.findAllByUserId(userId);
         var plantsToBeWatered = new ArrayList<Plant>();
 
