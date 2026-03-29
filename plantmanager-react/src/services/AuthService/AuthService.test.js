@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as env from '../../config/env';
 
 vi.mock('axios');
-vi.spyOn(env, 'getServerUrl').mockReturnValue('test_url');
+vi.spyOn(env, 'getServerUrl').mockReturnValue('http://test_url');
 
 const localStorageMock = (() => {
     let store = {};

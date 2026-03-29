@@ -16,7 +16,7 @@ const AuthService = {
                 formData.append('username', username);
                 formData.append('password', password);
 
-                return axios.post("http://" + backendServerURL + "/sign-in/v2", formData, config)
+                return axios.post(backendServerURL + "/sign-in/v2", formData, config)
                     .then(response => {
                         const token = response.headers['authorization'];
                         if (token) {
@@ -34,7 +34,7 @@ const AuthService = {
             withCredentials: true
             }
 
-        return axios.post("http://" + backendServerURL + "/logout", config)
+        return axios.post(backendServerURL + "/logout", config)
             .then(response => {
                 localStorage.removeItem('token');
                 return response;
