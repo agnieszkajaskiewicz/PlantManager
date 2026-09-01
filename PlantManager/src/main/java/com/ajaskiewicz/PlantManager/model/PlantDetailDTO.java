@@ -23,4 +23,5 @@ public class PlantDetailDTO {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate lastWateringDate;
     private Integer wateringDays;
+    private String imageName;
 }

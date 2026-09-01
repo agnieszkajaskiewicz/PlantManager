@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Form from 'react-bootstrap/Form';
 import styles from './PlantEditor.module.css';
+import { useRef } from 'react';
 
 import {Dropdown} from "react-bootstrap";
 import addIcon from "../../img/addIcon.png";
@@ -21,6 +22,10 @@ const PlantEditor = () => {
         const {id} = useParams();
         const {plantService} = useDependencies();
         const isEditMode = !!id;
+
+        const [selectedFile, setSelectedFile] = useState(null);
+        const [imagePreview, setImagePreview] = useState(null);
+        const fileInputRef = useRef(null);
 
         useEffect(() => {
             if (isEditMode) {
@@ -50,15 +55,22 @@ const PlantEditor = () => {
             try {
                 setIsLoading(true);
                 setError('');
-                
+
                 const lastWateringDate = startDate.toISOString().split('T')[0];
-                
+                let savedPlantId;
+
                 if (isEditMode) {
                     await plantService.updatePlant(id, plantName, roomName, lastWateringDate, wateringDays);
+                    savedPlantId = id;
                 } else {
-                    await plantService.createNewPlant(plantName, roomName, lastWateringDate, wateringDays);
+                    const response = await plantService.createNewPlant(plantName, roomName, lastWateringDate, wateringDays);
+                    savedPlantId = response.data.id; // need the new id to upload image
                 }
-                
+
+                if (selectedFile) {
+                    await uploadImage(savedPlantId, selectedFile);
+                }
+
                 setIsLoading(false);
                 navigate('/dashboard');
             } catch (exception) {
@@ -66,6 +78,23 @@ const PlantEditor = () => {
                 setError('Failed to save plant');
                 setIsLoading(false);
             }
+        };
+
+        const handleFileSelect = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            setSelectedFile(file);
+            setImagePreview(URL.createObjectURL(file));
+        };
+
+        const uploadImage = async (plantId, file) => {
+            const formData = new FormData();
+            formData.append('image', file);
+            await fetch(`/dashboard/v2/${plantId}/image`, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
         };
 
         const generateRange = (size, startAt = 0) => {
@@ -131,9 +160,32 @@ const PlantEditor = () => {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label className="formLabel">Picture</Form.Label>
-                            <button className="appButton" disabled={isLoading}>UPLOAD IMAGE</button>
-                            <img src={addIcon} alt="Add Plant" className={styles.plantImg}/>
-                        </Form.Group>
+                            {imagePreview
+                                ? <img src={imagePreview} alt="Plant" className={styles.plantImg} />
+                                : <img
+                                    src={id ? `/dashboard/v2/${id}/image` : addIcon}
+                                    alt="Plant"
+                                    className={styles.plantImg}
+                                    onError={(e) => { e.target.src = addIcon; }}
+                                />
+                            }
+                            <div>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    ref={fileInputRef}
+                                    onChange={handleFileSelect}
+                                />
+                                <button
+                                    className="appButton"
+                                    disabled={isLoading}
+                                    onClick={() => fileInputRef.current.click()}
+                                >
+                                    UPLOAD IMAGE
+                                </button>
+                            </div>
+                        </Form.Group> 
                         
                         <div className={styles.footer}>
                             <button 

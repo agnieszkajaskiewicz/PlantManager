@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class PlantCreationDTO { //todo add image
+public class PlantCreationDTO {
     @NotEmpty
     private String plantName;
     @NotEmpty
@@ -26,4 +26,5 @@ public class PlantCreationDTO { //todo add image
     private LocalDate lastWateringDate;
     @NotNull
     private Integer wateringDays;
+    private String imageName;
 }

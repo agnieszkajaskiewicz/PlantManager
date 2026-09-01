@@ -15,7 +15,6 @@ const PlantService = {
     deletePlantById: (plantId) => {
         const backendServerURL = `${getServerUrl()}`;
 
-
         return axios.delete(backendServerURL + "/dashboard/deletePlant/v2/" + plantId, {withCredentials: true});
     },
     createNewPlant: (plantName, roomName, lastWateringDate, wateringDays) => { //todo image
@@ -47,6 +46,11 @@ const PlantService = {
         const backendServerURL = `${getServerUrl()}`;
 
         return axios.post(backendServerURL + "/toBeWateredSoon/confirmWatering/v2/" + plantId, {}, {withCredentials: true});
+    },
+    uploadPlantImage: (plantId, formData) => {
+        const backendServerURL = `${getServerUrl()}`;
+
+        return axios.post(backendServerURL + `/dashboard/v2/${plantId}/image`, formData, {withCredentials: true})
     }
 };
 

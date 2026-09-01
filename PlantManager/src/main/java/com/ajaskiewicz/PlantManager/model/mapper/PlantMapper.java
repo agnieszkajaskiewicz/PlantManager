@@ -18,7 +18,7 @@ public interface PlantMapper {
     @Mapping(source = "wateringSchedule.lastWateredDate", target = "lastWateringDate")
     PlantDetailDTO plantToPlantDetailDto(Plant plant);
 
-    @Mapping(target = "imageName", ignore = true)
+    @Mapping(target = "imageName")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(source = "roomName", target = "room.roomName")
@@ -27,7 +27,7 @@ public interface PlantMapper {
     @Mapping(target = "wateringDifferenceInDays", ignore = true)
     Plant plantToPlantEntity(PlantCreationDTO plantCreationDTO); //todo add image
 
-    @Mapping(target = "imageName", ignore = true)
+    @Mapping(target = "imageName")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(source = "roomName", target = "room.roomName")

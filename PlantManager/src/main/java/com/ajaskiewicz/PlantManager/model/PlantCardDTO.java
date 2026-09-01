@@ -8,4 +8,5 @@ import lombok.Getter;
 public class PlantCardDTO {
     private Long id;
     private String plantName;
+    private String imageName;
 }

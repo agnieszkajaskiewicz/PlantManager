@@ -1,10 +1,14 @@
 package com.ajaskiewicz.PlantManager.web.rest;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +44,8 @@ import javassist.NotFoundException;
 @RequestMapping(value = "/dashboard")
 public class PlantController {
 
-    private static final String UPLOADED_IMAGES_PATH = "uploadedImages/";
+    @Value("${app.upload.base-dir}")
+    private String uploadBasePath;
 
     private final PlantService plantService;
     private final UserService userService;
@@ -123,7 +128,9 @@ public class PlantController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
+        String existingImageName = existingPlant.getImageName();
         plantMapper.updatePlantFromDto(plantCreationDTO, existingPlant);
+        existingPlant.setImageName(existingImageName);
 
         Plant savedPlant = plantService.createOrUpdatePlant(existingPlant);
         PlantCardDTO plantDto = plantMapper.plantToPlantCardDto(savedPlant);
@@ -145,7 +152,7 @@ public class PlantController {
             plant.setImageName(filename);
             Plant savedPlant = plantService.createOrUpdatePlant(plant);
 
-            String uploadDirectory = UPLOADED_IMAGES_PATH + savedPlant.getId();
+            String uploadDirectory = uploadBasePath + savedPlant.getId();
             FileUploadUtil.saveFile(uploadDirectory, filename, multipartFile);
         }
 
@@ -178,7 +185,7 @@ public class PlantController {
     }
 
     private void deletePlantImage(Long id) throws IOException {
-        String deleteDirectory = UPLOADED_IMAGES_PATH + id;
+        String deleteDirectory = uploadBasePath + id;
         FileDeleteUtil.deleteFile(deleteDirectory);
     }
 
@@ -192,5 +199,49 @@ public class PlantController {
         deletePlantImage(id);
         plantService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/v2/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> uploadPlantImage(
+            @PathVariable("id") Long id,
+            @RequestParam("image") MultipartFile file) throws IOException, NotFoundException {
+
+        Plant plant = plantService.find(id);
+        if (!plant.getUser().getId().equals(userService.findIdOfLoggedUser())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        String filename = file.getOriginalFilename();
+        FileUploadUtil.saveFile(uploadBasePath + id, filename, file);
+
+        plant.setImageName(filename);
+        plantService.createOrUpdatePlant(plant);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/v2/{id}/image")
+    @ResponseBody
+    public ResponseEntity<byte[]> getPlantImage(
+            @PathVariable("id") Long id) throws IOException, NotFoundException {
+
+        Plant plant = plantService.find(id);
+        if (!plant.getUser().getId().equals(userService.findIdOfLoggedUser())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if (plant.getImageName() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Path imagePath = Paths.get(uploadBasePath + id).resolve(plant.getImageName());
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+
+        String contentType = Files.probeContentType(imagePath);
+        if (contentType == null) contentType = "image/jpeg";
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(imageBytes);
     }
 }
